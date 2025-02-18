@@ -1,21 +1,28 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/core/Theme/app_theme.dart';
+import 'package:flutter_base/core/constants/app_routes.dart';
 import 'package:flutter_base/core/constants/constants.dart';
 import 'package:flutter_base/core/localization/Keys.dart';
+import 'package:flutter_base/core/utils/extensions/request_handle_extension.dart';
 import 'package:flutter_base/core/widgets/app_button.dart';
 import 'package:flutter_base/core/widgets/custom_app_bar.dart';
+import 'package:flutter_base/features/auth/presentation/providers/usecase_provider.dart';
 import 'package:flutter_base/features/auth/presentation/widgets/phone_number_field.dart';
 import 'package:flutter_base/features/auth/presentation/widgets/auth_header_widget.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../widgets/labeled_text_field.dart';
 
-class SignUpScreen extends StatefulWidget {
+class SignUpScreen extends ConsumerStatefulWidget {
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  ConsumerState<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -31,6 +38,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    handleState(signUpStateNotifierProvider, showLoading: true,
+        onSuccess: (res) {
+      // navigateToMainScreen();
+    });
+
     return Scaffold(
       appBar: CustomAppBar(
         navigated: true,
@@ -254,7 +266,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 backColor: AppTheme.mainAppColor,
                 text: "Continue",
                 onPress: () {
-                  if (_formKey.currentState!.validate()) {}
+                  if (_formKey.currentState!.validate()) {
+                    signUp();
+                  }
                 },
               ),
               SizedBox(height: 24),
@@ -278,5 +292,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
     );
+  }
+
+  void signUp() {
+    ref.read(signUpStateNotifierProvider.notifier).call(
+          firstName: _firstNameController.text,
+          lastName: _lastNameController.text,
+          email: _emailController.text,
+          phoneNumber: _phoneController.text,
+          password: _passwordController.text
+        );
+  }
+
+  void sendOtp() {
+    context.go(otpScreenRoute,extra: {});
   }
 }

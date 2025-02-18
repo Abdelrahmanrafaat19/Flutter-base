@@ -40,8 +40,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget build(BuildContext context) {
     final validationLoginState = ref.watch(loginProvider);
 
-    handleState(loginStateNotifierProvider,showLoading: true,onSuccess: (res){
-      // handle success event
+    handleState(loginStateNotifierProvider, showLoading: true,
+        onSuccess: (res) {
+      navigateToMainScreen();
     });
 
     return Scaffold(
@@ -102,8 +103,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   InkWell(
                       onTap: _forgetPassword,
                       child: Text("Forget Password?",
-                          style: AppTheme
-                              .styleWithAppGunmetalLinkFonts14w400
+                          style: AppTheme.styleWithAppGunmetalLinkFonts14w400
                               .copyWith(decoration: TextDecoration.underline)))
                 ],
               ),
@@ -147,7 +147,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 height: 32,
               ),
               Padding(
-                padding: const EdgeInsetsDirectional.symmetric(horizontal: 14.0),
+                padding:
+                    const EdgeInsetsDirectional.symmetric(horizontal: 14.0),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -158,10 +159,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         color: AppTheme.gray,
                       ),
                     ),
-        
                     Padding(
-                      padding: const EdgeInsetsDirectional.symmetric(horizontal: 12.0),
-                      child: Text("Or sign in with",style: AppTheme.styleWithTextAppGrey4RegularFonts14w400,),
+                      padding: const EdgeInsetsDirectional.symmetric(
+                          horizontal: 12.0),
+                      child: Text(
+                        "Or sign in with",
+                        style: AppTheme.styleWithTextAppGrey4RegularFonts14w400,
+                      ),
                     ),
                     Expanded(
                       child: Divider(
@@ -178,11 +182,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  InkWell(onTap : _signInWithApply,child: SVGIcons.localImage(appleBtn)),
+                  InkWell(
+                      onTap: _signInWithApply,
+                      child: SVGIcons.localImage(appleBtn)),
                   SizedBox(
                     width: 24,
                   ),
-                  InkWell(onTap : _signInWithGoogle,child: SVGIcons.localImage(googleBtn)),
+                  InkWell(
+                      onTap: _signInWithGoogle,
+                      child: SVGIcons.localImage(googleBtn)),
                 ],
               ),
               SizedBox(
@@ -205,8 +213,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         style: AppTheme
                             .styleWithTextRedAdelleSansExtendedFonts16w400
                             .copyWith(
-                            decoration: TextDecoration.underline,
-                            decorationColor: AppTheme.mainAppColor),
+                                decoration: TextDecoration.underline,
+                                decorationColor: AppTheme.mainAppColor),
                       ),
                     ),
                   )
@@ -241,13 +249,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     context.push(signUpScreenRoute);
   }
 
-  void _signInWithApply() {
-  }
+  void _signInWithApply() {}
 
-  void _signInWithGoogle() {
-  }
+  void _signInWithGoogle() {}
 
-  void _signInWithFaceId() async{
+  void _signInWithFaceId() async {
     bool isSuccess = await FaceIDHelper.authenticateWithFaceID();
     print("process is : $isSuccess");
   }

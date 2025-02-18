@@ -1,4 +1,4 @@
-const mainAppUrl = 'https://lazo.sa/backend/public/api';
+const mainAppUrl = 'http://ec2-13-51-6-62.eu-north-1.compute.amazonaws.com:8080/api/';
 const mainAppUrlDomain = 'http://ajazsademo-001-site1.atempurl.com/public/';
 
 const userRegisterEndPoint = "users/createUser";
