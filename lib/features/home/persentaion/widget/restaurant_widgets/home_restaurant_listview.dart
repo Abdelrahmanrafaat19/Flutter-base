@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_base/features/home/persentaion/widget/restaurant_widgets/horizontal_restaurant_listview_with_title.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../../core/constants/app_routes.dart';
 
 class HomeRestaurantListview extends StatefulWidget {
   final List<String> restaurants;
@@ -33,5 +36,7 @@ class _HomeRestaurantListviewState extends State<HomeRestaurantListview> {
 
   void onItemClick() {}
 
-  void onSeeAllClickListener() {}
+  void onSeeAllClickListener() {
+    context.push(seeAllScreenForCategoryRoute);
+  }
 }

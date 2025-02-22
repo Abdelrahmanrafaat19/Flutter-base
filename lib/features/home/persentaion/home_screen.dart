@@ -2,12 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/core/Constants/Constants.dart';
 import 'package:flutter_base/core/Theme/app_theme.dart';
+import 'package:flutter_base/core/constants/app_routes.dart';
 import 'package:flutter_base/core/widgets/svg_icons.dart';
 import 'package:flutter_base/features/home/persentaion/widget/category_widgets/horizontal_category_listview_with_title.dart';
 import 'package:flutter_base/features/home/persentaion/bottom_sheets/filter_bottom_sheet.dart';
 import 'package:flutter_base/features/home/persentaion/widget/restaurant_widgets/home_restaurant_listview.dart';
 import 'package:flutter_base/features/home/persentaion/widget/search_with_filter.dart';
 import 'package:flutter_base/features/home/persentaion/widget/service_options.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/assets.dart';
 import '../../../core/utils/Extensions/utils_exts.dart';
@@ -139,7 +141,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           list: ["", "", "", "", "", "", ""],
                           showLoading: false,
                           itemClick: () {},
-                          onSeeAllClickListener: () {}
+                          onSeeAllClickListener: () {
+                            navigateToShowAllCategories();
+                          }
                       ),
                       SizedBox(
                         height: 24,
@@ -172,4 +176,9 @@ class _HomeScreenState extends State<HomeScreen> {
         context: context,
         builder: (BuildContext context) => FilterBottomSheet());
   }
+
+  void navigateToShowAllCategories() {
+    context.push(seeAllScreenForCategoryRoute);
+  }
+
 }
