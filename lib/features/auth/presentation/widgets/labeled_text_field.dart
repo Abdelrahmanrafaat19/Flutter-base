@@ -11,6 +11,8 @@ class LabeledTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final void Function(String)? onChanged;
   final String? Function(String?)? validator;
+  final bool isvalidate;
+  final FocusNode? focusNode;
 
   const LabeledTextField({
     super.key,
@@ -22,6 +24,8 @@ class LabeledTextField extends StatelessWidget {
     this.suffixIcon,
     this.validator,
     this.errorMaxLine,
+    required this.isvalidate,
+    this.focusNode,
   });
 
   @override
@@ -30,12 +34,15 @@ class LabeledTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         label,
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         AppTextField(
           hintStyle: AppTheme.style14normalblack.copyWith(color: AppTheme.gray),
           hint: hint,
+          focusNode: focusNode,
           borderRidus: BorderRadius.circular(8),
           secured: isvisible,
+          textFieldColor:
+              isvalidate == false ? const Color(0xffFFE5E5) : Colors.white,
           textFieldBorderColor: AppTheme.mainAppColor,
           textEditingController: controller,
           onChanged: onChanged,

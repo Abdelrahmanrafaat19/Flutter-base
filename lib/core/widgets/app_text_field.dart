@@ -16,6 +16,7 @@ class AppTextField extends StatefulWidget {
   final StringCallBack? value;
   final StringCallBack? changeValueCallback;
   final TextEditingController textEditingController;
+  final FocusNode? focusNode;
   final double? width;
   final BorderRadius? borderRidus;
   final Color? textFieldColor;
@@ -69,6 +70,7 @@ class AppTextField extends StatefulWidget {
     this.hintStyle,
     this.textFieldEnableBorderColor,
     this.errorMaxLine,
+    this.focusNode,
   }) : super(key: key);
 
   @override
@@ -86,6 +88,7 @@ class _AppTextFieldState extends State<AppTextField> {
       child: Container(
         width: widget.width,
         child: TextFormField(
+            focusNode: widget.focusNode,
             readOnly: widget.readOnly ?? false,
             autovalidateMode: widget.mode,
             inputFormatters: widget.mask != null ? [widget.mask!] : null,
@@ -136,18 +139,16 @@ class _AppTextFieldState extends State<AppTextField> {
                     fontWeight: FontWeight.w100,
                     color: Theme.of(context).textTheme.bodyMedium!.color),
                 focusedBorder: AppBorders.getBorder(
-                  borderColor: widget.textFieldBorderColor ?? AppTheme.mainAppColor
-                ),
+                    borderColor:
+                        widget.textFieldBorderColor ?? AppTheme.mainAppColor),
                 errorBorder: AppBorders.getErrorBorder(
-                  radius: widget.borderRidus ?? BorderRadius.circular(4)
-                ),
+                    radius: widget.borderRidus ?? BorderRadius.circular(4)),
                 focusedErrorBorder: AppBorders.getErrorBorder(
-                    radius: widget.borderRidus ?? BorderRadius.circular(4)
-                ),
+                    radius: widget.borderRidus ?? BorderRadius.circular(4)),
                 enabledBorder: AppBorders.getEnableBorder(),
                 disabledBorder: AppBorders.getBorder(
-                  borderColor: widget.textFieldEnableBorderColor ?? AppTheme.appGrey8
-                ),
+                    borderColor:
+                        widget.textFieldEnableBorderColor ?? AppTheme.appGrey8),
                 filled: true,
                 counter: SizedBox(),
                 enabled: widget.disabled != null ? (!widget.disabled!) : true,

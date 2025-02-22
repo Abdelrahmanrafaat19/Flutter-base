@@ -24,6 +24,7 @@ class _ForgetPasswordScreenState extends ConsumerState<ForgetPasswordScreen> {
   final formKey = GlobalKey<FormState>();
 
   final phoneController = TextEditingController();
+  bool isPhoneNumberIsValidate = true;
 
   @override
   void initState() {
@@ -66,17 +67,20 @@ class _ForgetPasswordScreenState extends ConsumerState<ForgetPasswordScreen> {
                 ),
                 SizedBox(height: 25),
                 PhoneNumberField(
+                  isPhoneNumberIsValidate: isPhoneNumberIsValidate,
                   controller: phoneController,
                   validator: (phone) {
                     if (phone == null || phone.isEmpty) {
+                      isPhoneNumberIsValidate = false;
                       return 'Phone number is required';
                     }
 
                     final RegExp phoneRegExp = RegExp(r"^\+\d{1,3}\d{7,12}$");
                     if (!phoneRegExp.hasMatch(phone)) {
+                      isPhoneNumberIsValidate = false;
                       return 'Enter a valid phone number (e.g., +1234567890)';
                     }
-
+                    isPhoneNumberIsValidate = true;
                     return null;
                   },
                 ),
@@ -101,6 +105,7 @@ class _ForgetPasswordScreenState extends ConsumerState<ForgetPasswordScreen> {
       context.push(changePasswordScreenRoute,
           extra: {PHONE_KEY: phoneController.text});
     }
+    setState(() {});
   }
 
   void _updateButtonState() {

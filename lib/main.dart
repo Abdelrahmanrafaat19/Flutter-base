@@ -6,6 +6,8 @@ import 'package:flutter_base/core/constants/eunms.dart';
 import 'package:flutter_base/features/auth/presentation/screens/change_password_screen.dart';
 import 'package:flutter_base/features/auth/presentation/screens/forget_password_screen.dart';
 import 'package:flutter_base/features/location/presentation/screens/location_permission_screen.dart';
+import 'package:flutter_base/features/location/presentation/screens/search_location_screen.dart';
+import 'package:flutter_base/features/notification/presentation/screens/notification_permission_screen.dart';
 import 'package:flutter_base/features/main/main_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -16,6 +18,9 @@ import 'core/constants/app_routes.dart';
 import 'features/auth/presentation/screens/login_screen.dart';
 import 'features/auth/presentation/screens/otp_screen.dart';
 import 'features/auth/presentation/screens/sign_up_screen.dart';
+import 'features/auth/presentation/screens/splash_screen.dart';
+import 'features/home/persentaion/cuisines_screen.dart';
+import 'features/home/persentaion/see_all_screen_for_category.dart';
 
 late SharedPreferences prefs;
 
@@ -175,6 +180,26 @@ class MyApp extends ConsumerWidget {
         path: locationPermissionScreenRoute,
         builder: (BuildContext context, GoRouterState state) =>
             LocationPermissionScreen(),
+      ),
+      GoRoute(
+        path: notificationPermissionScreenRoute,
+        builder: (BuildContext context, GoRouterState state) =>
+            NotificationPermissionScreen(),
+      ),
+      GoRoute(
+        path: searchLocationScreenRoute,
+        builder: (BuildContext context, GoRouterState state) =>
+            SearchLocationScreen(),
+      ),
+      GoRoute(
+        path: cuisinesScreenRoute,
+        builder: (BuildContext context, GoRouterState state) =>
+            CuisinesScreen(),
+      ),
+      GoRoute(
+        path: seeAllScreenForCategoryRoute,
+        builder: (BuildContext context, GoRouterState state) =>
+            SeeAllScreenForCategory(),
       ),
     ],
   );

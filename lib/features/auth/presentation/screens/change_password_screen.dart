@@ -28,6 +28,8 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
 
   final newPasswordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+  bool isNewPasswordValidate = true;
+  bool isConfirmNewPasswordValidate = true;
 
   @override
   void initState() {
@@ -72,6 +74,7 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
                     marginBottom: 64,
                   ),
                   LabeledTextField(
+                    isvalidate: isNewPasswordValidate,
                     isvisible: isPasswordVisible,
                     suffixIcon: IconButton(
                       icon: Icon(
@@ -90,6 +93,7 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
                     hint: /* context.tr(OldPasswordKey) */ ".......",
                     validator: (value) {
                       if (value == null || value.isEmpty) {
+                        isNewPasswordValidate = false;
                         return "New Password is required";
                       }
                       return null;
@@ -101,6 +105,7 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
                   ),
                   SizedBox(height: 16),
                   LabeledTextField(
+                    isvalidate: isConfirmNewPasswordValidate,
                     isvisible: isPasswordVisible,
                     suffixIcon: IconButton(
                       icon: Icon(
@@ -117,8 +122,11 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
+                        isConfirmNewPasswordValidate = false;
                         return "Confirem New Password is required";
                       } else if (value != newPasswordController.text) {
+                        isConfirmNewPasswordValidate = false;
+
                         return "Passwords do not match";
                       }
                       return null;
@@ -148,6 +156,7 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
                         //     return PasswordResetBottomSheet();
                         //   },
                         // );
+                        setState(() {});
                         if (formKey.currentState!.validate()) {
                           showSuccessBottomSheet();
                         }

@@ -35,6 +35,14 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
   bool isPasswordVisibleConfirmPassword = true;
   final _formKey = GlobalKey<FormState>();
+  final FocusNode _focusNode = FocusNode();
+
+  bool isFirstNameValidate = true;
+  bool isLastNameValidate = true;
+  bool isPhoneNumberValidate = true;
+  bool isemailValidate = true;
+  bool isPasswordValidate = true;
+  bool isComfirmPasswordValidate = true;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +56,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         navigated: true,
         appContext: context,
         title: context.tr(signUpKey),
-        trailingWidget: Padding(
+        trailingWidget: const Padding(
           padding: EdgeInsets.symmetric(horizontal: defaultPaddingHorizontal),
           child: Center(
             child: Text(
@@ -61,77 +69,94 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              AuthHeaderWidget(
+              const AuthHeaderWidget(
                 marginTop: 36,
                 marginBottom: 64,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Row(
                 children: [
                   Expanded(
                     child: LabeledTextField(
                       controller: _firstNameController,
+                      focusNode: _focusNode,
                       hint: "yourname",
+                      isvalidate: isFirstNameValidate,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
+                          isFirstNameValidate = false;
                           return "First name is required";
                         }
                         final RegExp nameRegExp = RegExp(r"^[a-zA-Z]{2,}$");
                         if (!nameRegExp.hasMatch(value)) {
+                          isFirstNameValidate = false;
+
                           return "letters only, at least 2 characters";
                         }
+                        isFirstNameValidate = true;
+
                         return null;
                       },
-                      label: Text(
+                      label: const Text(
                         "Firstname",
                         style: AppTheme.style14BoldBlack,
                       ),
                     ),
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Expanded(
                       child: LabeledTextField(
+                    isvalidate: isLastNameValidate,
                     controller: _lastNameController,
                     hint: "yourname",
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "First name is required";
+                        isLastNameValidate = false;
+                        return "Last name is required";
                       }
                       final RegExp nameRegExp = RegExp(r"^[a-zA-Z]{2,}$");
                       if (!nameRegExp.hasMatch(value)) {
+                        isLastNameValidate = false;
+
                         return "letters only, at least 2 characters";
                       }
+                      isLastNameValidate = true;
                       return null;
                     },
-                    label: Text(
+                    label: const Text(
                       "Lastname",
                       style: AppTheme.style14BoldBlack,
                     ),
                   )),
                 ],
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               PhoneNumberField(
+                isPhoneNumberIsValidate: isPhoneNumberValidate,
                 controller: _phoneController,
                 validator: (phone) {
                   if (phone == null || phone.isEmpty) {
+                    isPhoneNumberValidate = false;
                     return 'Phone number is required';
                   }
 
                   final RegExp phoneRegExp = RegExp(r"^\+\d{1,3}\d{7,12}$");
                   if (!phoneRegExp.hasMatch(phone)) {
+                    isPhoneNumberValidate = false;
                     return 'Enter a valid phone number (e.g., +1234567890)';
                   }
+                  isPhoneNumberValidate = true;
 
                   return null;
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               LabeledTextField(
+                isvalidate: isemailValidate,
                 controller: _emailController,
                 hint: "example@gmail.com",
                 validator: (email) {
@@ -139,18 +164,20 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     final RegExp emailRegExp = RegExp(
                         r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
                     if (!emailRegExp.hasMatch(email)) {
+                      isemailValidate = false;
                       return 'Enter a valid email address';
                     }
                   }
+                  isemailValidate = true;
                   return null; // Email is optional, so we allow empty input
                 },
                 label: Row(
                   children: [
-                    Text(
+                    const Text(
                       "Email",
                       style: AppTheme.style14BoldBlack,
                     ),
-                    SizedBox(width: 12),
+                    const SizedBox(width: 12),
                     Text(
                       "(Optional)",
                       style: AppTheme.style14BoldBlack.copyWith(
@@ -159,8 +186,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   ],
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               LabeledTextField(
+                isvalidate: isPasswordValidate,
                 isvisible: isPasswordVisiblePassword,
                 suffixIcon: IconButton(
                   icon: Icon(
@@ -180,24 +208,29 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 errorMaxLine: 3,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
+                    isPasswordValidate = false;
                     return "Password is required";
                   }
 
                   final RegExp passwordRegExp =
                       RegExp(r"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,50}$");
                   if (!passwordRegExp.hasMatch(value)) {
+                    isPasswordValidate = false;
+
                     return "Password must be at least 8 characters, include at least one letter and one number";
                   }
+                  isPasswordValidate = true;
 
                   return null;
                 },
-                label: Text(
+                label: const Text(
                   "Password",
                   style: AppTheme.style14BoldBlack,
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               LabeledTextField(
+                isvalidate: isComfirmPasswordValidate,
                 controller: _confirmPasswordController,
                 isvisible: isPasswordVisibleConfirmPassword,
                 suffixIcon: IconButton(
@@ -217,6 +250,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 hint: "*****************************",
                 validator: (value) {
                   if (value == null || value.isEmpty) {
+                    isComfirmPasswordValidate = false;
                     return "Confirm Password is required";
                   }
 
@@ -224,30 +258,40 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                       RegExp(r"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,50}$");
 
                   if (!passwordRegExp.hasMatch(value)) {
+                    setState(() {
+                      isComfirmPasswordValidate = false;
+                    });
+
                     return "Password must be at least 8 characters, include at least one letter and one number.";
                   } else if (value != _passwordController.text) {
+                    setState(() {
+                      isComfirmPasswordValidate = false;
+                    });
+
                     return "Passwords do not match";
                   }
+                  isComfirmPasswordValidate = true;
 
                   return null;
                 },
-                label: Text(
+                label: const Text(
                   "Confirm Password",
                   style: AppTheme.style14BoldBlack,
                 ),
                 errorMaxLine: 3, // Allows multi-line error messages if needed
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               Row(
                 children: [
                   Checkbox(
                       value: false,
-                      side: BorderSide(color: AppTheme.mainAppColor, width: 1),
-                      fillColor: WidgetStatePropertyAll(
+                      side: const BorderSide(
+                          color: AppTheme.mainAppColor, width: 1),
+                      fillColor: const WidgetStatePropertyAll(
                         Colors.transparent,
                       ),
                       onChanged: (value) {}),
-                  Text('Agree to ', style: AppTheme.styleblack16normal),
+                  const Text('Agree to ', style: AppTheme.styleblack16normal),
                   GestureDetector(
                     onTap: () {},
                     child: Text(
@@ -259,7 +303,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               AppButton(
                 width: double.infinity,
                 height: defaultButtonHeight,
@@ -267,15 +311,16 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 text: "Continue",
                 onPress: () {
                   if (_formKey.currentState!.validate()) {
+                    setState(() {});
                     signUp();
                   }
                 },
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Have an account?   '),
+                  const Text('Have an account?   '),
                   GestureDetector(
                     onTap: () {},
                     child: Text(

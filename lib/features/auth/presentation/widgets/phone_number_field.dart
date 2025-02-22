@@ -10,8 +10,13 @@ class PhoneNumberField extends StatelessWidget {
   final TextEditingController? controller;
   final void Function(PhoneNumber)? onChanged;
   final String? Function(String?)? validator;
+  final bool isPhoneNumberIsValidate;
   const PhoneNumberField(
-      {super.key, this.controller, this.onChanged, this.validator});
+      {super.key,
+      this.controller,
+      this.onChanged,
+      this.validator,
+      required this.isPhoneNumberIsValidate});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +37,9 @@ class PhoneNumberField extends StatelessWidget {
             height: 20,
           ),
           decoration: InputDecoration(
-            fillColor: Colors.white,
+            fillColor: isPhoneNumberIsValidate == false
+                ? const Color(0xffFFE5E5)
+                : Colors.white,
             filled: true,
             hintText: "Enter phone number",
             focusedBorder:

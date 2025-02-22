@@ -27,6 +27,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool isPasswordVisible = true;
+  bool isPasswordValidate = true;
+  bool isPhoneNumberIsValidate = true;
 
   @override
   void initState() {
@@ -71,10 +73,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 marginBottom: 64,
               ),
               PhoneNumberField(
+                isPhoneNumberIsValidate: isPasswordValidate,
                 controller: _phoneController,
               ),
               SizedBox(height: 14),
               LabeledTextField(
+                isvalidate: isPasswordValidate,
                 isvisible: isPasswordVisible,
                 suffixIcon: IconButton(
                   icon: Icon(
