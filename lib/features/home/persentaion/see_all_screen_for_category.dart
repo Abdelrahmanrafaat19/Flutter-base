@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/core/Theme/app_theme.dart';
 import 'package:flutter_base/core/constants/assets.dart';
@@ -68,168 +69,174 @@ class _SeeAllScreenForCategoryState extends State<SeeAllScreenForCategory> {
             ),
             SliverList.builder(
               itemBuilder: (context, index) {
-                return Container(
-                  height: 100,
-                  width: double.infinity,
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 85,
-                        height: 100,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(8),
-                            bottomLeft: Radius.circular(8),
+                return IntrinsicHeight(
+                  child: Container(
+                    width: double.infinity,
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 85,
+                          height: 100,
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadiusDirectional.only(
+                              topStart: Radius.circular(8),
+                              bottomStart: Radius.circular(8),
+                            ),
+                            image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: NetworkImage(
+                                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJ0EqHI6h5QgFTXGG_1i2FADG1xulRbVtecA&s",
+                              ),
+                            ),
                           ),
-                          image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image: NetworkImage(
-                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJ0EqHI6h5QgFTXGG_1i2FADG1xulRbVtecA&s",
+                          child: Align(
+                            alignment: AlignmentDirectional.bottomStart,
+                            child: Container(
+                              width: 65,
+                              height: 22,
+                              padding: const EdgeInsetsDirectional.symmetric(
+                                  horizontal: 5, vertical: 6),
+                              decoration: const BoxDecoration(
+                                  color: AppTheme.lightGreen,
+                                  borderRadius: BorderRadiusDirectional.only(
+                                      topEnd:
+                                          Radius.circular(defaultButtonRadius))),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SVGIcons.localSVG(discountIconPath,
+                                      width: 14, height: 14),
+                                  Text(
+                                    "15% OFF",
+                                    style: AppTheme
+                                        .styleWithTextGreenAdelleSansExtendedFonts12w400
+                                        .copyWith(fontSize: 10),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                        child: Align(
-                          alignment: AlignmentDirectional.bottomStart,
-                          child: Container(
-                            width: 65,
-                            height: 22,
-                            padding: const EdgeInsetsDirectional.symmetric(
-                                horizontal: 5, vertical: 6),
-                            decoration: const BoxDecoration(
-                                color: AppTheme.lightGreen,
-                                borderRadius: BorderRadiusDirectional.only(
-                                    topEnd:
-                                        Radius.circular(defaultButtonRadius))),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
+                        const SizedBox(
+                          width: 16,
+                        ),
+                        Expanded(
+                          child: SizedBox(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SVGIcons.localSVG(discountIconPath,
-                                    width: 14, height: 14),
-                                Text(
-                                  "15% OFF",
-                                  style: AppTheme
-                                      .styleWithTextGreenAdelleSansExtendedFonts12w400
-                                      .copyWith(fontSize: 10),
+                                const SizedBox(
+                                  height: 12,
+                                ),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text(
+                                      "Tako",
+                                      style: AppTheme
+                                          .styleWithTextBlackAdelleSansExtendedFonts18w500,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                                      child: Row(
+                                        children: [
+                                          SVGIcons.localSVG(ratingStarIconPath,
+                                              width: 16, height: 16),
+                                          const SizedBox(
+                                            width: 4,
+                                          ),
+                                          const Text(
+                                            "4.5",
+                                            style: AppTheme
+                                                .styleWithTextBlackAdelleSansExtendedFonts14w500,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 12,
+                                ),
+                                Row(
+                                  children: [
+                                    SVGIcons.localSVG(clockIconPath,
+                                        width: 16, height: 16),
+                                    const Padding(
+                                      padding: EdgeInsetsDirectional.symmetric(
+                                          horizontal: 6.0),
+                                      child: Text(
+                                        "20 Mins",
+                                        style:
+                                            AppTheme.styleWithAppGrey7Fonts14w400,
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 4,
+                                      width: 4,
+                                      decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: AppTheme.appGrey15),
+                                    ),
+                                    const SizedBox(
+                                      width: 6,
+                                    ),
+                                    SVGIcons.localSVG(categoryIconPath,
+                                        width: 16, height: 16),
+                                    const Padding(
+                                      padding: EdgeInsetsDirectional.symmetric(
+                                          horizontal: 6.0),
+                                      child: Text(
+                                        "Mexican",
+                                        style:
+                                            AppTheme.styleWithAppGrey7Fonts14w400,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                Row(
+                                  children: [
+                                    SVGIcons.localSVG(gpsIconPath,
+                                        width: 16, height: 16),
+                                    const Padding(
+                                      padding: EdgeInsetsDirectional.symmetric(
+                                          horizontal: 6.0),
+                                      child: Text(
+                                        "Madinty, South Park, B208",
+                                        style:
+                                            AppTheme.styleWithAppGrey7Fonts14w400,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: defaultPaddingHorizontal),
+                                      child: SVGIcons.localSVG(favoriteIconPath,
+                                          width: 24, height: 24),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 8,
                                 )
                               ],
                             ),
                           ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 16,
-                      ),
-                      Expanded(
-                        child: SizedBox(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(
-                                height: 12,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text(
-                                    "Tako",
-                                    style: AppTheme
-                                        .styleWithTextBlackAdelleSansExtendedFonts18w500,
-                                  ),
-                                  Row(
-                                    children: [
-                                      SVGIcons.localSVG(ratingStarIconPath,
-                                          width: 16, height: 16),
-                                      const SizedBox(
-                                        width: 4,
-                                      ),
-                                      const Text(
-                                        "4.5",
-                                        style: AppTheme
-                                            .styleWithTextBlackAdelleSansExtendedFonts14w500,
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 12,
-                              ),
-                              Row(
-                                children: [
-                                  SVGIcons.localSVG(clockIconPath,
-                                      width: 16, height: 16),
-                                  const Padding(
-                                    padding: EdgeInsetsDirectional.symmetric(
-                                        horizontal: 6.0),
-                                    child: Text(
-                                      "20 Mins",
-                                      style:
-                                          AppTheme.styleWithAppGrey7Fonts14w400,
-                                    ),
-                                  ),
-                                  Container(
-                                    height: 4,
-                                    width: 4,
-                                    decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: AppTheme.appGrey15),
-                                  ),
-                                  const SizedBox(
-                                    width: 6,
-                                  ),
-                                  SVGIcons.localSVG(categoryIconPath,
-                                      width: 16, height: 16),
-                                  const Padding(
-                                    padding: EdgeInsetsDirectional.symmetric(
-                                        horizontal: 6.0),
-                                    child: Text(
-                                      "Mexican",
-                                      style:
-                                          AppTheme.styleWithAppGrey7Fonts14w400,
-                                    ),
-                                  )
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              Row(
-                                children: [
-                                  SVGIcons.localSVG(gpsIconPath,
-                                      width: 16, height: 16),
-                                  const Padding(
-                                    padding: EdgeInsetsDirectional.symmetric(
-                                        horizontal: 6.0),
-                                    child: Text(
-                                      "Madinty, South Park, B208",
-                                      style:
-                                          AppTheme.styleWithAppGrey7Fonts14w400,
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 20,
-                                  ),
-                                  SVGIcons.localSVG(favoriteIconPath,
-                                      width: 24, height: 24),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 8,
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   ),
                 );
               },
