@@ -27,4 +27,5 @@ const discountIconPath = "assets/images/discount_icon.svg";
 const clockIconPath = "assets/images/clock.svg";
 const categoryIconPath = "assets/images/category_icon.svg";
 const profileIconPath = "assets/images/profile_icon.svg";
+const filterRatingStarIconPath = "assets/images/filter_rating_star.svg";
 

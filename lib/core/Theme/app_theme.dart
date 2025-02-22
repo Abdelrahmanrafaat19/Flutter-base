@@ -11,6 +11,7 @@ class AppTheme {
   static const Color secondaryAppColorLight = Color(0xFF4FC2FF);
   static const Color secondaryAppColorDark = Color(0xFF439FD0);
   static const Color secondaryTempAppColorDark = Color(0xFFF04741);
+  static const Color orangeAppColor = Color(0xFFFF7F50);
   static const Color gray = Color(0xFFD0D1D4);
   static const Color lightGreen = Color(0xFFE7F6E5);
   static const Color appGreen = Color(0xFF0DA500);
@@ -234,6 +235,9 @@ class AppTheme {
   //     color: mainAppColor , fontSize: 16, fontWeight: FontWeight.w400);
 
   static const TextStyle styleWithTextBlackAdelleSansExtendedFonts14w400 =
+  TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w400);
+
+  static const TextStyle styleWithTextBlackSmRegularFonts14w400 =
   TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w400);
 
   static const TextStyle styleWithTextWhiteAdelleSansExtendedFonts14w400 =

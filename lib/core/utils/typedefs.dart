@@ -7,3 +7,4 @@ typedef FutureResponseModel = Future<ResponseModel>;
 
 // call backs
 typedef VoidCallback = Function();
+typedef FilterSelectCallBack = Function(int?);

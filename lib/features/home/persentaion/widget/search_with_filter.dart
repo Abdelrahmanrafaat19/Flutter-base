@@ -14,7 +14,7 @@ typedef OnTextChangeListener = Function(String);
 class AppSearchBarWithFilter extends StatefulWidget {
   final int? delay;
   final bool hasFilter;
-  final VoidCallback onFilterClick;
+  final VoidCallback? onFilterClick;
   final VoidCallback? onSearchClick;
   final OnTextChangeListener? onTextChangeListener;
   final TextEditingController? controller;
@@ -22,8 +22,7 @@ class AppSearchBarWithFilter extends StatefulWidget {
   final String? hintTxt;
   const AppSearchBarWithFilter(
       {super.key,
-      required this.hasFilter,
-      required this.onFilterClick,
+      required this.hasFilter, this.onFilterClick,
       this.onTextChangeListener,
       this.delay, this.enableSearch = true, this.onSearchClick, this.controller, this.hintTxt });
 
@@ -119,7 +118,7 @@ class _AppSearchBarWithFilterState extends State<AppSearchBarWithFilter> {
         widget.hasFilter
             ? InkWell(
                 onTap: () {
-                  widget.onFilterClick.call();
+                  widget.onFilterClick?.call();
                 },
                 child: Container(
                   height: 50,

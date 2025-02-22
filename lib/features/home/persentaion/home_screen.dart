@@ -4,6 +4,7 @@ import 'package:flutter_base/core/Constants/Constants.dart';
 import 'package:flutter_base/core/Theme/app_theme.dart';
 import 'package:flutter_base/core/widgets/svg_icons.dart';
 import 'package:flutter_base/features/home/persentaion/widget/category_widgets/horizontal_category_listview_with_title.dart';
+import 'package:flutter_base/features/home/persentaion/bottom_sheets/filter_bottom_sheet.dart';
 import 'package:flutter_base/features/home/persentaion/widget/restaurant_widgets/home_restaurant_listview.dart';
 import 'package:flutter_base/features/home/persentaion/widget/search_with_filter.dart';
 import 'package:flutter_base/features/home/persentaion/widget/service_options.dart';
@@ -90,7 +91,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       AppSearchBarWithFilter(
                         hasFilter: false,
                         enableSearch: false,
-                        onFilterClick: () {},
+                        onSearchClick: () {
+                          print("asdfkl");
+                          showFilterBottomSheet();
+                        },
                         hintTxt: "Type of food, restaurants name",
                       ),
                       SizedBox(
@@ -156,5 +160,16 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     UtilsExts.handleStatusBarColorWithIcon(
         statusBarColor: Colors.white);
+  }
+
+  void showFilterBottomSheet() {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(10), topLeft: Radius.circular(10))),
+        context: context,
+        builder: (BuildContext context) => FilterBottomSheet());
   }
 }
