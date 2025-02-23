@@ -178,7 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void navigateToShowAllCategories() {
-    context.push(seeAllScreenForCategoryRoute);
+    context.push(cuisinesScreenRoute);
   }
 
 }

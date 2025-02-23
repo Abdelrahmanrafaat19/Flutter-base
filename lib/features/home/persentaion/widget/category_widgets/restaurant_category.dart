@@ -6,13 +6,15 @@ import 'package:flutter_base/core/widgets/circle_image.dart';
 class RestaurantCategory extends StatelessWidget {
   final String? categoryImg;
   final String? categoryName;
-  const RestaurantCategory({super.key, this.categoryImg, this.categoryName});
+  final double width;
+  final double height;
+  const RestaurantCategory({super.key, this.categoryImg, this.categoryName, required this.width, required this.height});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 110,
-      height: 80,
+      width: width,
+      height: height,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(defaultButtonRadius)
@@ -21,14 +23,14 @@ class RestaurantCategory extends StatelessWidget {
         children: [
 
           ImageView(
-            width: 110,
-            height: 80,
+            width: width,
+            height: height,
             initialImg: categoryImg
           ),
 
           Container(
-            width: 110,
-            height: 80,
+            width: width,
+            height: height,
             color: CupertinoColors.black.withOpacity(.3),
           ),
           Align(

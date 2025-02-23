@@ -1,7 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/core/widgets/custom_app_bar.dart';
+import '../../../core/Constants/Constants.dart';
 import '../../../core/localization/Keys.dart';
+import '../../../core/widgets/circle_image.dart';
 import 'widget/category_widgets/restaurant_category.dart';
 
 class CuisinesScreen extends StatelessWidget {
@@ -20,14 +22,15 @@ class CuisinesScreen extends StatelessWidget {
         child: GridView.builder(
           itemCount: 12,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
+              crossAxisCount: 3,
               crossAxisSpacing: 9,
               mainAxisSpacing: MediaQuery.of(context).size.height * 0.0379,
               childAspectRatio: 2 / 1.7),
           itemBuilder: (context, index) {
-            return const RestaurantCategory(
-              categoryImg:
-                  "https://t3.ftcdn.net/jpg/02/52/38/80/360_F_252388016_KjPnB9vglSCuUJAumCDNbmMzGdzPAucK.jpg",
+            return RestaurantCategory(
+              width: double.infinity,
+              height: double.infinity,
+              categoryImg: "https://t3.ftcdn.net/jpg/02/52/38/80/360_F_252388016_KjPnB9vglSCuUJAumCDNbmMzGdzPAucK.jpg",
               categoryName: "sdfsadfs",
             );
           },
