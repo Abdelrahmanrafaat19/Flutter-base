@@ -161,8 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
-    UtilsExts.handleStatusBarColorWithIcon(
-        statusBarColor: Colors.white);
+    UtilsExts.handleStatusBarColorWithIcon();
   }
 
   void navigateToShowAllCategories() {
