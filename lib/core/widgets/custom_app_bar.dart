@@ -38,7 +38,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       toolbarHeight: leadingHeightCount(),
       automaticallyImplyLeading: false,
       elevation: 0,
-      backgroundColor: appBarColor ?? AppTheme.mainBackgroundLightColor,
+      backgroundColor: appBarColor ?? AppTheme.mainAppBackgroundColor,
       centerTitle: isCenter,
       actions: trailingWidget != null ? [trailingWidget!] : [],
       leadingWidth: 50,
@@ -83,5 +83,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(90);
+  Size get preferredSize => const Size.fromHeight(55);
 }

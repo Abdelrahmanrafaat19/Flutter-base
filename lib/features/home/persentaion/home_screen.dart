@@ -91,11 +91,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 24,
                       ),
                       AppSearchBarWithFilter(
+                        hasBorder: false,
                         hasFilter: false,
                         enableSearch: false,
                         onSearchClick: () {
-                          print("asdfkl");
-                          showFilterBottomSheet();
                         },
                         hintTxt: "Type of food, restaurants name",
                       ),
@@ -164,17 +163,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     UtilsExts.handleStatusBarColorWithIcon(
         statusBarColor: Colors.white);
-  }
-
-  void showFilterBottomSheet() {
-    showModalBottomSheet(
-        isScrollControlled: true,
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(10), topLeft: Radius.circular(10))),
-        context: context,
-        builder: (BuildContext context) => FilterBottomSheet());
   }
 
   void navigateToShowAllCategories() {

@@ -36,7 +36,7 @@ class LabeledTextField extends StatelessWidget {
         label,
         const SizedBox(height: 8),
         AppTextField(
-          hintStyle: AppTheme.style14normalblack.copyWith(color: AppTheme.gray),
+          hintStyle: AppTheme.style14normalblack.copyWith(color: AppTheme.appGrey8),
           hint: hint,
           focusNode: focusNode,
           borderRidus: BorderRadius.circular(8),

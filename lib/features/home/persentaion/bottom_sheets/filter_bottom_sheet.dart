@@ -58,27 +58,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     ItemSelector(
       id: 5,
       name: "Indian",
-    ),
-    ItemSelector(
-      id: 1,
-      name: "Mexican",
-    ),
-    ItemSelector(
-      id: 2,
-      name: "Western",
-    ),
-    ItemSelector(
-      id: 3,
-      name: "Eastern",
-    ),
-    ItemSelector(
-      id: 4,
-      name: "Chinese",
-    ),
-    ItemSelector(
-      id: 5,
-      name: "Indian",
-    ),
+    )
   ];
   final ratings = [
     ItemSelector(
@@ -107,7 +87,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   double crossAxisSpacing = 20;
   double mainAxisSpacing = 20;
   double childAspectRatio = 2.5;
-  double itemHeight = 46; // Example fixed height
+  double itemHeight = 47; // Example fixed height
 
 
   @override
