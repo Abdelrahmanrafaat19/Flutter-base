@@ -49,5 +49,12 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>NSFaceIDUsageDescription</key>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need your location to provide better service.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>We need your location to provide continuous tracking.</string>
+	<key>NSUserNotificationUsageDescription</key>
+	<string>We need permission to send notifications.</string>
+
 </dict>
 </plist>

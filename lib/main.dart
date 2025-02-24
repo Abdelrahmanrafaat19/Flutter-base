@@ -17,7 +17,6 @@ import 'core/constants/app_routes.dart';
 import 'features/auth/presentation/screens/login_screen.dart';
 import 'features/auth/presentation/screens/otp_screen.dart';
 import 'features/auth/presentation/screens/sign_up_screen.dart';
-import 'features/auth/presentation/screens/splash_screen.dart';
 import 'features/home/persentaion/cuisines_screen.dart';
 import 'features/home/persentaion/see_all_screen_for_category.dart';
 
@@ -141,7 +140,8 @@ class MyApp extends ConsumerWidget {
     routes: <GoRoute>[
       GoRoute(
         path: splashScreenRoute,
-        builder: (BuildContext context, GoRouterState state) => LoginScreen(),
+        builder: (BuildContext context, GoRouterState state) =>
+            NotificationPermissionScreen(),
       ),
       GoRoute(
         path: loginScreenRoute,

@@ -2,10 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_base/core/Theme/app_theme.dart';
 import 'package:flutter_base/core/constants/constants.dart';
 import 'package:flutter_base/core/widgets/app_button.dart';
+import 'package:flutter_base/features/notification/data/repositories/notification_permission_repo_imple.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-class NotificationPermissionScreen extends StatelessWidget {
+class NotificationPermissionScreen extends StatefulWidget {
   const NotificationPermissionScreen({super.key});
 
+  @override
+  State<NotificationPermissionScreen> createState() =>
+      _NotificationPermissionScreenState();
+}
+
+class _NotificationPermissionScreenState
+    extends State<NotificationPermissionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +60,10 @@ class NotificationPermissionScreen extends StatelessWidget {
                 height: defaultButtonHeight,
                 text: "Allow Notification",
                 backColor: AppTheme.mainAppColor,
-                onPress: () {}),
+                onPress: () async {
+                  NotificationPermissionRepoImple()
+                      .requestNotificationPermission();
+                }),
             SizedBox(
               height: 16,
             ),
