@@ -23,14 +23,10 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
-  void initState() {
-    UtilsExts.handleStatusBarColorWithIcon(
-        statusBarColor:
-        Color.lerp(AppTheme.appHeaderOne, AppTheme.appHeaderTwo, .4),statusBarIcons: Brightness.light);
-    super.initState();
-  }
-  @override
   Widget build(BuildContext context) {
+
+    handleChangeHomeStatueBarColor();
+
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -71,8 +67,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 alignment: AlignmentDirectional.center,
                                 child: InkWell(
                                     onTap: () {},
-                                    child: SVGIcons.localSVG(notificationIconPath,
-                                        width: 24, height: 24))),
+                                    child: SVGIcons.localSVG(
+                                        notificationIconPath,
+                                        width: 24,
+                                        height: 24))),
                             Positioned(
                               right: 4,
                               top: 1,
@@ -94,8 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         hasBorder: false,
                         hasFilter: false,
                         enableSearch: false,
-                        onSearchClick: () {
-                        },
+                        onSearchClick: () {},
                         hintTxt: "Type of food, restaurants name",
                       ),
                       SizedBox(
@@ -142,12 +139,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           itemClick: () {},
                           onSeeAllClickListener: () {
                             navigateToShowAllCategories();
-                          }
-                      ),
+                          }),
                       SizedBox(
                         height: 24,
                       ),
-                      HomeRestaurantListview(restaurants: ["","",""], showLoading: false)
+                      HomeRestaurantListview(
+                          restaurants: ["", "", ""], showLoading: false)
                     ],
                   ),
                 ),
@@ -159,13 +156,17 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  @override
-  void dispose() {
-    UtilsExts.handleStatusBarColorWithIcon();
-  }
-
   void navigateToShowAllCategories() {
     context.push(cuisinesScreenRoute);
   }
 
+  void handleChangeHomeStatueBarColor() {
+    UtilsExts.handleStatusBarColorWithIcon(
+        statusBarColor: Color.lerp(
+          AppTheme.appHeaderOne,
+          AppTheme.appHeaderTwo,
+          .4,
+        ),
+        statusBarIcons: Brightness.light);
+  }
 }
