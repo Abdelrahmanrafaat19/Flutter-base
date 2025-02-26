@@ -6,24 +6,33 @@ import 'package:flutter_base/core/constants/constants.dart';
 import 'package:flutter_base/core/widgets/custom_app_bar.dart';
 import 'package:flutter_base/core/widgets/paginated_listview.dart';
 import 'package:flutter_base/core/widgets/svg_icons.dart';
+import 'package:flutter_base/features/home/data/item_selector.dart';
+import 'package:flutter_base/features/home/persentaion/Providers/FilterStateNotifiers.dart';
+import 'package:flutter_base/features/home/persentaion/widget/filter/horizontal_filter_result_listview.dart';
 import 'package:flutter_base/features/home/persentaion/widget/restaurant_widgets/vertical_restaurant_card.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import 'bottom_sheets/filter_bottom_sheet.dart';
 import 'widget/search_with_filter.dart';
 
-class SeeAllScreenForCategory extends StatefulWidget {
+class SeeAllScreenForCategory extends ConsumerStatefulWidget {
   const SeeAllScreenForCategory({super.key});
 
   @override
-  State<SeeAllScreenForCategory> createState() =>
+  ConsumerState<SeeAllScreenForCategory> createState() =>
       _SeeAllScreenForCategoryState();
 }
 
-class _SeeAllScreenForCategoryState extends State<SeeAllScreenForCategory> {
-
+class _SeeAllScreenForCategoryState extends ConsumerState<SeeAllScreenForCategory> {
+  List<ItemSelector> filterList = [];
   @override
   Widget build(BuildContext context) {
+    var filterResult = ref.watch(restaurantFilterProvider);
+
+    print("filter result $filterResult");
     return Scaffold(
         backgroundColor: const Color(0xffFAFAFA),
         appBar: CustomAppBar(
@@ -46,6 +55,10 @@ class _SeeAllScreenForCategoryState extends State<SeeAllScreenForCategory> {
               ),
             ),
             SizedBox(
+              height: filterResult.isNotEmpty ? 20 : 0,
+            ),
+            HorizontalFilterResultListview(list: filterResult),
+            SizedBox(
               height: 20,
             ),
             Expanded(
@@ -64,9 +77,9 @@ class _SeeAllScreenForCategoryState extends State<SeeAllScreenForCategory> {
                       parent: BouncingScrollPhysics()),
                   paginated: true,
                   builder: (item) => Skeletonizer(
-                    enabled: false,
-                    child: const VerticalRestaurantCard(),
-                  )),
+                        enabled: false,
+                        child: const VerticalRestaurantCard(),
+                      )),
             )
           ],
         ));
@@ -80,6 +93,31 @@ class _SeeAllScreenForCategoryState extends State<SeeAllScreenForCategory> {
             borderRadius: BorderRadius.only(
                 topRight: Radius.circular(10), topLeft: Radius.circular(10))),
         context: context,
-        builder: (BuildContext context) => FilterBottomSheet());
+        builder: (BuildContext context) => FilterBottomSheet(
+              onFilterApply: (selectedSortByItemIndex, selectedCuisinesIndex,
+                  selectedRatingIndex, rangeValues) {
+                filterList.clear();
+                if(selectedSortByItemIndex != null){
+                  filterList.add(sortByItems[selectedSortByItemIndex]);
+                }
+                if(selectedCuisinesIndex != null){
+                  // filterList.add(sortByItems[selectedSortByItemIndex]);
+                }
+                if(selectedRatingIndex != null){
+                  filterList.add(ratings[selectedRatingIndex]);
+                }
+                if(rangeValues != null){
+                  filterList.add(
+                    ItemSelector(
+                      name: "${rangeValues.start} - ${rangeValues.end}"
+                    )
+                  );
+                }
+                print(
+                  filterList.length
+                );
+                ref.read(restaurantFilterProvider.notifier).updateStatue(filterList);
+              },
+            ));
   }
 }

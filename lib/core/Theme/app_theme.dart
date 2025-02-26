@@ -14,6 +14,8 @@ class AppTheme {
   static const Color orangeAppColor = Color(0xFFFF7F50);
   static const Color gray = Color(0xFFD0D1D4);
   static const Color lightGreen = Color(0xFFE7F6E5);
+  static const Color filterOptionBackground = Color(0xFFE6F2F2);
+  static const Color filterOptionTextColor = Color(0xFF008080);
   static const Color appGreen = Color(0xFF0DA500);
 
   static const Color appGrey = Color(0xFFBEBEBE); //#E5E5E5

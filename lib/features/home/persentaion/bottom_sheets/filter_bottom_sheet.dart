@@ -2,38 +2,29 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/core/Theme/app_theme.dart';
 import 'package:flutter_base/core/constants/assets.dart';
+import 'package:flutter_base/core/constants/constants.dart';
 import 'package:flutter_base/core/widgets/svg_icons.dart';
 import 'package:flutter_base/features/home/data/item_selector.dart';
-import 'package:flutter_base/features/home/persentaion/widget/filter_option_item.dart';
+import 'package:flutter_base/features/home/persentaion/widget/filter/filter_option_item.dart';
 
-import '../../../../core/Constants/Constants.dart';
+import '../../../../core/utils/typedefs.dart';
 import '../../../../core/widgets/app_button.dart';
 
 class FilterBottomSheet extends StatefulWidget {
-  const FilterBottomSheet({super.key});
+  final FilterResult onFilterApply;
+  const FilterBottomSheet({super.key, required this.onFilterApply});
 
   @override
   State<FilterBottomSheet> createState() => _FilterBottomSheetState();
 }
 
 class _FilterBottomSheetState extends State<FilterBottomSheet> {
-  RangeValues _currentRangeValues = const RangeValues(0, 100);
+  RangeValues _currentRangeValues =
+      const RangeValues(filterPriceStart, filterPriceEnd);
 
-  int? selectedSortByItem;
-  final sortByItems = [
-    ItemSelector(
-      id: 0,
-      name: "All",
-    ),
-    ItemSelector(
-      id: 1,
-      name: "Newest",
-    ),
-    ItemSelector(
-      id: 2,
-      name: "Popular",
-    ),
-  ];
+  int? selectedSortByItemIndex;
+  int? selectedCuisinesIndex;
+  int? selectedRatingIndex;
   final cuisines = [
     ItemSelector(
       id: 0,
@@ -60,28 +51,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
       name: "Indian",
     )
   ];
-  final ratings = [
-    ItemSelector(
-      id: 0,
-      name: "1",
-    ),
-    ItemSelector(
-      id: 1,
-      name: "2",
-    ),
-    ItemSelector(
-      id: 2,
-      name: "3",
-    ),
-    ItemSelector(
-      id: 3,
-      name: "4",
-    ),
-    ItemSelector(
-      id: 4,
-      name: "5",
-    ),
-  ];
 
   int crossAxisCount = 3;
   double crossAxisSpacing = 20;
@@ -89,13 +58,9 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   double childAspectRatio = 2.5;
   double itemHeight = 47; // Example fixed height
 
-
   @override
   Widget build(BuildContext context) {
-
-    // Calculate number of rows
-    int rows = (cuisines.length / crossAxisCount).ceil();
-    double totalHeight = (rows * itemHeight) + ((rows - 1) * mainAxisSpacing);
+    calculateCuisinesHeight();
 
     return Padding(
       padding: const EdgeInsets.all(defaultPaddingHorizontal),
@@ -145,12 +110,12 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 itemCount: sortByItems.length,
                 itemBuilder: (context, index) {
                   return FilterOptionItem(
-                    state: selectedSortByItem == sortByItems[index].id,
+                    state: selectedSortByItemIndex == sortByItems[index].id,
                     id: sortByItems[index].id,
                     optionName: sortByItems[index].name ?? "",
                     onItemSelect: (int) {
                       setState(() {
-                        selectedSortByItem = sortByItems[index].id;
+                        selectedSortByItemIndex = sortByItems[index].id;
                       });
                     },
                   );
@@ -168,7 +133,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               height: defaultPaddingHorizontal,
             ),
             SizedBox(
-              height: totalHeight,
+              height: calculateCuisinesHeight(),
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: crossAxisCount, // 3 widgets per row
@@ -179,12 +144,12 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 itemCount: cuisines.length,
                 itemBuilder: (context, index) {
                   return FilterOptionItem(
-                    state: selectedSortByItem == cuisines[index].id,
+                    state: selectedCuisinesIndex == cuisines[index].id,
                     id: cuisines[index].id,
                     optionName: cuisines[index].name ?? "",
                     onItemSelect: (int) {
                       setState(() {
-                        selectedSortByItem = cuisines[index].id;
+                        selectedCuisinesIndex = cuisines[index].id;
                       });
                     },
                   );
@@ -220,18 +185,18 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 itemCount: ratings.length,
                 itemBuilder: (context, index) {
                   return FilterOptionItem(
-                    icon: SVGIcons.localSVG(
-                        filterRatingStarIconPath,
-                        color: selectedSortByItem == ratings[index].id
+                    icon: SVGIcons.localSVG(filterRatingStarIconPath,
+                        color: selectedRatingIndex == ratings[index].id
                             ? Colors.white
                             : Colors.orange,
-                        width: 20,height: 20),
-                    state: selectedSortByItem == ratings[index].id,
+                        width: 20,
+                        height: 20),
+                    state: selectedRatingIndex == ratings[index].id,
                     id: ratings[index].id,
                     optionName: ratings[index].name ?? "",
                     onItemSelect: (int) {
                       setState(() {
-                        selectedSortByItem = ratings[index].id;
+                        selectedRatingIndex = ratings[index].id;
                       });
                     },
                   );
@@ -244,8 +209,9 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             Row(
               children: [
                 Text(
-                  "Rating",
-                  style: AppTheme.styleWithTextBlackAdelleSansExtendedFonts16w700,
+                  "Price",
+                  style:
+                      AppTheme.styleWithTextBlackAdelleSansExtendedFonts16w700,
                 ),
                 Spacer(),
                 Text(
@@ -278,12 +244,17 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               height: defaultPaddingHorizontal,
             ),
             AppButton(
+                enabled: enableFilterBtu(),
                 backColor: AppTheme.mainAppColor,
                 width: double.infinity,
                 height: 56,
                 text: "Show Results",
                 onPress: () {
-        
+                  widget.onFilterApply.call(
+                      selectedSortByItemIndex,
+                      selectedCuisinesIndex,
+                      selectedRatingIndex,
+                      _currentRangeValues);
                 }),
             SizedBox(
               height: defaultPaddingHorizontal,
@@ -292,5 +263,19 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
         ),
       ),
     );
+  }
+
+  double calculateCuisinesHeight() {
+    int rows = (cuisines.length / crossAxisCount).ceil();
+    double totalHeight = (rows * itemHeight) + ((rows - 1) * mainAxisSpacing);
+    return totalHeight;
+  }
+
+  bool enableFilterBtu() {
+    return selectedSortByItemIndex != null ||
+        selectedRatingIndex != null ||
+        selectedCuisinesIndex != null ||
+        (_currentRangeValues.start == filterPriceStart &&
+            _currentRangeValues.end == filterPriceEnd);
   }
 }
