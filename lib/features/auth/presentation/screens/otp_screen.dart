@@ -12,7 +12,7 @@ import '../../../../core/constants/eunms.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/custom_app_bar.dart';
 import '../widgets/otp_fields.dart';
-import '../providers/auth_validation_providers.dart';
+import '../providers/auth_enable_btu_providers.dart';
 import '../widgets/timer_counter.dart';
 
 class OTPScreen extends ConsumerStatefulWidget {

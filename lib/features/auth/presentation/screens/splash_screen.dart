@@ -32,17 +32,16 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
       final client = ref.read(userProvider.notifier).checkIfUserExist();
       ref.read(userProvider.notifier).setUser(client);
-      ref.read(httpOperationsProvider).userToken = client?.token;
 
       context.go(loginScreenRoute);
       if (client != null) {
         // initFcmToken();
-        // context.go(R_MainScreen);
+        context.go(mainScreenRoute);
       } else {
         // if(prefs.getBool(doneLandingKey) == true){
         //   context.go(R_MainScreen);
         // }else {
-        //   context.push(R_OnBoardingScreen);
+          context.push(loginScreenRoute);
         // }
       }
 

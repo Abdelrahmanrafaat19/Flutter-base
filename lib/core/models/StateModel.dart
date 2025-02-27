@@ -17,7 +17,8 @@ class StateModel<T> {
   final DataState state;
   final T? data;
   final String? message;
-  StateModel({this.state = DataState.INITIAL, this.data, this.message});
+  final List<String>? errors;
+  StateModel( {this.state = DataState.INITIAL, this.data, this.message,this.errors,});
   @override
   String toString() {
     return "State -> $state , Data : $data ";
@@ -36,8 +37,8 @@ class StateModel<T> {
     return StateModel(state: DataState.SUCCESS,data: data,message: message);
   }
 
-  factory StateModel.fail(String message) {
-    return StateModel(state: DataState.ERROR,message: message);
+  factory StateModel.fail(String message,List<String> errors) {
+    return StateModel(state: DataState.ERROR,message: message,errors: errors);
   }
 
   factory StateModel.empty({dynamic data}) {
@@ -84,6 +85,6 @@ extension StateHandel on StateModel {
 
 extension ResponseToStateModel on ResponseModel {
   StateModel toState(){
-    return StateModel(data: data,state: isSuccess == true ? DataState.SUCCESS : DataState.ERROR,message: message);
+    return StateModel(data: data,state: code == 200 ? DataState.SUCCESS : DataState.ERROR,message: message);
   }
 }

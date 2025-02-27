@@ -11,7 +11,7 @@ import 'package:flutter_base/features/auth/presentation/widgets/auth_header_widg
 import 'package:flutter_base/features/auth/presentation/widgets/labeled_text_field.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../providers/auth_validation_providers.dart';
+import '../providers/auth_enable_btu_providers.dart';
 import '../widgets/success_bottom_sheet.dart';
 
 class ChangePassword extends ConsumerStatefulWidget {

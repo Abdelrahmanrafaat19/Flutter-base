@@ -8,7 +8,7 @@ class AuthRemoteDataSource {
   AuthRemoteDataSource(this._httpOps);
 
   Future<ResponseModel> login(String? phoneNumber, String? password) {
-    return _httpOps.postFormData(
+    return _httpOps.postData(
       endPoint: userLoginEndPoint,
       data: {
         "phoneNumber": phoneNumber.toString(),

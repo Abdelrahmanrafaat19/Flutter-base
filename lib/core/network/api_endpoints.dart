@@ -1,4 +1,4 @@
-const mainAppUrl = 'http://ec2-13-51-6-62.eu-north-1.compute.amazonaws.com:8080/api/';
+const mainAppUrl = 'http://ec2-16-171-111-76.eu-north-1.compute.amazonaws.com/api/eatsnbeats/';
 const mainAppUrlDomain = 'http://ajazsademo-001-site1.atempurl.com/public/';
 
 const userRegisterEndPoint = "users/createUser";

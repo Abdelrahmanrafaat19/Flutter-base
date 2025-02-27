@@ -6,7 +6,7 @@ class UserModel {
   String? firstName;
   String? lastName;
   String? email;
-  int? phoneNumber;
+  String? phoneNumber;
 
   UserModel(
       {this.token,

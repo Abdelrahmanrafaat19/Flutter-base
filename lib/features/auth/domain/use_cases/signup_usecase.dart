@@ -32,7 +32,7 @@ class SignupUseCase extends StateNotifier<StateModel<User>>{
         generatedToken: generatedToken
     );
 
-    if(signUpResponse.isSuccess == true){
+    if(signUpResponse.code == true){
       state = StateModel(
         state: DataState.SUCCESS,
         data: toUserEntity(UserModel.fromJson(signUpResponse.data)),

@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
@@ -18,21 +17,26 @@ class HttpOperations {
 
   HttpOperations(this.ref);
 
-  Future<ResponseModel> postData({required String endPoint,bool authorized = false,Map? data, String params = ""}) async {
-    try{
+  Future<ResponseModel> postData(
+      {required String endPoint,
+      bool authorized = false,
+      Map? data,
+      String params = ""}) async {
+    try {
       final response = await httpLog.post(
         Uri.parse(mainAppUrl + endPoint + (params)),
-        headers:authorized ? <String, String> {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $userToken',
-          "Accept" : "application/json",
-          'lang' : AppLocalizations.globalLocale?.languageCode ?? "en"
-        } :
-        {
-          'Content-Type': 'application/json; charset=UTF-8',
-          "Accept" : "application/json",
-          'lang' : AppLocalizations.globalLocale?.languageCode ?? "en"
-        },
+        headers: authorized
+            ? <String, String>{
+                'Authorization': 'Bearer $userToken',
+                'Content-Type': 'application/json',
+                'accept': 'application/hal+json',
+                'lang': AppLocalizations.globalLocale?.languageCode ?? "en"
+              }
+            : {
+                'Content-Type': 'application/json',
+                'accept': 'application/hal+json',
+                'lang': AppLocalizations.globalLocale?.languageCode ?? "en"
+              },
         body: json.encode(data ?? {}),
       );
 
@@ -50,35 +54,49 @@ class HttpOperations {
         name: 'Response',
       );
 
-      return ResponseModel.fromJson(jsonDecode(response.body));
+      print("responseModel code: ${response.statusCode}");
 
-    }catch(e){
+      if (response.statusCode == 200) {
+        return ResponseModel.fromJson(jsonDecode(response.body));
+      } else {
+        return ResponseModel(
+            responseState: ResponseState.Error,
+            code: response.statusCode,
+            message: jsonDecode(response.body)['message'] ??
+                'Unexpected error occurred',
+            errors: jsonDecode(response.body)['errors']);
+      }
+    } catch (e) {
       print(e);
       developer.log(
         e.toString(),
         name: 'Err',
       );
 
-      return ResponseModel(responseState: ResponseState.Error,isSuccess: false,message: e.toString());
+      return ResponseModel(
+          responseState: ResponseState.Error, code: 500, message: e.toString());
     }
   }
 
-  Future<ResponseModel> getData({required String endPoint,bool authorized = false, String params = ""}) async {
-
-    try{
+  Future<ResponseModel> getData(
+      {required String endPoint,
+      bool authorized = false,
+      String params = ""}) async {
+    try {
       final response = await httpLog.get(
         Uri.parse(mainAppUrl + endPoint + (params)),
-        headers:authorized ? <String, String> {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $userToken',
-          "Accept" : "application/json",
-          'lang' : AppLocalizations.globalLocale?.languageCode ?? "en"
-        } :
-        {
-          'Content-Type': 'application/json; charset=UTF-8',
-          "Accept" : "application/json",
-          'lang' : AppLocalizations.globalLocale?.languageCode ?? "en"
-        },
+        headers: authorized
+            ? <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8',
+                'Authorization': 'Bearer $userToken',
+                "Accept": "application/json",
+                'lang': AppLocalizations.globalLocale?.languageCode ?? "en"
+              }
+            : {
+                'Content-Type': 'application/json; charset=UTF-8',
+                "Accept": "application/json",
+                'lang': AppLocalizations.globalLocale?.languageCode ?? "en"
+              },
       );
       developer.log(
         '${response.request}',
@@ -88,30 +106,43 @@ class HttpOperations {
         _getPrettyJSONString(json.decode(response.body)),
         name: 'Response',
       );
-      return ResponseModel.fromJson(json.decode(response.body));
-    }catch(e){
+      if (response.statusCode == 200) {
+        return ResponseModel.fromJson(jsonDecode(response.body));
+      } else {
+        return ResponseModel(
+            responseState: ResponseState.Error,
+            code: response.statusCode,
+            message: jsonDecode(response.body)['message'] ??
+                'Unexpected error occurred',
+            errors: jsonDecode(response.body)['errors']);
+      }
+    } catch (e) {
       print("HTTP Error $e");
 
-      return ResponseModel(responseState: ResponseState.Error,isSuccess: false,message: e.toString());
+      return ResponseModel(
+          responseState: ResponseState.Error, code: 500, message: e.toString());
     }
   }
 
-  Future<ResponseModel> deleteData({required String endPoint,bool authorized = false, String params = ""}) async {
-
-    try{
+  Future<ResponseModel> deleteData(
+      {required String endPoint,
+      bool authorized = false,
+      String params = ""}) async {
+    try {
       final response = await httpLog.delete(
         Uri.parse(mainAppUrl + endPoint + (params)),
-        headers:authorized ? <String, String> {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $userToken',
-          "Accept" : "application/json",
-          'lang' : AppLocalizations.globalLocale?.languageCode ?? "en"
-        } :
-        {
-          'Content-Type': 'application/json; charset=UTF-8',
-          "Accept" : "application/json",
-          'lang' : AppLocalizations.globalLocale?.languageCode ?? "en"
-        },
+        headers: authorized
+            ? <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8',
+                'Authorization': 'Bearer $userToken',
+                "Accept": "application/json",
+                'lang': AppLocalizations.globalLocale?.languageCode ?? "en"
+              }
+            : {
+                'Content-Type': 'application/json; charset=UTF-8',
+                "Accept": "application/json",
+                'lang': AppLocalizations.globalLocale?.languageCode ?? "en"
+              },
       );
       developer.log(
         '${response.request}',
@@ -121,38 +152,55 @@ class HttpOperations {
         _getPrettyJSONString(json.decode(response.body)),
         name: 'Response',
       );
-      return ResponseModel.fromJson(json.decode(response.body));
-    }catch(e){
+      if (response.statusCode == 200) {
+        return ResponseModel.fromJson(jsonDecode(response.body));
+      } else {
+        return ResponseModel(
+            responseState: ResponseState.Error,
+            code: response.statusCode,
+            message: jsonDecode(response.body)['message'] ??
+                'Unexpected error occurred',
+            errors: jsonDecode(response.body)['errors']);
+      }
+    } catch (e) {
       print("HTTP Error $e");
 
-      return ResponseModel(responseState: ResponseState.Error,isSuccess: false,message: e.toString());
+      return ResponseModel(
+          responseState: ResponseState.Error, code: 500, message: e.toString());
     }
   }
 
-  Future<ResponseModel> postFormData({required String endPoint,bool authorized = false,required Map<String,String> data,List<http.MultipartFile>? files, String params = ""}) async {
-    try{
+  Future<ResponseModel> postFormData(
+      {required String endPoint,
+      bool authorized = false,
+      required Map<String, String> data,
+      List<http.MultipartFile>? files,
+      String params = ""}) async {
+    try {
       var postUri = Uri.parse(mainAppUrl + endPoint + params);
-      http.MultipartRequest request =  http.MultipartRequest("POST", postUri);
+      http.MultipartRequest request = http.MultipartRequest("POST", postUri);
       print("User Token $userToken");
-      request.headers.addAll(authorized ? <String, String> {
-        'Authorization': 'Bearer $userToken',
-        'Content-Type': 'multipart/form-data;',
-        'Accept': 'application/json',
-        'lang' : AppLocalizations.globalLocale?.languageCode ?? "en"
-      } :
-      {
-        'Content-Type': 'multipart/form-data;',
-        'Accept': 'application/json',
-        'lang' : AppLocalizations.globalLocale?.languageCode ?? "en"
-      },);
+      request.headers.addAll(
+        authorized
+            ? <String, String>{
+                'Authorization': 'Bearer $userToken',
+                'Content-Type': 'application/json;',
+                'accept': 'application/hal+json',
+                'lang': AppLocalizations.globalLocale?.languageCode ?? "en"
+              }
+            : {
+                'Content-Type': 'application/json;',
+                'accept': 'application/hal+json',
+                'lang': AppLocalizations.globalLocale?.languageCode ?? "en"
+              },
+      );
 
       request.fields.addAll(data);
 
-      if(files != null)
-        request.files.addAll(files);
+      if (files != null) request.files.addAll(files);
 
-      final response = await request.send();
-      var responseBody = await http.Response.fromStream(response);
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
 
       developer.log(
         '${response.request}',
@@ -170,23 +218,34 @@ class HttpOperations {
         name: 'Request',
       );
       developer.log(
-        _getPrettyJSONString(json.decode(responseBody.body)),
+        _getPrettyJSONString(json.decode(response.body)),
         name: 'Response',
       );
 
-      return ResponseModel.fromJson(jsonDecode(responseBody.body));
-
-    }catch(e){
+      if (response.statusCode == 200) {
+        developer.log(_getPrettyJSONString(jsonDecode(response.body)),
+            name: 'Response');
+        return ResponseModel.fromJson(jsonDecode(response.body));
+      } else {
+        return ResponseModel(
+            responseState: ResponseState.Error,
+            code: response.statusCode,
+            message: jsonDecode(response.body)['message'] ??
+                'Unexpected error occurred',
+            errors: jsonDecode(response.body)['errors']);
+      }
+    } catch (e) {
       print(e);
       developer.log(
         e.toString(),
         name: 'Err',
       );
-      return ResponseModel(responseState: ResponseState.Error,isSuccess: false,message: e.toString());
+      return ResponseModel(
+          responseState: ResponseState.Error, code: 500, message: e.toString());
     }
   }
 
-  static String _getPrettyJSONString(jsonObject){
+  static String _getPrettyJSONString(jsonObject) {
     var encoder = const JsonEncoder.withIndent("     ");
     return encoder.convert(jsonObject);
   }

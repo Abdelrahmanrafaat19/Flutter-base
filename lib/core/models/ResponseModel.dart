@@ -2,37 +2,35 @@ import 'StateModel.dart';
 
 class ResponseModel {
   ResponseState? responseState;
-  bool? isSuccess;
+  int? code;
   String? message;
-  List? errors;
+  List<String>? errors;
   dynamic data;
-  int? userId;
 
-  ResponseModel({this.responseState = ResponseState.Initial,this.isSuccess = false,this.message = "",this.data,this.errors,this.userId});
+  ResponseModel({this.responseState = ResponseState.Initial,this.code ,this.message = "",this.data,this.errors});
 
   factory ResponseModel.fromJson(dynamic map) {
     return ResponseModel(
-      isSuccess: map['status']!= null ? ((map['status'] as String == "success")) : false,
+      code: map['code'] ?? 0,
       message : ( map['message'] != null &&  map['message'] is String) ? map['message'] as String : ( map['message'] != null &&  map['message'] is String) ? map['message'] as String : null,
       data : map['data'] ?? map,
-      errors: map['data'] is List ? map["data"] : null,
-      userId: (map as Map).containsKey("user_id") ? map["user_id"] : null,
+      errors: map['errors'] is List ? map["errors"] : null,
     );
   }
 
   @override
   String toString() {
-    return '{${this.isSuccess} , ${this.message} ${this.responseState}';
+    return '{${this.code} , ${this.message} ${this.responseState}';
   }
 
   String? getFullError() {
 
-    String err = errors?.map((errorValue) => errorValue).join("\n") ?? "Something Wrong !";
+    String err = errors?.map((errorValue) => errorValue).join("\n") ?? "$message";
     print("Full Er $err");
     return err;
   }
   StateModel toState(data){
-    return StateModel(state: isSuccess == true ? DataState.SUCCESS : DataState.ERROR , message: message , data: data);
+    return StateModel(state: code == 200 ? DataState.SUCCESS : DataState.ERROR , message: message , data: data);
   }
 }
 

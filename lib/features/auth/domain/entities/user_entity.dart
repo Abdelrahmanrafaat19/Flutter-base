@@ -3,7 +3,7 @@ class User{
   String? firstName;
   String? lastName;
   String? email;
-  int? phoneNumber;
+  String? phoneNumber;
 
   User({
     this.token,

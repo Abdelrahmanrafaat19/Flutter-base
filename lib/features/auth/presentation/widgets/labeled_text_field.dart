@@ -13,6 +13,7 @@ class LabeledTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final bool isvalidate;
   final FocusNode? focusNode;
+  final AutovalidateMode? mode;
 
   const LabeledTextField({
     super.key,
@@ -25,7 +26,7 @@ class LabeledTextField extends StatelessWidget {
     this.validator,
     this.errorMaxLine,
     required this.isvalidate,
-    this.focusNode,
+    this.focusNode, this.mode,
   });
 
   @override
@@ -36,6 +37,7 @@ class LabeledTextField extends StatelessWidget {
         label,
         const SizedBox(height: 8),
         AppTextField(
+          mode: mode,
           hintStyle: AppTheme.style14normalblack.copyWith(color: AppTheme.appGrey8),
           hint: hint,
           focusNode: focusNode,

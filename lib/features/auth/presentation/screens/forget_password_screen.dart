@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_routes.dart';
 import '../../../../core/widgets/app_button.dart';
-import '../providers/auth_validation_providers.dart';
+import '../providers/auth_enable_btu_providers.dart';
 import '../widgets/auth_header_widget.dart';
 import '../widgets/phone_number_field.dart';
 
