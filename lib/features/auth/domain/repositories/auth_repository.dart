@@ -25,4 +25,6 @@ abstract class AuthRepository {
 
   FutureResponseModel verifyOtp({String? phoneNumber,String? otp});
 
+  FutureResponseModel forgetPassword({String? phoneNumber,String? password});
+
 }

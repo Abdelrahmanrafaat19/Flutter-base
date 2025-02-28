@@ -1,7 +1,8 @@
-const mainAppUrl = 'http://ec2-13-61-152-172.eu-north-1.compute.amazonaws.com/api/eatsnbeats/';
+const mainAppUrl = 'http://ec2-16-171-240-213.eu-north-1.compute.amazonaws.com/api/eatsnbeats/';
 const mainAppUrlDomain = 'http://ajazsademo-001-site1.atempurl.com/public/';
 
 const userRegisterEndPoint = "users/createUser";
+const usersEndPoint = "users";
 const userCheckValidityEndPoint = "users/checkValidity";
 const sendOtpEndPoint = "verify/phone";
 const verifyOtpEndPoint = "verify/otp";

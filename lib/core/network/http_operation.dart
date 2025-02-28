@@ -21,7 +21,8 @@ class HttpOperations {
       {required String endPoint,
       bool authorized = false,
       Map? data,
-      String params = ""}) async {
+      String params = ""})
+  async {
     try {
       final response = await httpLog.post(
         Uri.parse(mainAppUrl + endPoint + (params)),
@@ -81,6 +82,61 @@ class HttpOperations {
           responseState: ResponseState.Error, code: 500, message: e.toString());
     }
   }
+
+  Future<ResponseModel> putData({
+    required String endPoint,
+    bool authorized = false,
+    Map? data,
+    String params = "",
+  }) async {
+    try {
+      final response = await httpLog.put(
+        Uri.parse("$mainAppUrl$endPoint/$params"), // Adding path param
+        headers: authorized
+            ? <String, String>{
+          'Authorization': 'Bearer $userToken',
+          'Content-Type': 'application/json',
+          'accept': 'application/hal+json',
+          'lang': AppLocalizations.globalLocale?.languageCode ?? "en",
+        }
+            : {
+          'Content-Type': 'application/json',
+          'accept': 'application/hal+json',
+          'lang': AppLocalizations.globalLocale?.languageCode ?? "en",
+        },
+        body: json.encode(data ?? {}), // Encoding the request body
+      );
+
+      developer.log('${response.request}', name: 'Request');
+      developer.log('$data', name: 'RequestBody');
+      developer.log(_getPrettyJSONString(json.decode(response.body)), name: 'Response');
+
+      print("ResponseModel code: ${response.statusCode}");
+
+      if (response.statusCode == 200) {
+        return ResponseModel.fromJson(jsonDecode(response.body));
+      } else {
+        return ResponseModel(
+          responseState: ResponseState.Error,
+          code: response.statusCode,
+          message: jsonDecode(response.body)['message'] ?? 'Unexpected error occurred',
+          errors: (jsonDecode(response.body)['errors'] is List)
+              ? (jsonDecode(response.body)['errors'] as List).map((e) => e.toString()).toList()
+              : null,
+        );
+      }
+    } catch (e) {
+      print(e);
+      developer.log(e.toString(), name: 'Err');
+
+      return ResponseModel(
+        responseState: ResponseState.Error,
+        code: 500,
+        message: e.toString(),
+      );
+    }
+  }
+
 
   Future<ResponseModel> getData(
       {required String endPoint,

@@ -54,13 +54,13 @@ class _SeeAllScreenForCategoryState extends ConsumerState<SeeAllScreenForCategor
                 hintTxt: "Type of food, restaurant name",
               ),
             ),
-            SizedBox(
-              height: filterResult.isNotEmpty ? 20 : 0,
-            ),
-            HorizontalFilterResultListview(list: filterResult),
-            SizedBox(
-              height: 20,
-            ),
+            // SizedBox(
+            //   height: filterResult.isNotEmpty ? 20 : 0,
+            // ),
+            // HorizontalFilterResultListview(list: filterResult),
+            // SizedBox(
+            //   height: 20,
+            // ),
             Expanded(
               child: PaginatedListView(
                   dataList: [

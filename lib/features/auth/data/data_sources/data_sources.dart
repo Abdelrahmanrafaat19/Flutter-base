@@ -69,4 +69,13 @@ class AuthRemoteDataSource {
       data: {"phoneNumber": phoneNumber.toString(),"otp": otp.toString()},
     );
   }
+
+  FutureResponseModel forgetPassword({String? phoneNumber,String? password}) {
+    return _httpOps.putData(
+      endPoint: usersEndPoint,
+      params: "$phoneNumber/password",
+      data: {"password": password.toString()},
+    );
+  }
+
 }

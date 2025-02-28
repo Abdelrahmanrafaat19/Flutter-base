@@ -60,4 +60,12 @@ class AuthRepositoryImp extends AuthRepository {
     );
   }
 
+  @override
+  FutureResponseModel forgetPassword({String? phoneNumber, String? password}) {
+    return _dataSource.forgetPassword(
+      phoneNumber: phoneNumber,
+      password: password
+    );
+  }
+
 }

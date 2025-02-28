@@ -4,6 +4,7 @@ import '../../../../core/models/StateModel.dart';
 import '../../domain/entities/user_entity.dart';
 import '../../domain/providers/auth_repository_provider.dart';
 import '../../domain/use_cases/check_If_data_valid_usecase.dart';
+import '../../domain/use_cases/forget_password_usecase.dart';
 import '../../domain/use_cases/login_usecase.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -29,3 +30,7 @@ final sendOtpStateNotifierProvider =
 final verifyOtpStateNotifierProvider =
     StateNotifierProvider.autoDispose<VerifyOtpUseCase, StateModel<dynamic>>(
         (ref) => VerifyOtpUseCase(ref, ref.read(authRepoProvider)));
+
+final forgetPasswordStateNotifierProvider =
+    StateNotifierProvider.autoDispose<ForgetPasswordUseCase, StateModel<dynamic>>(
+        (ref) => ForgetPasswordUseCase(ref, ref.read(authRepoProvider)));

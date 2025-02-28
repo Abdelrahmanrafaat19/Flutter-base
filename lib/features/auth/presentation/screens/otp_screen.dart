@@ -59,7 +59,9 @@ class _OtpScreenState extends ConsumerState<OTPScreen> {
         showLoading: true, showToast: true, onSuccess: (res) {
       if (widget.otpType == OTPType.SignUp) {
         createAccount();
-      } else if (widget.otpType == OTPType.Update) {}
+      } else if (widget.otpType == OTPType.Update) {
+        navigateToChangePasswordScreen();
+      }
     });
 
     handleState(signUpStateNotifierProvider, showLoading: true, showToast: true,
@@ -286,5 +288,10 @@ class _OtpScreenState extends ConsumerState<OTPScreen> {
 
   void navigateToHomeScreen() {
     context.go(mainScreenRoute);
+  }
+
+  void navigateToChangePasswordScreen() {
+    context.push(changePasswordScreenRoute,
+        extra: {PHONE_KEY: widget.phone});
   }
 }

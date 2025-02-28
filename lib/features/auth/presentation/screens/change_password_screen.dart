@@ -2,14 +2,18 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/core/Theme/app_theme.dart';
 import 'package:flutter_base/core/constants/Assets.dart';
+import 'package:flutter_base/core/constants/app_routes.dart';
 import 'package:flutter_base/core/constants/constants.dart';
 import 'package:flutter_base/core/localization/Keys.dart';
+import 'package:flutter_base/core/utils/extensions/request_handle_extension.dart';
 import 'package:flutter_base/core/widgets/app_button.dart';
 import 'package:flutter_base/core/widgets/custom_app_bar.dart';
 import 'package:flutter_base/core/widgets/svg_icons.dart';
+import 'package:flutter_base/features/auth/presentation/providers/usecase_provider.dart';
 import 'package:flutter_base/features/auth/presentation/widgets/auth_header_widget.dart';
 import 'package:flutter_base/features/auth/presentation/widgets/labeled_text_field.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../providers/auth_enable_btu_providers.dart';
 import '../widgets/success_bottom_sheet.dart';
@@ -44,6 +48,12 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
   Widget build(BuildContext context) {
     final changePasswordState = ref.watch(changePasswordProvider);
 
+    handleState(
+        forgetPasswordStateNotifierProvider,
+      showLoading: true,onSuccess: (res){
+          showSuccessBottomSheet();
+    }
+    );
     return Scaffold(
         appBar: CustomAppBar(
           navigated: true,
@@ -146,19 +156,9 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
                       backColor: AppTheme.mainAppColor,
                       text: "save",
                       onPress: () {
-                        // showModalBottomSheet(
-                        //   context: context,
-                        //   shape: RoundedRectangleBorder(
-                        //     borderRadius:
-                        //         BorderRadius.vertical(top: Radius.circular(20)),
-                        //   ),
-                        //   builder: (context) {
-                        //     return PasswordResetBottomSheet();
-                        //   },
-                        // );
                         setState(() {});
                         if (formKey.currentState!.validate()) {
-                          showSuccessBottomSheet();
+                          forgetPassword();
                         }
                       }),
                 ],
@@ -170,9 +170,6 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
 
   @override
   void dispose() {
-    for (var element in [newPasswordController, confirmPasswordController]) {
-      element.dispose();
-    }
     for (var controller in [newPasswordController, confirmPasswordController]) {
       controller.dispose();
     }
@@ -191,6 +188,8 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
 
   void showSuccessBottomSheet() {
     showModalBottomSheet(
+        isDismissible: false,
+        enableDrag: false,
         isScrollControlled: true,
         backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(
@@ -203,7 +202,19 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
               title: "Password Reset Successfully",
               description: "Your password has been updated",
               btnName: "Save",
-              clickAction: () {},
+              clickAction: () {
+                context.pop();
+                context.pop();
+                context.pop();
+              },
             ));
   }
+
+  void forgetPassword() {
+    ref.read(forgetPasswordStateNotifierProvider.notifier).call(
+      phoneNumber: widget.Phone.substring(1),
+      password: newPasswordController.text
+    );
+  }
+
 }
