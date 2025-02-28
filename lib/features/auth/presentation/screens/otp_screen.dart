@@ -3,6 +3,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/core/constants/app_routes.dart';
 import 'package:flutter_base/core/localization/Keys.dart';
+import 'package:flutter_base/core/utils/extensions/request_handle_extension.dart';
+import 'package:flutter_base/features/auth/presentation/providers/usecase_provider.dart';
 import 'package:flutter_base/features/auth/presentation/widgets/auth_header_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -17,20 +19,20 @@ import '../widgets/timer_counter.dart';
 
 class OTPScreen extends ConsumerStatefulWidget {
   final String phone;
-  final String? cityId;
   final String? email;
-  final String? image;
-  final String? name;
+  final String? firstName;
+  final String? lastName;
+  final String? password;
   final OTPType otpType;
-  // final TypeOfMode? typeOfMode;
-  const OTPScreen(
-      {super.key,
-      /*this.typeOfMode = TypeOfMode.ViewMode*/ required this.phone,
-      required this.otpType,
-      this.cityId,
-      this.email,
-      this.image,
-      this.name});
+  const OTPScreen({
+    super.key,
+    required this.phone,
+    required this.otpType,
+    this.email,
+    this.lastName,
+    this.firstName,
+    this.password,
+  });
 
   @override
   ConsumerState<OTPScreen> createState() => _OtpScreenState();
@@ -40,9 +42,32 @@ class _OtpScreenState extends ConsumerState<OTPScreen> {
   final GlobalKey<OTPFieldsState> otpFieldsKeys = GlobalKey();
   final GlobalKey<TimerTextState> timerKey = GlobalKey();
   var readyToResendOtp = false;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((res) {
+      sendOtp();
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final optState = ref.watch(otpProvider);
+
+    handleState(verifyOtpStateNotifierProvider,
+        showLoading: true, showToast: true, onSuccess: (res) {
+      if (widget.otpType == OTPType.SignUp) {
+        createAccount();
+      } else if (widget.otpType == OTPType.Update) {}
+    });
+
+    handleState(signUpStateNotifierProvider, showLoading: true, showToast: true,
+        onSuccess: (res) {
+      if (widget.otpType == OTPType.SignUp) {
+        navigateToHomeScreen();
+      } else if (widget.otpType == OTPType.Update) {}
+    });
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -160,7 +185,7 @@ class _OtpScreenState extends ConsumerState<OTPScreen> {
                       height: defaultButtonHeight,
                       backColor: AppTheme.mainAppColor,
                       text: "Verify",
-                      onPress: verify)),
+                      onPress: verifyOtp)),
             ],
           ),
         ),
@@ -237,11 +262,29 @@ class _OtpScreenState extends ConsumerState<OTPScreen> {
   }
 */
 
-  void verify() {
-    if (widget.otpType == OTPType.SignUp) {
-      // go to home
-    } else if (widget.otpType == OTPType.Update) {
-      context.push(changePasswordScreenRoute, extra: {PHONE_KEY: widget.phone});
+  void verifyOtp() {
+    if (otpFieldsKeys.currentState?.formKey.currentState?.validate() == true) {
+      ref.read(verifyOtpStateNotifierProvider.notifier).call(
+          phoneNumber: widget.phone, otp: otpFieldsKeys.currentState?.getCode);
     }
+  }
+
+  void sendOtp() {
+    ref
+        .read(sendOtpStateNotifierProvider.notifier)
+        .call(phoneNumber: widget.phone);
+  }
+
+  void createAccount() {
+    ref.read(signUpStateNotifierProvider.notifier).call(
+        firstName: widget.firstName,
+        lastName: widget.lastName,
+        email: widget.email,
+        phoneNumber: widget.phone,
+        password: widget.password);
+  }
+
+  void navigateToHomeScreen() {
+    context.go(mainScreenRoute);
   }
 }
