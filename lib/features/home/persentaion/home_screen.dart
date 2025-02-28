@@ -4,27 +4,32 @@ import 'package:flutter_base/core/Constants/Constants.dart';
 import 'package:flutter_base/core/Theme/app_theme.dart';
 import 'package:flutter_base/core/constants/app_routes.dart';
 import 'package:flutter_base/core/widgets/svg_icons.dart';
+import 'package:flutter_base/features/auth/domain/providers/user_provider.dart';
 import 'package:flutter_base/features/home/persentaion/widget/category_widgets/horizontal_category_listview_with_title.dart';
 import 'package:flutter_base/features/home/persentaion/bottom_sheets/filter_bottom_sheet.dart';
 import 'package:flutter_base/features/home/persentaion/widget/restaurant_widgets/home_restaurant_listview.dart';
 import 'package:flutter_base/features/home/persentaion/widget/search_with_filter.dart';
 import 'package:flutter_base/features/home/persentaion/widget/service_options.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/assets.dart';
 import '../../../core/utils/Extensions/utils_exts.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-
+    var user = ref.read(userProvider.notifier).checkIfUserExist();
+    print("home $user");
     handleChangeHomeStatueBarColor();
 
     return Scaffold(

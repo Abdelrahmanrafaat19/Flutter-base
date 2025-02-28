@@ -255,7 +255,7 @@ class IntlPhoneField extends StatefulWidget {
     this.languageCode = 'en',
     this.disableAutoFillHints = false,
     this.obscureText = false,
-    this.textAlign = TextAlign.left,
+    this.textAlign = TextAlign.start,
     this.textAlignVertical,
     this.onTap,
     this.readOnly = false,
@@ -345,7 +345,7 @@ class _IntlPhoneFieldState extends State<IntlPhoneField> {
     if (widget.autovalidateMode == AutovalidateMode.always) {
       final initialPhoneNumber = PhoneNumber(
         countryISOCode: _selectedCountry.code,
-        countryCode: '+${_selectedCountry.dialCode}',
+        countryCode: _selectedCountry.dialCode,
         number: widget.initialValue ?? '',
       );
 
@@ -376,6 +376,7 @@ class _IntlPhoneFieldState extends State<IntlPhoneField> {
           selectedCountry: _selectedCountry,
           onCountryChanged: (Country country) {
             _selectedCountry = country;
+            print("from _selectedCountry : ${_selectedCountry.fullCountryCode}");
             widget.onCountryChanged?.call(country);
             setState(() {});
           },
@@ -413,30 +414,31 @@ class _IntlPhoneFieldState extends State<IntlPhoneField> {
         counterText: !widget.enabled ? '' : null,
       ),
       style: widget.style,
-      /*  onSaved: (value) {
+        onSaved: (value) {
         widget.onSaved?.call(
           PhoneNumber(
             countryISOCode: _selectedCountry.code,
             countryCode:
-                '+${_selectedCountry.dialCode}${_selectedCountry.regionCode}',
+                '${_selectedCountry.dialCode}${_selectedCountry.regionCode}',
             number: value!,
           ),
         );
-      }, */
-      /*   onChanged: (value) async {
+      },
+      onChanged: (value) async {
+        print("from _selectedCountry : ${_selectedCountry.fullCountryCode}");
         final phoneNumber = PhoneNumber(
           countryISOCode: _selectedCountry.code,
-          countryCode: '+${_selectedCountry.fullCountryCode}',
+          countryCode: _selectedCountry.fullCountryCode,
           number: value,
         );
 
         if (widget.autovalidateMode != AutovalidateMode.disabled) {
           validatorMessage =
-              await widget.validator?.call(phoneNumber.toString());
+          await widget.validator?.call(phoneNumber.toString());
         }
 
         widget.onChanged?.call(phoneNumber);
-      }, */
+      },
       validator: widget.validator,
       /* (value) {
         if (value == null || !isNumeric(value)) return validatorMessage;

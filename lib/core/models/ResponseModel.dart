@@ -14,7 +14,9 @@ class ResponseModel {
       code: map['code'] ?? 0,
       message : ( map['message'] != null &&  map['message'] is String) ? map['message'] as String : ( map['message'] != null &&  map['message'] is String) ? map['message'] as String : null,
       data : map['data'] ?? map,
-      errors: map['errors'] is List ? map["errors"] : null,
+      errors: map['errors'] is List
+          ? (map['errors'] as List).map((e) => e.toString()).toList()
+          : null,
     );
   }
 

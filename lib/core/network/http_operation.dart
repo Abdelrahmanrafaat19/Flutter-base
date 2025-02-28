@@ -64,7 +64,11 @@ class HttpOperations {
             code: response.statusCode,
             message: jsonDecode(response.body)['message'] ??
                 'Unexpected error occurred',
-            errors: jsonDecode(response.body)['errors']);
+            errors: (jsonDecode(response.body)['errors'] is List)
+                ? (jsonDecode(response.body)['errors'] as List)
+                    .map((e) => e.toString())
+                    .toList()
+                : null);
       }
     } catch (e) {
       print(e);
@@ -114,7 +118,11 @@ class HttpOperations {
             code: response.statusCode,
             message: jsonDecode(response.body)['message'] ??
                 'Unexpected error occurred',
-            errors: jsonDecode(response.body)['errors']);
+            errors: (jsonDecode(response.body)['errors'] is List)
+                ? (jsonDecode(response.body)['errors'] as List)
+                    .map((e) => e.toString())
+                    .toList()
+                : null);
       }
     } catch (e) {
       print("HTTP Error $e");
@@ -160,7 +168,11 @@ class HttpOperations {
             code: response.statusCode,
             message: jsonDecode(response.body)['message'] ??
                 'Unexpected error occurred',
-            errors: jsonDecode(response.body)['errors']);
+            errors: (jsonDecode(response.body)['errors'] is List)
+                ? (jsonDecode(response.body)['errors'] as List)
+                    .map((e) => e.toString())
+                    .toList()
+                : null);
       }
     } catch (e) {
       print("HTTP Error $e");
@@ -232,7 +244,11 @@ class HttpOperations {
             code: response.statusCode,
             message: jsonDecode(response.body)['message'] ??
                 'Unexpected error occurred',
-            errors: jsonDecode(response.body)['errors']);
+            errors: (jsonDecode(response.body)['errors'] is List)
+                ? (jsonDecode(response.body)['errors'] as List)
+                    .map((e) => e.toString())
+                    .toList()
+                : null);
       }
     } catch (e) {
       print(e);

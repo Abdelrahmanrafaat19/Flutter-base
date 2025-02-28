@@ -9,6 +9,7 @@ import '../../../../core/widgets/border_styles.dart';
 class PhoneNumberField extends StatelessWidget {
   final TextEditingController? controller;
   final void Function(PhoneNumber)? onChanged;
+  final void Function(PhoneNumber?)? onSave;
   final String? Function(String?)? validator;
   final bool isPhoneNumberIsValidate;
   const PhoneNumberField(
@@ -16,7 +17,7 @@ class PhoneNumberField extends StatelessWidget {
       this.controller,
       this.onChanged,
       this.validator,
-      required this.isPhoneNumberIsValidate});
+      required this.isPhoneNumberIsValidate, this.onSave});
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +54,7 @@ class PhoneNumberField extends StatelessWidget {
           onChanged: onChanged,
           controller: controller,
           validator: validator,
+          onSaved: onSave,
         ),
       ],
     );

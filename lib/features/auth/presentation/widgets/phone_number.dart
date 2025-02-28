@@ -41,7 +41,7 @@ class PhoneNumber {
   }
 
   bool isValidNumber() {
-    Country country = getCountry(completeNumber);
+    Country country = getCountry(completeNumberWithPlus);
     if (number.length < country.minLength) {
       throw NumberTooShortException();
     }
@@ -52,8 +52,16 @@ class PhoneNumber {
     return true;
   }
 
-  String get completeNumber {
-    return countryCode + number;
+  String get completeNumberWithPlus {
+    String numberWithoutZero = number.startsWith('0') ? number.substring(1) : number;
+
+    return "+$countryCode$numberWithoutZero";
+  }
+
+  String get completeNumberWithoutPlus {
+    String numberWithoutZero = number.startsWith('0') ? number.substring(1) : number;
+
+    return countryCode + numberWithoutZero;
   }
 
   static Country getCountry(String phoneNumber) {

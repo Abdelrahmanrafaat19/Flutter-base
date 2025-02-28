@@ -18,6 +18,7 @@ import '../../../../core/Constants/Constants.dart';
 import '../../../../core/Theme/app_theme.dart';
 import '../../../../core/localization/Keys.dart';
 import '../widgets/labeled_text_field.dart';
+import '../widgets/phone_number.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   @override
@@ -25,6 +26,7 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
+  PhoneNumber? _phoneNumber;
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool isPasswordVisible = true;
@@ -95,8 +97,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       return null;
                     }
                   },
-                  onChanged: (v){
-                    validationLoginState.clear();
+                  onChanged: (value){
+                    _phoneNumber = value;
+                    print("onChanged phone : $value");
                   },
                 ),
                 SizedBox(height: 14),
@@ -131,7 +134,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     }
                   },
                   onChanged: (v){
-                    validationLoginState.clear();
+
                   },
                 ),
                 SizedBox(
@@ -157,7 +160,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           enabled: enableLogin,
                           height: defaultButtonHeight,
                           text: "Sign In",
-                          onPress: login),
+                          onPress: (){
+                            ref.read(validationLoginProvider.notifier).updateStatue({});
+                            login();
+                          }),
                     ),
                     SizedBox(
                       width: enableFaceId ? defaultPaddingHorizontal : 0,
@@ -300,11 +306,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   void login() {
+    print("phone ${_phoneNumber?.completeNumberWithoutPlus} , password : ${_passwordController.text}");
     ref.read(loginStateNotifierProvider.notifier).call(
-        phoneNumber: _phoneController.text, password: _passwordController.text);
+        phoneNumber: _phoneNumber?.completeNumberWithoutPlus, password: _passwordController.text);
+
   }
 
   void navigateToMainScreen() {
     context.go(mainScreenRoute);
   }
+
+
 }
