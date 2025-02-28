@@ -3,14 +3,7 @@ import 'package:flutter_base/core/constants/assets.dart';
 import 'package:flutter_svg/svg.dart';
 
 class SVGIcons {
-  static Widget shareIcon(){
-    return SvgPicture.asset(
-      shareIconSvg,
-      color: Colors.white,
-      width: 40,
-      height: 40,
-    );
-  }
+
   static Widget itemsIcon(){
     return SvgPicture.asset(
       itemsIconSvg,

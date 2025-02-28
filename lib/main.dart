@@ -1,10 +1,10 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_base/core/Constants/Constants.dart';
 import 'package:flutter_base/core/constants/eunms.dart';
 import 'package:flutter_base/features/auth/presentation/screens/change_password_screen.dart';
 import 'package:flutter_base/features/auth/presentation/screens/forget_password_screen.dart';
+import 'package:flutter_base/features/auth/presentation/screens/splash_screen.dart';
 import 'package:flutter_base/features/location/presentation/screens/location_permission_screen.dart';
 import 'package:flutter_base/features/location/presentation/screens/search_location_screen.dart';
 import 'package:flutter_base/features/notification/presentation/screens/notification_permission_screen.dart';
@@ -13,12 +13,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as ago;
+import 'core/Constants/Constants.dart';
 import 'core/Theme/app_theme.dart';
 import 'core/constants/app_routes.dart';
 import 'features/auth/presentation/screens/login_screen.dart';
 import 'features/auth/presentation/screens/otp_screen.dart';
 import 'features/auth/presentation/screens/sign_up_screen.dart';
-import 'features/auth/presentation/screens/splash_screen.dart';
 import 'features/home/persentaion/cuisines_screen.dart';
 import 'features/home/persentaion/see_all_screen_for_category.dart';
 
@@ -143,7 +143,7 @@ class MyApp extends ConsumerWidget {
       GoRoute(
         path: splashScreenRoute,
         builder: (BuildContext context, GoRouterState state) =>
-            LoginScreen(),
+            const SplashScreen(),
       ),
       GoRoute(
         path: mainScreenRoute,
@@ -172,6 +172,10 @@ class MyApp extends ConsumerWidget {
             var extra = state.extra as Map;
             return OTPScreen(
               phone: extra[PHONE_KEY],
+              email: extra[EMAIL_KEY],
+              firstName: extra[FIRST_NAME_KEY],
+              lastName: extra[LAST_NAME_KEY],
+              password: extra[PASSWORD_KEY],
               otpType: extra[OTP_TYPE_KEY] as OTPType,
             );
           }),

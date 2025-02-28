@@ -26,12 +26,15 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 4), () {
+    Future.delayed(const Duration(seconds: 1), () {
       UtilsExts.handleStatusBarColorWithIcon(
           statusBarColor: AppTheme.mainAppColor);
 
       final client = ref.read(userProvider.notifier).checkIfUserExist();
-      ref.read(userProvider.notifier).setUser(client);
+
+      if(client != null) {
+        ref.read(userProvider.notifier).setUser(client);
+      }
 
       print(client);
       context.go(loginScreenRoute);
@@ -65,15 +68,15 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Spacer(),
-              TweenAnimationBuilder<double>(
-                  curve: Curves.ease,
-                  tween: Tween<double>(begin: 0.0, end: 1.0),
-                  duration: const Duration(seconds: 4),
-                  builder:
-                      (BuildContext context, double opacity, Widget? child) {
-                    return Opacity(
-                        opacity: opacity, child: SVGIcons.shareIcon());
-                  }),
+              // TweenAnimationBuilder<double>(
+              //     curve: Curves.ease,
+              //     tween: Tween<double>(begin: 0.0, end: 1.0),
+              //     duration: const Duration(seconds: 4),
+              //     builder:
+              //         (BuildContext context, double opacity, Widget? child) {
+              //       return Opacity(
+              //           opacity: opacity, child: SVGIcons.shareIcon());
+              //     }),
               const Spacer(),
             ],
           ),

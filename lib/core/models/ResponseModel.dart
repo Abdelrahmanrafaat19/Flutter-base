@@ -40,5 +40,6 @@ enum ResponseState {
   Initial,
   Loading,
   Loaded,
-  Error
+  Error,
+  Succuss
 }

@@ -48,6 +48,12 @@ class MainScreenNavHostState extends ConsumerState<MainScreenNavHost> with Ticke
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   void didChangeDependencies() {
     animation = Tween(
         begin: getEndPosition(0),

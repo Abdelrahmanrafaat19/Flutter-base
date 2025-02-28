@@ -24,12 +24,40 @@ class AuthRepositoryImp extends AuthRepository {
       String? password,
       String? generatedToken}) {
     return _dataSource.signUp(
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        phoneNumber: phoneNumber,
+        password: password,
+        generatedToken: generatedToken);
+  }
+
+  @override
+  FutureResponseModel checkIfDataValid(
+      {String? firstName,
+      String? lastName,
+      String? email,
+      String? phoneNumber,
+      String? password}) {
+    return _dataSource.checkIfDataValid(
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        phoneNumber: phoneNumber,
+        password: password);
+  }
+
+  @override
+  FutureResponseModel sendOtp({String? phoneNumber}) {
+    return _dataSource.sendOtp(phoneNumber: phoneNumber);
+  }
+
+  @override
+  FutureResponseModel verifyOtp({String? phoneNumber, String? otp}) {
+    return _dataSource.verifyOtp(
       phoneNumber: phoneNumber,
-      password: password,
-      generatedToken: generatedToken
+      otp: otp
     );
   }
+
 }

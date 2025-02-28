@@ -203,9 +203,6 @@ class OTPFieldsState extends ConsumerState<OTPFields> {
 
   @override
   void dispose() {
-    for (var element in [otp1, otp2, otp3, otp4]) {
-      element.dispose();
-    }
     for (var controller in [otp1, otp2, otp3, otp4]) {
       controller.dispose();
     }

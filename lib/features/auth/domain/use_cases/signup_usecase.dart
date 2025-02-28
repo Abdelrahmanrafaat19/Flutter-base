@@ -5,6 +5,7 @@ import 'package:flutter_base/features/auth/data/models/user_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../entities/user_entity.dart';
+import '../providers/user_provider.dart';
 import '../repositories/auth_repository.dart';
 
 class SignupUseCase extends StateNotifier<StateModel<User>>{
@@ -23,7 +24,7 @@ class SignupUseCase extends StateNotifier<StateModel<User>>{
 
     state = StateModel.loading();
 
-    ResponseModel signUpResponse = await _authRepository.signUp(
+    ResponseModel responseModel = await _authRepository.signUp(
         firstName: firstName,
         lastName: lastName,
         email: email,
@@ -32,12 +33,21 @@ class SignupUseCase extends StateNotifier<StateModel<User>>{
         generatedToken: generatedToken
     );
 
-    if(signUpResponse.code == true){
+    if (responseModel.code == 200) {
+      var user = UserModel.fromJson(responseModel.data);
+
+      // save user data
+      ref.read(userProvider.notifier).setUser(user);
+
       state = StateModel(
-        state: DataState.SUCCESS,
-        data: toUserEntity(UserModel.fromJson(signUpResponse.data)),
-        message: signUpResponse.message
-      );
+          state: DataState.SUCCESS,
+          data: toUserEntity(user),
+          message: responseModel.message);
+    } else {
+      state = StateModel(
+          state: DataState.ERROR,
+          message: responseModel.message,
+          errors: responseModel.errors);
     }
   }
 }

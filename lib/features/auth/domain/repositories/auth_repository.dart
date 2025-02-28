@@ -12,4 +12,17 @@ abstract class AuthRepository {
     String? generatedToken,
   });
 
+  FutureResponseModel checkIfDataValid({
+    String? firstName,
+    String? lastName,
+    String? email,
+    String? phoneNumber,
+    String? password
+  });
+
+
+  FutureResponseModel sendOtp({String? phoneNumber});
+
+  FutureResponseModel verifyOtp({String? phoneNumber,String? otp});
+
 }

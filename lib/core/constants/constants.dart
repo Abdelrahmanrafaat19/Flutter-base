@@ -6,6 +6,10 @@ import '../../features/home/data/item_selector.dart';
 
 const USER_KEY = 'user_key';
 const PHONE_KEY = 'phone';
+const EMAIL_KEY = 'email';
+const FIRST_NAME_KEY = 'firstName';
+const LAST_NAME_KEY = 'lastName';
+const PASSWORD_KEY = 'password';
 const OTP_TYPE_KEY = 'otpType';
 
 // CONST

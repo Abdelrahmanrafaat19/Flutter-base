@@ -28,8 +28,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    var user = ref.read(userProvider.notifier).checkIfUserExist();
-    print("home $user");
     handleChangeHomeStatueBarColor();
 
     return Scaffold(

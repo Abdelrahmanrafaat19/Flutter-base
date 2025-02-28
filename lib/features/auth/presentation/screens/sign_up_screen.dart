@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_base/core/Theme/app_theme.dart';
 import 'package:flutter_base/core/constants/app_routes.dart';
 import 'package:flutter_base/core/constants/constants.dart';
+import 'package:flutter_base/core/constants/eunms.dart';
 import 'package:flutter_base/core/localization/Keys.dart';
 import 'package:flutter_base/core/utils/extensions/request_handle_extension.dart';
 import 'package:flutter_base/core/widgets/app_button.dart';
@@ -16,6 +17,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../widgets/labeled_text_field.dart';
+import '../widgets/phone_number.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {
   @override
@@ -23,6 +25,7 @@ class SignUpScreen extends ConsumerStatefulWidget {
 }
 
 class _SignUpScreenState extends ConsumerState<SignUpScreen> {
+  PhoneNumber? _phoneNumber;
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -46,9 +49,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    handleState(signUpStateNotifierProvider, showLoading: true,
+
+    handleState(checkIfDataValidStateNotifierProvider, showLoading: true,
         onSuccess: (res) {
-      // navigateToMainScreen();
+      goToSendOtp();
     });
 
     return Scaffold(
@@ -139,19 +143,22 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 isPhoneNumberIsValidate: isPhoneNumberValidate,
                 controller: _phoneController,
                 validator: (phone) {
-                  if (phone == null || phone.isEmpty) {
+                  if (_phoneNumber?.completeNumberWithPlus == null || _phoneNumber?.completeNumberWithPlus.isEmpty == true) {
                     isPhoneNumberValidate = false;
                     return 'Phone number is required';
                   }
-
                   final RegExp phoneRegExp = RegExp(r"^\+\d{1,3}\d{7,12}$");
-                  if (!phoneRegExp.hasMatch(phone)) {
+                  if (!phoneRegExp.hasMatch(_phoneNumber!.completeNumberWithPlus)) {
                     isPhoneNumberValidate = false;
                     return 'Enter a valid phone number (e.g., +1234567890)';
                   }
                   isPhoneNumberValidate = true;
 
                   return null;
+                },
+                onChanged: (value){
+                  _phoneNumber = value;
+                  print("onChanged phone : $value");
                 },
               ),
               const SizedBox(height: 16),
@@ -312,7 +319,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 onPress: () {
                   if (_formKey.currentState!.validate()) {
                     setState(() {});
-                    signUp();
+                    checkIfDataValid();
+                    // goToSendOtp();
                   }
                 },
               ),
@@ -339,12 +347,33 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     );
   }
 
-  void signUp() {
-    ref.read(signUpStateNotifierProvider.notifier).call(
+  @override
+  void dispose() {
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _phoneController.dispose();
+    super.dispose();
+  }
+
+  void goToSendOtp() {
+    context.push(otpScreenRoute,extra: {
+      FIRST_NAME_KEY : _firstNameController.text,
+      LAST_NAME_KEY : _lastNameController.text,
+      PHONE_KEY : _phoneNumber?.completeNumberWithPlus,
+      EMAIL_KEY : _emailController.text,
+      PASSWORD_KEY : _passwordController.text,
+      OTP_TYPE_KEY : OTPType.SignUp
+    });
+  }
+  void checkIfDataValid() {
+    ref.read(checkIfDataValidStateNotifierProvider.notifier).call(
           firstName: _firstNameController.text,
           lastName: _lastNameController.text,
           email: _emailController.text,
-          phoneNumber: _phoneController.text,
+          phoneNumber: _phoneNumber?.completeNumberWithPlus,
           password: _passwordController.text
         );
   }
