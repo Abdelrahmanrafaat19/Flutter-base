@@ -131,25 +131,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 SizedBox(
                   height: 24,
                 ),
-                Padding(
-                  padding: const EdgeInsetsDirectional.symmetric(
-                      horizontal: defaultPaddingHorizontal),
-                  child: Column(
-                    children: [
-                      HorizontalCategoryListWithTitle(
-                          list: ["", "", "", "", "", "", ""],
-                          showLoading: false,
-                          itemClick: () {},
-                          onSeeAllClickListener: () {
-                            navigateToShowAllCategories();
-                          }),
-                      SizedBox(
-                        height: 24,
-                      ),
-                      HomeRestaurantListview(
-                          restaurants: ["", "", ""], showLoading: false)
-                    ],
-                  ),
+                Column(
+                  children: [
+                    HorizontalCategoryListWithTitle(
+                        list: ["", "", "", "", "", "", ""],
+                        showLoading: false,
+                        itemClick: () {},
+                        onSeeAllClickListener: () {
+                          navigateToShowAllCategories();
+                        }),
+                    SizedBox(
+                      height: 24,
+                    ),
+                    HomeRestaurantListview(
+                        restaurants: ["", "", ""], showLoading: false)
+                  ],
                 ),
               ],
             ),

@@ -58,9 +58,9 @@ class _SeeAllScreenForCategoryState extends ConsumerState<SeeAllScreenForCategor
             //   height: filterResult.isNotEmpty ? 20 : 0,
             // ),
             // HorizontalFilterResultListview(list: filterResult),
-            // SizedBox(
-            //   height: 20,
-            // ),
+            SizedBox(
+              height: 20,
+            ),
             Expanded(
               child: PaginatedListView(
                   dataList: [

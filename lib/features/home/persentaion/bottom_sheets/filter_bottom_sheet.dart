@@ -6,6 +6,7 @@ import 'package:flutter_base/core/constants/constants.dart';
 import 'package:flutter_base/core/widgets/svg_icons.dart';
 import 'package:flutter_base/features/home/data/item_selector.dart';
 import 'package:flutter_base/features/home/persentaion/widget/filter/filter_option_item.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/utils/typedefs.dart';
 import '../../../../core/widgets/app_button.dart';
@@ -80,11 +81,22 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                       style: AppTheme.styleColorAppGunmetal40FontSize20W700
                           .copyWith(decoration: TextDecoration.underline)),
                 ),
-                Align(
-                  alignment: AlignmentDirectional.centerEnd,
-                  child: Text("Reset",
-                      style: AppTheme
-                          .styleWithTextGray7AdelleSansExtendedFonts16w400),
+                InkWell(
+                  onTap: (){
+                    setState(() {
+                      selectedRatingIndex = null;
+                      selectedCuisinesIndex = null;
+                      selectedSortByItemIndex = null;
+                      _currentRangeValues =
+                      const RangeValues(filterPriceStart, filterPriceEnd);
+                    });
+                  },
+                  child: Align(
+                    alignment: AlignmentDirectional.centerEnd,
+                    child: Text("Reset",
+                        style: AppTheme
+                            .styleWithTextGray7AdelleSansExtendedFonts16w400),
+                  ),
                 )
               ],
             ),
@@ -255,6 +267,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                       selectedCuisinesIndex,
                       selectedRatingIndex,
                       _currentRangeValues);
+                  context.pop();
                 }),
             SizedBox(
               height: defaultPaddingHorizontal,

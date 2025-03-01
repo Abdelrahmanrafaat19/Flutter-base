@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_base/core/Constants/Constants.dart';
 import 'package:flutter_base/features/home/persentaion/widget/category_widgets/restaurant_category.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -27,11 +28,14 @@ class _HorizontalCategoryListWithTitleState extends State<HorizontalCategoryList
         children:[
           Skeletonizer(
             enabled: widget.showLoading,
-            child: TitleWithSeeAll(
-              title: "Cuisines",
-              onClickOnSeeAll: () {
-                widget.onSeeAllClickListener.call();
-              },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: defaultPaddingHorizontal),
+              child: TitleWithSeeAll(
+                title: "Cuisines",
+                onClickOnSeeAll: () {
+                  widget.onSeeAllClickListener.call();
+                },
+              ),
             ),
           ),
           SizedBox(
@@ -48,17 +52,20 @@ class _HorizontalCategoryListWithTitleState extends State<HorizontalCategoryList
                       onTap: (){
                         widget.itemClick.call();
                       },
-                      child: RestaurantCategory(
-                        width: 110,
-                        height: 80,
-                        categoryImg: "https://t3.ftcdn.net/jpg/02/52/38/80/360_F_252388016_KjPnB9vglSCuUJAumCDNbmMzGdzPAucK.jpg",
-                        categoryName: "sdfsadfs",
+                      child: Padding(
+                        padding: const EdgeInsetsDirectional.only(start: defaultPaddingHorizontal),
+                        child: RestaurantCategory(
+                          width: 110,
+                          height: 80,
+                          categoryImg: "https://t3.ftcdn.net/jpg/02/52/38/80/360_F_252388016_KjPnB9vglSCuUJAumCDNbmMzGdzPAucK.jpg",
+                          categoryName: "sdfsadfs",
+                        ),
                       ),
                     ),
                   );
                 },
                 separatorBuilder: (context , index) => const SizedBox(
-                  width: 12,
+                  width: 0,
                 ),
                 itemCount: widget.showLoading ? 5 : widget.list.length),
           ),

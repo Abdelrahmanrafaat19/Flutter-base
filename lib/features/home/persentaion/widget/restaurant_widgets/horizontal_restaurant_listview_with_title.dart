@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_base/core/Constants/Constants.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../title_with_see_all.dart';
@@ -29,11 +30,14 @@ class _HorizontalRestaurantListWithTitleState
     return Column(children: [
       Skeletonizer(
         enabled: widget.showLoading,
-        child: TitleWithSeeAll(
-          title: "Trending Now",
-          onClickOnSeeAll: () {
-            widget.onSeeAllClickListener.call();
-          },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: defaultPaddingHorizontal),
+          child: TitleWithSeeAll(
+            title: "Trending Now",
+            onClickOnSeeAll: () {
+              widget.onSeeAllClickListener.call();
+            },
+          ),
         ),
       ),
       SizedBox(
@@ -50,12 +54,15 @@ class _HorizontalRestaurantListWithTitleState
                   onTap: () {
                     widget.itemClick.call();
                   },
-                  child: HorizontalRestaurantCard(),
+                  child: Padding(
+                    padding: const EdgeInsetsDirectional.only(start: defaultPaddingHorizontal),
+                    child: HorizontalRestaurantCard(),
+                  ),
                 ),
               );
             },
             separatorBuilder: (context, index) => const SizedBox(
-                  width: 12,
+                  width: 0,
                 ),
             itemCount: widget.showLoading ? 5 : widget.list.length),
       ),
