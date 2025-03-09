@@ -4,20 +4,24 @@ import 'package:flutter_base/core/widgets/svg_icons.dart';
 import 'package:flutter_base/features/home/persentaion/widget/search_with_filter.dart';
 
 class SearchFieldWidget extends StatefulWidget {
-  const SearchFieldWidget({super.key});
+  final TextEditingController controller;
+  final void Function()? searchClick;
+  const SearchFieldWidget(
+      {super.key, required this.controller, this.searchClick});
 
   @override
   State<SearchFieldWidget> createState() => _SearchFieldWidgetState();
 }
 
 class _SearchFieldWidgetState extends State<SearchFieldWidget> {
-  TextEditingController _searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return AppSearchBarWithFilter(
+      controller: widget.controller,
       hasFilter: false,
-      enableSearch: false,
+      enableSearch: true,
       onFilterClick: () {},
+      onSearchClick: widget.searchClick,
       postIcon: IconButton(
         icon: SizedBox(
           width: 20,
@@ -27,7 +31,7 @@ class _SearchFieldWidgetState extends State<SearchFieldWidget> {
             color: AppTheme.appGrey7,
           ),
         ),
-        onPressed: () => _searchController.clear(),
+        onPressed: () => widget.controller.clear(),
       ),
       hintTxt: "Type of food, restaurants name",
     );
