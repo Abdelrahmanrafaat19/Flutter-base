@@ -45,7 +45,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
         // if(prefs.getBool(doneLandingKey) == true){
         //   context.go(R_MainScreen);
         // }else {
-          context.push(loginScreenRoute);
+
+        UtilsExts.handleStatusBarColorWithIcon();
+        context.push(loginScreenRoute);
         // }
       }
 
@@ -89,6 +91,5 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void dispose() {
     super.dispose();
-    UtilsExts.handleStatusBarColorWithIcon();
   }
 }

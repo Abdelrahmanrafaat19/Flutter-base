@@ -2,13 +2,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_base/core/Theme/app_theme.dart';
 import 'package:intl/intl.dart';
 class UtilsExts {
 
     static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
     static void handleStatusBarColorWithIcon(
-        {Color? statusBarColor = Colors.white, Brightness? statusBarIcons = Brightness.dark}) {
+        {Color? statusBarColor = AppTheme.mainAppBackgroundColor, Brightness? statusBarIcons = Brightness.dark}) {
         SystemChrome.setSystemUIOverlayStyle(
             SystemUiOverlayStyle(
                 statusBarColor: statusBarColor ,statusBarIconBrightness: statusBarIcons
