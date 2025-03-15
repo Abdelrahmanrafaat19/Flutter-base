@@ -1,6 +1,11 @@
-
 //KEYS
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_base/core/constants/Assets.dart';
+import 'package:flutter_base/core/constants/eunms.dart';
+import 'package:flutter_base/core/constants/eunms.dart';
+import 'package:flutter_base/core/constants/eunms.dart';
+import 'package:flutter_base/core/widgets/svg_icons.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../features/home/data/item_selector.dart';
 
@@ -21,45 +26,25 @@ const filterPriceStart = 0.0;
 const filterPriceEnd = 100.0;
 
 // PADDING
-const defaultPaddingForInputFields = EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0);
-
+const defaultPaddingForInputFields =
+    EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0);
 
 // Arrays
 final sortByItems = [
-  ItemSelector(
-    id: 0,
-    name: "All",
-  ),
-  ItemSelector(
-    id: 1,
-    name: "Newest",
-  ),
-  ItemSelector(
-    id: 2,
-    name: "Popular",
-  ),
+  FilterItemSelector(id: 0, name: "All", type: FilterType.Sort),
+  FilterItemSelector(id: 1, name: "Newest", type: FilterType.Sort),
+  FilterItemSelector(id: 2, name: "Popular", type: FilterType.Sort),
 ];
 
 final ratings = [
-  ItemSelector(
-    id: 0,
-    name: "1",
-  ),
-  ItemSelector(
-    id: 1,
-    name: "2",
-  ),
-  ItemSelector(
-    id: 2,
-    name: "3",
-  ),
-  ItemSelector(
-    id: 3,
-    name: "4",
-  ),
-  ItemSelector(
-    id: 4,
-    name: "5",
-  ),
+  FilterItemSelector(
+      id: 0, name: "1", image: starIconPath, type: FilterType.Rating),
+  FilterItemSelector(
+      id: 1, name: "2", image: starIconPath, type: FilterType.Rating),
+  FilterItemSelector(
+      id: 2, name: "3", image: starIconPath, type: FilterType.Rating),
+  FilterItemSelector(
+      id: 3, name: "4", image: starIconPath, type: FilterType.Rating),
+  FilterItemSelector(
+      id: 4, name: "5", image: starIconPath, type: FilterType.Rating),
 ];
-

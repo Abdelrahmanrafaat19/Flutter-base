@@ -12,17 +12,24 @@ import '../../../../core/utils/typedefs.dart';
 import '../../../../core/widgets/app_button.dart';
 
 class FilterBottomSheet extends StatefulWidget {
+  final int? initSortByItemIndex;
+  final int? initCuisinesIndex;
+  final int? initRatingIndex;
+  final RangeValues? initRatingValue;
   final FilterResult onFilterApply;
-  const FilterBottomSheet({super.key, required this.onFilterApply});
+  const FilterBottomSheet(
+      {super.key,
+      required this.onFilterApply,
+      this.initSortByItemIndex,
+      this.initCuisinesIndex,
+      this.initRatingIndex, this.initRatingValue});
 
   @override
   State<FilterBottomSheet> createState() => _FilterBottomSheetState();
 }
 
 class _FilterBottomSheetState extends State<FilterBottomSheet> {
-  RangeValues _currentRangeValues =
-      const RangeValues(filterPriceStart, filterPriceEnd);
-
+  RangeValues? selectRangeValues;
   int? selectedSortByItemIndex;
   int? selectedCuisinesIndex;
   int? selectedRatingIndex;
@@ -60,6 +67,19 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   double itemHeight = 47; // Example fixed height
 
   @override
+  void initState() {
+    selectedSortByItemIndex = widget.initSortByItemIndex;
+    selectedCuisinesIndex = widget.initCuisinesIndex;
+    selectedRatingIndex = widget.initRatingIndex;
+    selectRangeValues = widget.initRatingValue;
+    print(
+        "sortByItemIndex $selectedSortByItemIndex \n"
+            "cuisinesIndex $selectedCuisinesIndex\n"
+            "ratingIndex $selectedRatingIndex\n"
+    );
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     calculateCuisinesHeight();
 
@@ -82,13 +102,13 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                           .copyWith(decoration: TextDecoration.underline)),
                 ),
                 InkWell(
-                  onTap: (){
+                  onTap: () {
                     setState(() {
                       selectedRatingIndex = null;
                       selectedCuisinesIndex = null;
                       selectedSortByItemIndex = null;
-                      _currentRangeValues =
-                      const RangeValues(filterPriceStart, filterPriceEnd);
+                      selectRangeValues =
+                          const RangeValues(filterPriceStart, filterPriceEnd);
                     });
                   },
                   child: Align(
@@ -227,7 +247,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 ),
                 Spacer(),
                 Text(
-                  "${_currentRangeValues.start.round()} - ${_currentRangeValues.end.round()}",
+                  "${selectRangeValues?.start.round()?? filterPriceStart} - ${selectRangeValues?.end.round() ?? filterPriceEnd}",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ],
@@ -236,17 +256,17 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               height: defaultPaddingHorizontal,
             ),
             RangeSlider(
-              values: _currentRangeValues,
+              values: selectRangeValues ?? const RangeValues(filterPriceStart, filterPriceEnd),
               min: 0,
               max: 100,
               divisions: 10, // Optional: Creates steps
               labels: RangeLabels(
-                _currentRangeValues.start.round().toString(),
-                _currentRangeValues.end.round().toString(),
+                (selectRangeValues?.start.round()?? filterPriceStart).toString(),
+                (selectRangeValues?.end.round() ?? filterPriceEnd).toString(),
               ),
               onChanged: (RangeValues values) {
                 setState(() {
-                  _currentRangeValues = values;
+                  selectRangeValues = values;
                 });
               },
               activeColor: AppTheme.orangeAppColor, // Change active track color
@@ -266,7 +286,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                       selectedSortByItemIndex,
                       selectedCuisinesIndex,
                       selectedRatingIndex,
-                      _currentRangeValues);
+                      selectRangeValues);
                   context.pop();
                 }),
             SizedBox(
@@ -288,7 +308,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     return selectedSortByItemIndex != null ||
         selectedRatingIndex != null ||
         selectedCuisinesIndex != null ||
-        (_currentRangeValues.start == filterPriceStart &&
-            _currentRangeValues.end == filterPriceEnd);
+        (selectRangeValues?.start == filterPriceStart &&
+            selectRangeValues?.end == filterPriceEnd);
   }
 }
