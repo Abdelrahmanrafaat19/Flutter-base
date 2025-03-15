@@ -51,6 +51,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       backgroundColor: AppTheme.code006060Color,
       floatingActionButton: FloatingActionButton(
         onPressed: () {},

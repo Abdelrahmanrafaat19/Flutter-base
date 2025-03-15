@@ -23,6 +23,7 @@ import 'features/auth/presentation/screens/otp_screen.dart';
 import 'features/auth/presentation/screens/sign_up_screen.dart';
 import 'features/home/persentaion/cuisines_screen.dart';
 import 'features/home/persentaion/see_all_screen_for_category.dart';
+import 'features/search/presentation/screens/search_result_screen.dart';
 
 late SharedPreferences prefs;
 
@@ -144,11 +145,12 @@ class MyApp extends ConsumerWidget {
     routes: <GoRoute>[
       GoRoute(
         path: splashScreenRoute,
-        builder: (BuildContext context, GoRouterState state) => const SearchScreen(),
+        builder: (BuildContext context, GoRouterState state) => const             SplashScreen(),
+
       ),
       GoRoute(
         path: mainScreenRoute,
-        builder: (BuildContext context, GoRouterState state) => const MainScreen(), 
+        builder: (BuildContext context, GoRouterState state) => const MainScreen(),
       ),
       GoRoute(
         path: loginScreenRoute,
@@ -213,7 +215,12 @@ class MyApp extends ConsumerWidget {
       GoRoute(
         path: seeAllScreenForCategoryRoute,
         builder: (BuildContext context, GoRouterState state) =>
-            SeeAllScreenForCategory(),
+         const   SeeAllScreenForCategory(),
+      ),
+      GoRoute(
+        path: searchScreenResultRoute,
+        builder: (BuildContext context, GoRouterState state) =>
+            SearchResultScreen(),
       ),
     ],
   );

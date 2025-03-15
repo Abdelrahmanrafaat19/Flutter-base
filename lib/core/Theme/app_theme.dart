@@ -120,7 +120,7 @@ class AppTheme {
     titleLarge: TextStyle(
         color: Colors.black, fontSize: 16, fontWeight: FontWeight.normal),
   );
-
+ 
   static final mediumBodyBlue =
       appTextTheme.bodyMedium?.copyWith(color: AppTheme.mainAppColor);
 
@@ -183,7 +183,12 @@ class AppTheme {
       fontSize: 24,
       fontWeight: FontWeight.w700,
       fontFamily: "cairepro");
+static const TextStyle fonStyle13W50022252BColor=TextStyle(
+  fontSize: 13,
+  fontWeight: FontWeight.w500,
+  color: code22252BColor
 
+);
   static const TextStyle styleWithAppGrey7Fonts14w400 =
       TextStyle(color: appGrey7, fontSize: 14, fontWeight: FontWeight.w400);
 
@@ -216,6 +221,11 @@ class AppTheme {
       color: Color(0xff333740), fontWeight: FontWeight.w400, fontSize: 16);
   static const TextStyle styleWithTextGray7AdelleSansExtendedFonts12w400 =
       TextStyle(color: appGrey7, fontSize: 12, fontWeight: FontWeight.w400);
+
+   static const TextStyle fontStyleW70018code008080Color   =TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w700,color: code008080Color,
+   );
 
   static const TextStyle styleWithTextGreenAdelleSansExtendedFonts12w400 =
       TextStyle(color: appGreen, fontSize: 12, fontWeight: FontWeight.w400);
