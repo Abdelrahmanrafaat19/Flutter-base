@@ -1,3 +1,4 @@
+// features/home/persentaion/home_screen.dart
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/core/Constants/Constants.dart';
@@ -95,6 +96,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         hasBorder: false,
                         hasFilter: false,
                         enableSearch: false,
+                        filterIconColor: AppTheme.appBlue,
                         onSearchClick: () {},
                         hintTxt: "Type of food, restaurants name",
                       ),

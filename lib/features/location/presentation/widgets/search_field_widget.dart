@@ -1,3 +1,4 @@
+// features/location/presentation/widgets/search_field_widget.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_base/core/Theme/app_theme.dart';
 import 'package:flutter_base/core/widgets/svg_icons.dart';
@@ -17,6 +18,7 @@ class _SearchFieldWidgetState extends State<SearchFieldWidget> {
   @override
   Widget build(BuildContext context) {
     return AppSearchBarWithFilter(
+      filterIconColor: AppTheme.appGrey15,
       controller: widget.controller,
       hasFilter: false,
       enableSearch: true,

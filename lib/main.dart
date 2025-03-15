@@ -1,3 +1,4 @@
+// main.dart
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_base/features/location/presentation/screens/location_per
 import 'package:flutter_base/features/location/presentation/screens/search_location_screen.dart';
 import 'package:flutter_base/features/notification/presentation/screens/notification_permission_screen.dart';
 import 'package:flutter_base/features/main/main_screen.dart';
+import 'package:flutter_base/features/search/presentation/screens/search_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -142,16 +144,11 @@ class MyApp extends ConsumerWidget {
     routes: <GoRoute>[
       GoRoute(
         path: splashScreenRoute,
-        builder: (BuildContext context, GoRouterState state) =>
-
-            const SplashScreen(),
+        builder: (BuildContext context, GoRouterState state) => const SearchScreen(),
       ),
       GoRoute(
         path: mainScreenRoute,
-        builder: (BuildContext context, GoRouterState state) => const MainScreen(),
-=======
-            NotificationPermissionScreen(),
-
+        builder: (BuildContext context, GoRouterState state) => const MainScreen(), 
       ),
       GoRoute(
         path: loginScreenRoute,
@@ -207,6 +204,11 @@ class MyApp extends ConsumerWidget {
         path: cuisinesScreenRoute,
         builder: (BuildContext context, GoRouterState state) =>
             CuisinesScreen(),
+      ),
+      GoRoute(
+        path: searchScreenRoute,
+        builder: (BuildContext context, GoRouterState state) =>
+            SearchScreen(),
       ),
       GoRoute(
         path: seeAllScreenForCategoryRoute,

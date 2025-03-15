@@ -1,3 +1,4 @@
+// core/constants/assets.dart
 //ASSETS
 const appLogo = "assets/images/tagapplogo.png";
 const whiteAppLogo = "assets/images/whiettaglogo.png";
@@ -28,4 +29,11 @@ const clockIconPath = "assets/images/clock.svg";
 const categoryIconPath = "assets/images/category_icon.svg";
 const profileIconPath = "assets/images/profile_icon.svg";
 const filterRatingStarIconPath = "assets/images/filter_rating_star.svg";
+const mapIcon="assets/images/map_icon.svg";
+const restaurantIcons="assets/images/restaurant_icons.svg";
+const arrowRightIcons="assets/images/arrow_right.svg";
+const discountIcon="assets/images/discount_icon_search.svg";
+const ratingIcon="assets/images/best_rate_icon.svg";
+const reserveIcon="assets/images/reserve_icon.svg";
+const gpsIcon="assets/images/gps_icon.svg";
 

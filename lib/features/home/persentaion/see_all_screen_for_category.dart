@@ -1,3 +1,4 @@
+// features/home/persentaion/see_all_screen_for_category.dart
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/core/Theme/app_theme.dart';
@@ -51,6 +52,7 @@ class _SeeAllScreenForCategoryState extends ConsumerState<SeeAllScreenForCategor
                 onFilterClick: () {
                   showFilterBottomSheet();
                 },
+                filterIconColor: AppTheme.appGrey15,
                 hintTxt: "Type of food, restaurant name",
               ),
             ),

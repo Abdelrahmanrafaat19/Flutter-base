@@ -1,3 +1,4 @@
+// features/home/persentaion/widget/search_with_filter.dart
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ class AppSearchBarWithFilter extends StatefulWidget {
   final OnTextChangeListener? onTextChangeListener;
   final TextEditingController? controller;
   final bool? enableSearch;
+  final Color filterIconColor;
   final String? hintTxt;
   final Widget? postIcon;
   const AppSearchBarWithFilter(
@@ -29,7 +31,7 @@ class AppSearchBarWithFilter extends StatefulWidget {
       this.onSearchClick,
       this.controller,
       this.hintTxt,
-      this.postIcon, this.hasBorder = true});
+      this.postIcon, this.hasBorder = true, required this.filterIconColor});
 
   @override
   State<AppSearchBarWithFilter> createState() => _AppSearchBarWithFilterState();
@@ -157,7 +159,7 @@ class _AppSearchBarWithFilterState extends State<AppSearchBarWithFilter> {
                   child: SVGIcons.localSVG(
                       "assets/images/filter_icon.svg",
                       width: 24,
-                      height: 24),
+                      height: 24,color: widget.filterIconColor),
                 ),
               )
             : SizedBox()
