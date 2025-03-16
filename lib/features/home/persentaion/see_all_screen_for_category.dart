@@ -46,6 +46,7 @@ class _SeeAllScreenForCategoryState
               padding: const EdgeInsets.symmetric(
                   horizontal: defaultPaddingHorizontal),
               child: AppSearchBarWithFilter(
+                hasFilterData: filterResult.isNotEmpty,
                 hasFilter: true,
                 enableSearch: true,
                 onFilterClick: () {

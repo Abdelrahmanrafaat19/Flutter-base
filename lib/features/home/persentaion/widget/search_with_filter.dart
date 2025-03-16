@@ -12,6 +12,7 @@ typedef OnTextChangeListener = Function(String);
 class AppSearchBarWithFilter extends StatefulWidget {
   final int? delay;
   final bool hasFilter;
+  final bool hasFilterData;
   final bool? hasBorder;
   final VoidCallback? onFilterClick;
   final VoidCallback? onSearchClick;
@@ -22,14 +23,16 @@ class AppSearchBarWithFilter extends StatefulWidget {
   final Widget? postIcon;
   const AppSearchBarWithFilter(
       {super.key,
-      required this.hasFilter, this.onFilterClick,
+      required this.hasFilter,
+      this.onFilterClick,
       this.onTextChangeListener,
       this.delay,
       this.enableSearch = true,
       this.onSearchClick,
       this.controller,
       this.hintTxt,
-      this.postIcon, this.hasBorder = true});
+      this.postIcon,
+      this.hasBorder = true, this.hasFilterData = false});
 
   @override
   State<AppSearchBarWithFilter> createState() => _AppSearchBarWithFilterState();
@@ -69,32 +72,45 @@ class _AppSearchBarWithFilterState extends State<AppSearchBarWithFilter> {
                     enabled: widget.enableSearch,
                     style: AppTheme
                         .styleWithTextBlackAdelleSansExtendedFonts14w400,
-
                     decoration: InputDecoration(
                         fillColor: Colors.white,
                         filled: true,
                         contentPadding: EdgeInsets.symmetric(horizontal: 12),
                         labelText: widget.hintTxt,
                         suffixIcon: widget.postIcon,
-                        hintStyle: AppTheme.style14normalblack.copyWith(color: AppTheme.appGrey10),
-                        labelStyle:
-                            AppTheme.styleWithTextAppGrey4RegularFonts14w400.copyWith(color: AppTheme.appGrey10),
+                        hintStyle: AppTheme.style14normalblack
+                            .copyWith(color: AppTheme.appGrey10),
+                        labelStyle: AppTheme
+                            .styleWithTextAppGrey4RegularFonts14w400
+                            .copyWith(color: AppTheme.appGrey10),
                         border: OutlineInputBorder(
                             borderRadius:
-                            BorderRadius.circular(defaultButtonRadius),
-                            borderSide: BorderSide(color: widget.hasBorder == true ? AppTheme.appGrey8 : Colors.white)),
+                                BorderRadius.circular(defaultButtonRadius),
+                            borderSide: BorderSide(
+                                color: widget.hasBorder == true
+                                    ? AppTheme.appGrey8
+                                    : Colors.white)),
                         enabledBorder: OutlineInputBorder(
                             borderRadius:
-                            BorderRadius.circular(defaultButtonRadius),
-                            borderSide: BorderSide(color:widget.hasBorder == true ? AppTheme.appGrey8 : Colors.white)),
+                                BorderRadius.circular(defaultButtonRadius),
+                            borderSide: BorderSide(
+                                color: widget.hasBorder == true
+                                    ? AppTheme.appGrey8
+                                    : Colors.white)),
                         focusedBorder: OutlineInputBorder(
                             borderRadius:
-                            BorderRadius.circular(defaultButtonRadius),
-                            borderSide: BorderSide(color: widget.hasBorder == true ? AppTheme.appGrey8 : Colors.white)),
+                                BorderRadius.circular(defaultButtonRadius),
+                            borderSide: BorderSide(
+                                color: widget.hasBorder == true
+                                    ? AppTheme.appGrey8
+                                    : Colors.white)),
                         disabledBorder: OutlineInputBorder(
                           borderRadius:
-                          BorderRadius.circular(defaultButtonRadius),
-                          borderSide: BorderSide(color: widget.hasBorder == true ? AppTheme.appGrey8 : Colors.white), // Disabled border color
+                              BorderRadius.circular(defaultButtonRadius),
+                          borderSide: BorderSide(
+                              color: widget.hasBorder == true
+                                  ? AppTheme.appGrey8
+                                  : Colors.white), // Disabled border color
                         ),
                         prefixIcon: SVGIcons.searchIcon()),
                     onChanged: (value) {
@@ -114,20 +130,30 @@ class _AppSearchBarWithFilterState extends State<AppSearchBarWithFilter> {
                       filled: true,
                       contentPadding: EdgeInsets.symmetric(horizontal: 12),
                       labelText: widget.hintTxt,
-                      labelStyle:
-                          AppTheme.styleWithTextAppGrey4RegularFonts14w400.copyWith(color: AppTheme.appGrey10),
+                      labelStyle: AppTheme
+                          .styleWithTextAppGrey4RegularFonts14w400
+                          .copyWith(color: AppTheme.appGrey10),
                       border: OutlineInputBorder(
                           borderRadius:
                               BorderRadius.circular(defaultButtonRadius),
-                          borderSide: BorderSide(color: widget.hasBorder == true ? AppTheme.appGrey8 : Colors.white)),
+                          borderSide: BorderSide(
+                              color: widget.hasBorder == true
+                                  ? AppTheme.appGrey8
+                                  : Colors.white)),
                       enabledBorder: OutlineInputBorder(
                           borderRadius:
                               BorderRadius.circular(defaultButtonRadius),
-                          borderSide: BorderSide(color: widget.hasBorder == true ? AppTheme.appGrey8 : Colors.white)),
+                          borderSide: BorderSide(
+                              color: widget.hasBorder == true
+                                  ? AppTheme.appGrey8
+                                  : Colors.white)),
                       focusedBorder: OutlineInputBorder(
                           borderRadius:
                               BorderRadius.circular(defaultButtonRadius),
-                          borderSide: BorderSide(color: widget.hasBorder == true ? AppTheme.appGrey8 : Colors.white)),
+                          borderSide: BorderSide(
+                              color: widget.hasBorder == true
+                                  ? AppTheme.appGrey8
+                                  : Colors.white)),
                       prefixIcon: SVGIcons.searchIcon()),
                   onChanged: (value) {
                     executeAfterDelay(value);
@@ -151,13 +177,24 @@ class _AppSearchBarWithFilterState extends State<AppSearchBarWithFilter> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8),
-                    border:
-                    Border.all(color: AppTheme.appGrey8, width: 1),
+                    border: Border.all(color: AppTheme.appGrey8, width: 1),
                   ),
-                  child: SVGIcons.localSVG(
-                      "assets/images/filter_icon.svg",
-                      width: 24,
-                      height: 24),
+                  child: Stack(children: [
+                    SVGIcons.localSVG("assets/images/filter_icon.svg",
+                        width: 24, height: 24),
+                    widget.hasFilterData ?Align(
+                      alignment: AlignmentDirectional.topEnd,
+                      child: Container(
+                        margin: EdgeInsetsDirectional.only(end: 2,bottom: 1),
+                        width: 8,
+                        height: 8,
+                        decoration: BoxDecoration(
+                            color: AppTheme.appRed,
+                            shape: BoxShape.circle
+                        ),
+                      ),
+                    ) :SizedBox(),
+                  ]),
                 ),
               )
             : SizedBox()
