@@ -4,10 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_base/core/constants/eunms.dart';
 import 'package:flutter_base/features/auth/presentation/screens/change_password_screen.dart';
 import 'package:flutter_base/features/auth/presentation/screens/forget_password_screen.dart';
-import 'package:flutter_base/features/auth/presentation/screens/splash_screen.dart';
-import 'package:flutter_base/features/location/presentation/screens/location_permission_screen.dart';
-import 'package:flutter_base/features/location/presentation/screens/search_location_screen.dart';
-import 'package:flutter_base/features/notification/presentation/screens/notification_permission_screen.dart';
+import 'package:flutter_base/features/permissions/presentation/screens/search_location_screen.dart';
 import 'package:flutter_base/features/main/main_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -16,11 +13,15 @@ import 'package:timeago/timeago.dart' as ago;
 import 'core/Constants/Constants.dart';
 import 'core/Theme/app_theme.dart';
 import 'core/constants/app_routes.dart';
+import 'core/localization/LanguageProvider.dart';
 import 'features/auth/presentation/screens/login_screen.dart';
 import 'features/auth/presentation/screens/otp_screen.dart';
 import 'features/auth/presentation/screens/sign_up_screen.dart';
 import 'features/home/persentaion/cuisines_screen.dart';
+import 'features/home/persentaion/home_screen.dart';
 import 'features/home/persentaion/see_all_screen_for_category.dart';
+import 'features/permissions/presentation/screens/location_permission_screen.dart';
+import 'features/permissions/presentation/screens/notification_permission_screen.dart';
 
 late SharedPreferences prefs;
 
@@ -130,7 +131,7 @@ class MyApp extends ConsumerWidget {
         darkTheme: AppTheme.darkTheme,
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
-        locale: context.locale,
+        locale: ref.watch(langProvider),
         routerDelegate: _router.routerDelegate,
         routeInformationProvider: _router.routeInformationProvider,
         routeInformationParser: _router.routeInformationParser,
@@ -143,7 +144,7 @@ class MyApp extends ConsumerWidget {
       GoRoute(
         path: splashScreenRoute,
         builder: (BuildContext context, GoRouterState state) =>
-            const SplashScreen(),
+            LoginScreen(),
       ),
       GoRoute(
         path: mainScreenRoute,

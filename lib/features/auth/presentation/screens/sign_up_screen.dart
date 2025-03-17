@@ -16,6 +16,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/widgets/language_text.dart';
 import '../widgets/labeled_text_field.dart';
 import '../widgets/phone_number.dart';
 
@@ -62,12 +63,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         title: context.tr(signUpKey),
         trailingWidget: const Padding(
           padding: EdgeInsets.symmetric(horizontal: defaultPaddingHorizontal),
-          child: Center(
-            child: Text(
-              "Arabic",
-              style: AppTheme.styleWithTextBlackAdelleSansExtendedFonts16w400,
-            ),
-          ),
+          child: LanguageText(),
         ),
       ),
       body: Form(

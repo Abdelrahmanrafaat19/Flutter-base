@@ -16,6 +16,7 @@ const FIRST_NAME_KEY = 'firstName';
 const LAST_NAME_KEY = 'lastName';
 const PASSWORD_KEY = 'password';
 const OTP_TYPE_KEY = 'otpType';
+const LANG_KEY = 'lang';
 
 // CONST
 const defaultPaddingHorizontal = 16.0;

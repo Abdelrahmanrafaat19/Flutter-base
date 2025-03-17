@@ -13,6 +13,7 @@ import '../../../../core/Theme/app_theme.dart';
 import '../../../../core/constants/eunms.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/custom_app_bar.dart';
+import '../../../../core/widgets/language_text.dart';
 import '../widgets/otp_fields.dart';
 import '../providers/auth_enable_btu_providers.dart';
 import '../widgets/timer_counter.dart';
@@ -77,15 +78,10 @@ class _OtpScreenState extends ConsumerState<OTPScreen> {
           title: context.tr(otpKey),
           navigated: true,
           isCenter: false,
-          trailingWidget: Padding(
-            padding: const EdgeInsets.symmetric(
+          trailingWidget: const Padding(
+            padding: EdgeInsets.symmetric(
                 horizontal: defaultPaddingHorizontal),
-            child: Center(
-              child: Text(
-                "اللغه العربيه",
-                style: AppTheme.styleWithTextBlackAdelleSansExtendedFonts16w400,
-              ),
-            ),
+            child: LanguageText(),
           )),
       body: SafeArea(
         child: SingleChildScrollView(

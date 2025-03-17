@@ -9,6 +9,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_routes.dart';
 import '../../../../core/constants/eunms.dart';
 import '../../../../core/widgets/app_button.dart';
+import '../../../../core/widgets/language_text.dart';
 import '../providers/auth_enable_btu_providers.dart';
 import '../widgets/auth_header_widget.dart';
 import '../widgets/phone_number.dart';
@@ -43,14 +44,9 @@ class _ForgetPasswordScreenState extends ConsumerState<ForgetPasswordScreen> {
         navigated: true,
         appContext: context,
         title: context.tr(forgetPasswordKey),
-        trailingWidget: Padding(
+        trailingWidget: const Padding(
           padding: EdgeInsets.symmetric(horizontal: defaultPaddingHorizontal),
-          child: Center(
-            child: Text(
-              "Arabic",
-              style: AppTheme.styleWithTextBlackAdelleSansExtendedFonts16w400,
-            ),
-          ),
+          child: LanguageText(),
         ),
       ),
       body: Form(
