@@ -17,6 +17,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/widgets/language_text.dart';
+import '../providers/auth_validation_provider.dart';
 import '../widgets/labeled_text_field.dart';
 import '../widgets/phone_number.dart';
 
@@ -50,10 +51,28 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-
+    final validationLoginState = ref.watch(validationLoginProvider);
     handleState(checkIfDataValidStateNotifierProvider, showLoading: true,
         onSuccess: (res) {
       goToSendOtp();
+    }, onFail: (res) {
+
+      Map<String,String> errorMap = {};
+
+      for (String error in (res.errors ?? [])) {
+        if (error.contains("email")) {
+          errorMap["email"] = error;
+        }
+        if (error.contains("phone")) {
+          errorMap["phone"] = error;
+        }
+        if (error.contains("name")) {
+          errorMap["name"] = error;
+        }
+      }
+      ref
+          .read(validationLoginProvider.notifier)
+          .updateStatue(errorMap);
     });
 
     return Scaffold(
@@ -139,12 +158,14 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 isPhoneNumberIsValidate: isPhoneNumberValidate,
                 controller: _phoneController,
                 validator: (phone) {
-                  if (_phoneNumber?.completeNumberWithPlus == null || _phoneNumber?.completeNumberWithPlus.isEmpty == true) {
+                  if (_phoneNumber?.completeNumberWithPlus == null ||
+                      _phoneNumber?.completeNumberWithPlus.isEmpty == true) {
                     isPhoneNumberValidate = false;
                     return 'Phone number is required';
                   }
                   final RegExp phoneRegExp = RegExp(r"^\+\d{1,3}\d{7,12}$");
-                  if (!phoneRegExp.hasMatch(_phoneNumber!.completeNumberWithPlus)) {
+                  if (!phoneRegExp
+                      .hasMatch(_phoneNumber!.completeNumberWithPlus)) {
                     isPhoneNumberValidate = false;
                     return 'Enter a valid phone number (e.g., +1234567890)';
                   }
@@ -152,7 +173,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
                   return null;
                 },
-                onChanged: (value){
+                onChanged: (value) {
                   _phoneNumber = value;
                   print("onChanged phone : $value");
                 },
@@ -355,26 +376,26 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   }
 
   void goToSendOtp() {
-    context.push(otpScreenRoute,extra: {
-      FIRST_NAME_KEY : _firstNameController.text,
-      LAST_NAME_KEY : _lastNameController.text,
-      PHONE_KEY : _phoneNumber?.completeNumberWithPlus,
-      EMAIL_KEY : _emailController.text,
-      PASSWORD_KEY : _passwordController.text,
-      OTP_TYPE_KEY : OTPType.SignUp
+    context.push(otpScreenRoute, extra: {
+      FIRST_NAME_KEY: _firstNameController.text,
+      LAST_NAME_KEY: _lastNameController.text,
+      PHONE_KEY: _phoneNumber?.completeNumberWithPlus,
+      EMAIL_KEY: _emailController.text,
+      PASSWORD_KEY: _passwordController.text,
+      OTP_TYPE_KEY: OTPType.SignUp
     });
   }
+
   void checkIfDataValid() {
     ref.read(checkIfDataValidStateNotifierProvider.notifier).call(
-          firstName: _firstNameController.text,
-          lastName: _lastNameController.text,
-          email: _emailController.text,
-          phoneNumber: _phoneNumber?.completeNumberWithPlus,
-          password: _passwordController.text
-        );
+        firstName: _firstNameController.text,
+        lastName: _lastNameController.text,
+        email: _emailController.text,
+        phoneNumber: _phoneNumber?.completeNumberWithoutPlus,
+        password: _passwordController.text);
   }
 
   void sendOtp() {
-    context.go(otpScreenRoute,extra: {});
+    context.go(otpScreenRoute, extra: {});
   }
 }

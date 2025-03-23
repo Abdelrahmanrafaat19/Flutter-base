@@ -10,6 +10,7 @@ class AuthRemoteDataSource {
 
   FutureResponseModel login(String? phoneNumber, String? password) {
     return _httpOps.postData(
+      authorized: false,
       endPoint: userLoginEndPoint,
       data: {
         "phoneNumber": phoneNumber.toString(),
@@ -26,6 +27,7 @@ class AuthRemoteDataSource {
       String? password,
       String? generatedToken}) {
     return _httpOps.postData(
+      authorized: false,
       endPoint: userRegisterEndPoint,
       data: {
         "firstName": firstName.toString(),
@@ -45,6 +47,7 @@ class AuthRemoteDataSource {
       String? phoneNumber,
       String? password}) {
     return _httpOps.postData(
+      authorized: false,
       endPoint: userCheckValidityEndPoint,
       data: {
         "firstName": firstName.toString(),
@@ -58,6 +61,7 @@ class AuthRemoteDataSource {
 
   FutureResponseModel sendOtp({String? phoneNumber}) {
     return _httpOps.postData(
+      authorized: false,
       endPoint: sendOtpEndPoint,
       data: {"phoneNumber": phoneNumber.toString()},
     );
@@ -65,6 +69,7 @@ class AuthRemoteDataSource {
 
   FutureResponseModel verifyOtp({String? phoneNumber,String? otp}) {
     return _httpOps.postData(
+      authorized: false,
       endPoint: verifyOtpEndPoint,
       data: {"phoneNumber": phoneNumber.toString(),"otp": otp.toString()},
     );
@@ -72,6 +77,7 @@ class AuthRemoteDataSource {
 
   FutureResponseModel forgetPassword({String? phoneNumber,String? password}) {
     return _httpOps.putData(
+      authorized: false,
       endPoint: usersEndPoint,
       params: "$phoneNumber/password",
       data: {"password": password.toString()},

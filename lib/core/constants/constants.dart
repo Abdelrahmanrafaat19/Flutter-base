@@ -7,7 +7,7 @@ import 'package:flutter_base/core/constants/eunms.dart';
 import 'package:flutter_base/core/widgets/svg_icons.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../features/home/data/item_selector.dart';
+import '../../features/home/data/models/item_selector.dart';
 
 const USER_KEY = 'user_key';
 const PHONE_KEY = 'phone';

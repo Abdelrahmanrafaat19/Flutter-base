@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_base/features/home/domain/entities/category_entity.dart';
 import 'package:flutter_base/features/home/persentaion/widget/restaurant_widgets/horizontal_restaurant_listview_with_title.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/constants/app_routes.dart';
 
 class HomeRestaurantListview extends StatefulWidget {
-  final List<String> restaurants;
+  final List<CategoryEntity> restaurants;
   final bool showLoading;
 
   const HomeRestaurantListview(
@@ -24,7 +25,7 @@ class _HomeRestaurantListviewState extends State<HomeRestaurantListview> {
           return Padding(
             padding: const EdgeInsetsDirectional.only(bottom: 24),
             child: HorizontalRestaurantListWithTitle(
-                list: ["", "", ""],
+                categoryItem: widget.restaurants[index],
                 showLoading: widget.showLoading,
                 itemClick: onItemClick,
                 onSeeAllClickListener: onSeeAllClickListener),

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:pretty_http_logger/pretty_http_logger.dart';
@@ -19,11 +20,13 @@ class HttpOperations {
 
   Future<ResponseModel> postData(
       {required String endPoint,
-      bool authorized = false,
+      bool authorized = true,
       Map? data,
       String params = ""})
   async {
     try {
+      print("clint UserToken HttpOperations $userToken");
+
       final response = await httpLog.post(
         Uri.parse(mainAppUrl + endPoint + (params)),
         headers: authorized
@@ -85,7 +88,7 @@ class HttpOperations {
 
   Future<ResponseModel> putData({
     required String endPoint,
-    bool authorized = false,
+    bool authorized = true,
     Map? data,
     String params = "",
   }) async {
@@ -140,7 +143,7 @@ class HttpOperations {
 
   Future<ResponseModel> getData(
       {required String endPoint,
-      bool authorized = false,
+      bool authorized = true,
       String params = ""}) async {
     try {
       final response = await httpLog.get(
@@ -190,7 +193,7 @@ class HttpOperations {
 
   Future<ResponseModel> deleteData(
       {required String endPoint,
-      bool authorized = false,
+      bool authorized = true,
       String params = ""}) async {
     try {
       final response = await httpLog.delete(
@@ -240,7 +243,7 @@ class HttpOperations {
 
   Future<ResponseModel> postFormData(
       {required String endPoint,
-      bool authorized = false,
+      bool authorized = true,
       required Map<String, String> data,
       List<http.MultipartFile>? files,
       String params = ""}) async {

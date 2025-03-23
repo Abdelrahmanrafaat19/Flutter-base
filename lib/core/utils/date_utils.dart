@@ -82,6 +82,26 @@ void showModalDatePicker(BuildContext context, CupertinoDatePickerMode mode, dou
       });
 }
 
+extension FormattedDate on String {
+  String ddMmYyyy() {
+    // Parse the input date string into a DateTime object
+    DateTime dateTime = DateTime.parse(this);
+
+    // Define the desired date format
+    DateFormat dateFormat = DateFormat('dd/MM/yyyy');
+
+    // Format the DateTime object into the desired format
+    return dateFormat.format(dateTime);
+  }
+  String hhMm(){
+    DateTime dateTime = DateTime.parse(this);
+
+    DateFormat dateFormat = DateFormat("hh:mm a");
+
+    return dateFormat.format(dateTime);
+  }
+}
+
 class DateUtilsClass {
   static String convertTimeStringToDayTime(String time) {
     return DateFormat('hh a').format(DateFormat("hh:mm:ss").parse(time));

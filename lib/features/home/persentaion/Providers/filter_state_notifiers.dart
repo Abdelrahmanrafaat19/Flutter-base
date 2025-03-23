@@ -1,4 +1,4 @@
-import 'package:flutter_base/features/home/data/item_selector.dart';
+import 'package:flutter_base/features/home/data/models/item_selector.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FilterStateNotifiers extends StateNotifier<List<FilterItemSelector>>{

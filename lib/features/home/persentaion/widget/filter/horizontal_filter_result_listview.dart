@@ -6,7 +6,7 @@ import 'package:flutter_base/features/home/persentaion/widget/filter/result_filt
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../../core/utils/typedefs.dart';
-import '../../../data/item_selector.dart';
+import '../../../data/models/item_selector.dart';
 
 class HorizontalFilterResultListview extends StatefulWidget {
   final List<FilterItemSelector> list;

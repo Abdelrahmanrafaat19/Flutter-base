@@ -4,8 +4,8 @@ import 'package:flutter_base/core/constants/constants.dart';
 import 'package:flutter_base/core/constants/eunms.dart';
 import 'package:flutter_base/core/widgets/custom_app_bar.dart';
 import 'package:flutter_base/core/widgets/paginated_listview.dart';
-import 'package:flutter_base/features/home/data/item_selector.dart';
-import 'package:flutter_base/features/home/persentaion/Providers/FilterStateNotifiers.dart';
+import 'package:flutter_base/features/home/data/models/item_selector.dart';
+import 'package:flutter_base/features/home/persentaion/Providers/filter_state_notifiers.dart';
 import 'package:flutter_base/features/home/persentaion/widget/filter/horizontal_filter_result_listview.dart';
 import 'package:flutter_base/features/home/persentaion/widget/restaurant_widgets/vertical_restaurant_card.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,7 +14,10 @@ import 'bottom_sheets/filter_bottom_sheet.dart';
 import 'widget/search_with_filter.dart';
 
 class SeeAllScreenForCategory extends ConsumerStatefulWidget {
-  const SeeAllScreenForCategory({super.key});
+  final String? title;
+  final int? cuisineId;
+  final int? categoryId;
+  const SeeAllScreenForCategory( {super.key,this.title, this.cuisineId, this.categoryId,});
 
   @override
   ConsumerState<SeeAllScreenForCategory> createState() =>
@@ -28,6 +31,7 @@ class _SeeAllScreenForCategoryState
   int? selectedCuisinesIndex;
   int? selectedRatingIndex;
   RangeValues? selectRangeValues;
+  String? searchValue;
   @override
   Widget build(BuildContext context) {
     var filterResult = ref.watch(restaurantFilterProvider);
@@ -38,7 +42,7 @@ class _SeeAllScreenForCategoryState
         appBar: CustomAppBar(
           navigated: true,
           appContext: context,
-          title: "Trending Now",
+          title: widget.title,
         ),
         body: Column(
           children: [
@@ -53,6 +57,9 @@ class _SeeAllScreenForCategoryState
                   showFilterBottomSheet();
                 },
                 hintTxt: "Type of food, restaurant name",
+                onTextChangeListener: (value){
+                  searchValue = value;
+                },
               ),
             ),
             SizedBox(
@@ -113,6 +120,7 @@ class _SeeAllScreenForCategoryState
                 topRight: Radius.circular(10), topLeft: Radius.circular(10))),
         context: context,
         builder: (BuildContext context) => FilterBottomSheet(
+              enableFilterByCuisine: widget.cuisineId == null,
               initSortByItemIndex: selectedSortByItemIndex,
               initCuisinesIndex: selectedCuisinesIndex,
               initRatingIndex: selectedRatingIndex,

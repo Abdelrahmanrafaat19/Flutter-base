@@ -4,7 +4,7 @@ import 'package:flutter_base/core/Theme/app_theme.dart';
 import 'package:flutter_base/core/constants/assets.dart';
 import 'package:flutter_base/core/constants/constants.dart';
 import 'package:flutter_base/core/widgets/svg_icons.dart';
-import 'package:flutter_base/features/home/data/item_selector.dart';
+import 'package:flutter_base/features/home/data/models/item_selector.dart';
 import 'package:flutter_base/features/home/persentaion/widget/filter/filter_option_item.dart';
 import 'package:go_router/go_router.dart';
 
@@ -16,13 +16,14 @@ class FilterBottomSheet extends StatefulWidget {
   final int? initCuisinesIndex;
   final int? initRatingIndex;
   final RangeValues? initRatingValue;
+  final bool? enableFilterByCuisine;
   final FilterResult onFilterApply;
   const FilterBottomSheet(
       {super.key,
       required this.onFilterApply,
       this.initSortByItemIndex,
       this.initCuisinesIndex,
-      this.initRatingIndex, this.initRatingValue});
+      this.initRatingIndex, this.initRatingValue, this.enableFilterByCuisine});
 
   @override
   State<FilterBottomSheet> createState() => _FilterBottomSheetState();
@@ -157,38 +158,44 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             SizedBox(
               height: defaultPaddingHorizontal,
             ),
-            Text(
-              "Cuisines",
-              style: AppTheme.styleWithTextBlackAdelleSansExtendedFonts16w700,
-            ),
-            SizedBox(
-              height: defaultPaddingHorizontal,
-            ),
-            SizedBox(
-              height: calculateCuisinesHeight(),
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: crossAxisCount, // 3 widgets per row
-                  crossAxisSpacing: crossAxisSpacing,
-                  mainAxisSpacing: mainAxisSpacing,
-                  childAspectRatio: childAspectRatio, // Adjust based on design
+
+            widget.enableFilterByCuisine == true?
+            Column(
+              children: [
+                Text(
+                  "Cuisines",
+                  style: AppTheme.styleWithTextBlackAdelleSansExtendedFonts16w700,
                 ),
-                itemCount: cuisines.length,
-                itemBuilder: (context, index) {
-                  return FilterOptionItem(
-                    state: selectedCuisinesIndex == cuisines[index].id,
-                    id: cuisines[index].id,
-                    optionName: cuisines[index].name ?? "",
-                    onItemSelect: (int) {
-                      setState(() {
-                        selectedCuisinesIndex = cuisines[index].id;
-                      });
+                SizedBox(
+                  height: defaultPaddingHorizontal,
+                ),
+                SizedBox(
+                  height: calculateCuisinesHeight(),
+                  child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount, // 3 widgets per row
+                      crossAxisSpacing: crossAxisSpacing,
+                      mainAxisSpacing: mainAxisSpacing,
+                      childAspectRatio: childAspectRatio, // Adjust based on design
+                    ),
+                    itemCount: cuisines.length,
+                    itemBuilder: (context, index) {
+                      return FilterOptionItem(
+                        state: selectedCuisinesIndex == cuisines[index].id,
+                        id: cuisines[index].id,
+                        optionName: cuisines[index].name ?? "",
+                        onItemSelect: (int) {
+                          setState(() {
+                            selectedCuisinesIndex = cuisines[index].id;
+                          });
+                        },
+                      );
                     },
-                  );
-                },
-              ),
-            ),
-            SizedBox(
+                  ),
+                ),
+              ],
+            ):const SizedBox(),
+            const SizedBox(
               height: defaultPaddingHorizontal,
             ),
             Divider(

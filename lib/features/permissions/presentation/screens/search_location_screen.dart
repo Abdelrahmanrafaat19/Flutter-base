@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_base/core/Theme/app_theme.dart';
 import 'package:flutter_base/core/widgets/custom_app_bar.dart';
 import 'package:flutter_base/core/widgets/svg_icons.dart';
-import 'package:flutter_base/features/location/presentation/widgets/address_item.dart';
-import 'package:flutter_base/features/location/presentation/widgets/search_field_widget.dart';
 
 import '../../../../core/localization/Keys.dart';
+import '../../widgets/address_item.dart';
+import '../../widgets/search_field_widget.dart';
 
 class SearchLocationScreen extends StatefulWidget {
   const SearchLocationScreen({super.key});
