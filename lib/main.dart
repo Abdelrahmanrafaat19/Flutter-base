@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_base/core/constants/eunms.dart';
 import 'package:flutter_base/features/auth/presentation/screens/change_password_screen.dart';
 import 'package:flutter_base/features/auth/presentation/screens/forget_password_screen.dart';
+import 'package:flutter_base/features/auth/presentation/screens/splash_screen.dart';
 import 'package:flutter_base/features/permissions/presentation/screens/search_location_screen.dart';
 import 'package:flutter_base/features/main/main_screen.dart';
 import 'package:flutter_base/features/search/presentation/screens/search_screen.dart';
@@ -148,7 +149,7 @@ class MyApp extends ConsumerWidget {
       GoRoute(
         path: splashScreenRoute,
         builder: (BuildContext context, GoRouterState state) =>
-            const SplashScreen(),
+            LoginScreen(),
       ),
       GoRoute(
         path: mainScreenRoute,
@@ -233,6 +234,14 @@ class MyApp extends ConsumerWidget {
           var extra = state.extra as String;
           return AllDataOfSearchCategoryScreen(
             title: extra,
+          );
+        },
+        builder: (BuildContext context, GoRouterState state) {
+          var extra = state.extra as Map;
+          return SeeAllScreenForCategory(
+            title: extra[TITLE_KEY],
+            cuisineId: extra[CUISINE_ID_KEY],
+            categoryId: extra[CATEGORY_ID_KEY],
           );
         },
       ),
