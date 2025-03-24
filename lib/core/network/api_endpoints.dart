@@ -10,3 +10,4 @@ const userLoginEndPoint = "users/login";
 const userOtpEndPoint = "auth/loginByOTP";
 const cuisineEndPoint = "cuisine";
 const categoryEndPoint = "category";
+const restaurantSearchEndPoint = "restaurant/search";

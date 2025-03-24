@@ -1,0 +1,66 @@
+import 'package:flutter_base/features/common/domain/repositories/common_repository.dart';
+import 'package:flutter_base/features/home/data/models/restaurant_model.dart';
+import 'package:flutter_base/features/home/domain/entities/category_entity.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/models/ResponseModel.dart';
+import '../../../../core/models/StateModel.dart';
+import '../../../home/domain/entities/restaurant_entity.dart';
+
+class RestaurantSearchUseCase
+    extends StateNotifier<StateModel<List<Restaurant>>> {
+  final Ref ref;
+  final CommonRepository _repository;
+  RestaurantSearchUseCase(this.ref, this._repository) : super(StateModel());
+
+  void call({
+    int? page,
+    String? size,
+    String? localeIsoCode,
+    String? restaurant,
+    int? cuisineId,
+    int? categoryId,
+    String? minRating,
+    bool? withRestaurants,
+    bool? isOpen,
+  }) async {
+
+    if (/*state.data?.lastPage != null &&*/
+        (page??0) > (/*state.data?.data?.products?.lastPage ?? 0*/ 2)) return;
+
+    state = page != 0
+        ? StateModel(data: state.data, state: DataState.MORE_LOADING)
+        : StateModel.loading();
+
+    // Build a request map and remove null values
+    Map<String, dynamic> requestBody = {
+      "restaurant": restaurant,
+      "categoryId": categoryId,
+      "cuisineId": cuisineId,
+      "minRating": minRating,
+      "withRestaurants": withRestaurants,
+      "isOpen": isOpen,
+    }..removeWhere((key, value) => value == null); // Remove null values
+
+    print(requestBody);
+    ResponseModel responseModel = await _repository.restaurantSearch(
+        page: page.toString(),
+        size: size,
+        localeIsoCode: localeIsoCode,
+        requestBody: requestBody);
+
+    if (responseModel.code == 200) {
+      List<Restaurant> restaurants = (responseModel.data as List)
+          .map((item) => toRestaurantEntity(RestaurantModel.fromJson(item)))
+          .toList();
+      state = StateModel(
+          state: DataState.SUCCESS,
+          data: restaurants,
+          message: responseModel.message);
+    } else {
+      state = StateModel(
+          state: DataState.ERROR,
+          message: responseModel.message,
+          errors: responseModel.errors);
+    }
+  }
+}

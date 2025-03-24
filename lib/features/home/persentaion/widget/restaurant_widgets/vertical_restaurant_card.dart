@@ -1,13 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../../core/Constants/Constants.dart';
 import '../../../../../core/Theme/app_theme.dart';
 import '../../../../../core/constants/Assets.dart';
 import '../../../../../core/widgets/svg_icons.dart';
+import '../../../domain/entities/restaurant_entity.dart';
 
 class VerticalRestaurantCard extends StatefulWidget {
-  const VerticalRestaurantCard({super.key});
+  final Restaurant? restaurant;
+  const VerticalRestaurantCard({super.key, this.restaurant});
 
   @override
   State<VerticalRestaurantCard> createState() => _VerticalRestaurantCardState();
@@ -42,29 +45,31 @@ class _VerticalRestaurantCardState extends State<VerticalRestaurantCard> {
                   ),
                 ),
               ),
-              child: Align(
-                alignment: AlignmentDirectional.bottomStart,
-                child: Container(
-                  width: 65,
-                  height: 22,
-                  padding: const EdgeInsetsDirectional.symmetric(
-                      horizontal: 5, vertical: 6),
-                  decoration: const BoxDecoration(
-                      color: AppTheme.lightGreen,
-                      borderRadius: BorderRadiusDirectional.only(
-                          topEnd: Radius.circular(defaultButtonRadius))),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SVGIcons.localSVG(discountIconPath,
-                          width: 14, height: 14),
-                      Text(
-                        "15% OFF",
-                        style: AppTheme
-                            .styleWithTextGreenAdelleSansExtendedFonts12w400
-                            .copyWith(fontSize: 10),
-                      )
-                    ],
+              child: Skeleton.ignore(
+                child: Align(
+                  alignment: AlignmentDirectional.bottomStart,
+                  child: Container(
+                    width: 65,
+                    height: 22,
+                    padding: const EdgeInsetsDirectional.symmetric(
+                        horizontal: 5, vertical: 6),
+                    decoration: const BoxDecoration(
+                        color: AppTheme.lightGreen,
+                        borderRadius: BorderRadiusDirectional.only(
+                            topEnd: Radius.circular(defaultButtonRadius))),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SVGIcons.localSVG(discountIconPath,
+                            width: 14, height: 14),
+                        Text(
+                          "15% OFF",
+                          style: AppTheme
+                              .styleWithTextGreenAdelleSansExtendedFonts12w400
+                              .copyWith(fontSize: 10),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -88,26 +93,28 @@ class _VerticalRestaurantCardState extends State<VerticalRestaurantCard> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
-                          "Tako",
+                        Text(
+                          widget.restaurant?.name ?? "",
                           style: AppTheme
                               .styleWithTextBlackAdelleSansExtendedFonts16w500,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                          child: Row(
-                            children: [
-                              SVGIcons.localSVG(ratingStarIconPath,
-                                  width: 16, height: 16),
-                              const SizedBox(
-                                width: 4,
-                              ),
-                              const Text(
-                                "4.5",
-                                style: AppTheme
-                                    .styleWithTextBlackAdelleSansExtendedFonts14w500,
-                              )
-                            ],
+                        Skeleton.ignore(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                            child: Row(
+                              children: [
+                                SVGIcons.localSVG(ratingStarIconPath,
+                                    width: 16, height: 16),
+                                const SizedBox(
+                                  width: 4,
+                                ),
+                                const Text(
+                                  "4.5",
+                                  style: AppTheme
+                                      .styleWithTextBlackAdelleSansExtendedFonts14w500,
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -115,50 +122,56 @@ class _VerticalRestaurantCardState extends State<VerticalRestaurantCard> {
                     const SizedBox(
                       height: 12,
                     ),
-                    Row(
-                      children: [
-                        SVGIcons.localSVG(clockIconPath, width: 16, height: 16),
-                        const Padding(
-                          padding:
-                              EdgeInsetsDirectional.symmetric(horizontal: 6.0),
-                          child: Text(
-                            "20 Mins",
-                            style: AppTheme.styleWithAppGrey7Fonts14w400,
+                    Skeleton.replace(
+                      replacement: Container(
+                        width: double.infinity,
+                        height: 20,
+                        color: Colors.white,
+                      ),child: Row(
+                        children: [
+                          SVGIcons.localSVG(clockIconPath, width: 16, height: 16),
+                          const Padding(
+                            padding:
+                                EdgeInsetsDirectional.symmetric(horizontal: 6.0),
+                            child: Text(
+                              "20 Mins",
+                              style: AppTheme.styleWithAppGrey7Fonts14w400,
+                            ),
                           ),
-                        ),
-                        Container(
-                          height: 4,
-                          width: 4,
-                          decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppTheme.appGrey15),
-                        ),
-                        const SizedBox(
-                          width: 6,
-                        ),
-                        SVGIcons.localSVG(categoryIconPath,
-                            width: 16, height: 16),
-                        const Padding(
-                          padding:
-                              EdgeInsetsDirectional.symmetric(horizontal: 6.0),
-                          child: Text(
-                            "Mexican",
-                            style: AppTheme.styleWithAppGrey7Fonts14w400,
+                          Container(
+                            height: 4,
+                            width: 4,
+                            decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppTheme.appGrey15),
                           ),
-                        )
-                      ],
+                          const SizedBox(
+                            width: 6,
+                          ),
+                          SVGIcons.localSVG(categoryIconPath,
+                              width: 16, height: 16),
+                          const Padding(
+                            padding:
+                                EdgeInsetsDirectional.symmetric(horizontal: 6.0),
+                            child: Text(
+                              "Mexican",
+                              style: AppTheme.styleWithAppGrey7Fonts14w400,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                     const SizedBox(
                       height: 8,
                     ),
                     Row(
                       children: [
-                        SVGIcons.localSVG(gpsIconPath, width: 16, height: 16),
-                        const Padding(
+                        Skeleton.ignore(child: SVGIcons.localSVG(gpsIconPath, width: 16, height: 16)),
+                         Padding(
                           padding:
-                              EdgeInsetsDirectional.symmetric(horizontal: 6.0),
+                          const EdgeInsetsDirectional.symmetric(horizontal: 6.0),
                           child: Text(
-                            "Madinty, South Park, B208",
+                            widget.restaurant?.location ?? "",
                             style: AppTheme.styleWithAppGrey7Fonts14w400,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,

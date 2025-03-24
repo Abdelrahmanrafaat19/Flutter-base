@@ -35,8 +35,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((callback) {
       ref
           .read(fetchCuisinesStateNotifierProvider.notifier)
-          .call(featured: true);
-      ref.read(fetchCategoriesStateNotifierProvider.notifier).call();
+          .call(featured: false);
+      // ref.read(fetchCategoriesStateNotifierProvider.notifier).call();
     });
     super.initState();
   }

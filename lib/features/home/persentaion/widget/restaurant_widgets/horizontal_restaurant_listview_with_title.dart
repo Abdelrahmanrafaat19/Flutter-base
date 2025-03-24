@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/core/Constants/Constants.dart';
+import 'package:flutter_base/core/utils/typedefs.dart';
 import 'package:flutter_base/features/home/domain/entities/category_entity.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -10,8 +11,8 @@ import 'horizontal_restaurant_card.dart';
 class HorizontalRestaurantListWithTitle extends StatefulWidget {
   final CategoryEntity categoryItem;
   final bool showLoading;
-  final VoidCallback itemClick;
-  final VoidCallback onSeeAllClickListener;
+  final OnRestaurantClick itemClick;
+  final OnSeeAllCategoryClick onSeeAllClickListener;
   const HorizontalRestaurantListWithTitle(
       {super.key,
       required this.categoryItem,
@@ -37,7 +38,7 @@ class _HorizontalRestaurantListWithTitleState
           child: TitleWithSeeAll(
             title: widget.categoryItem.description ?? "",
             onClickOnSeeAll: () {
-              widget.onSeeAllClickListener.call();
+              widget.onSeeAllClickListener.call(widget.categoryItem);
             },
           ),
         ),
@@ -54,7 +55,7 @@ class _HorizontalRestaurantListWithTitleState
                 enabled: widget.showLoading,
                 child: InkWell(
                   onTap: () {
-                    widget.itemClick.call();
+                    widget.itemClick.call(widget.categoryItem.rsRestaurants?[index]);
                   },
                   child: Padding(
                     padding: const EdgeInsetsDirectional.only(

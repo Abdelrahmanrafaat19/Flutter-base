@@ -17,6 +17,9 @@ const LAST_NAME_KEY = 'lastName';
 const PASSWORD_KEY = 'password';
 const OTP_TYPE_KEY = 'otpType';
 const LANG_KEY = 'lang';
+const TITLE_KEY = 'title';
+const CUISINE_ID_KEY = 'cuisineId';
+const CATEGORY_ID_KEY = 'categoryId';
 
 // CONST
 const defaultPaddingHorizontal = 16.0;

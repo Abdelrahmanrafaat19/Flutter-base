@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_base/core/constants/constants.dart';
 import 'package:flutter_base/features/home/domain/entities/category_entity.dart';
+import 'package:flutter_base/features/home/domain/entities/restaurant_entity.dart';
 import 'package:flutter_base/features/home/persentaion/widget/restaurant_widgets/horizontal_restaurant_listview_with_title.dart';
 import 'package:go_router/go_router.dart';
 
@@ -35,9 +37,12 @@ class _HomeRestaurantListviewState extends State<HomeRestaurantListview> {
     );
   }
 
-  void onItemClick() {}
+  void onItemClick(Restaurant? restaurant) {}
 
-  void onSeeAllClickListener() {
-    context.push(seeAllScreenForCategoryRoute);
+  void onSeeAllClickListener(CategoryEntity category) {
+    context.push(seeAllScreenForCategoryRoute, extra: {
+      TITLE_KEY: category.description,
+      CATEGORY_ID_KEY: category.id,
+    });
   }
 }

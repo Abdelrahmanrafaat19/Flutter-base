@@ -5,11 +5,14 @@ import 'package:flutter_base/core/constants/eunms.dart';
 import 'package:flutter_base/core/widgets/custom_app_bar.dart';
 import 'package:flutter_base/core/widgets/paginated_listview.dart';
 import 'package:flutter_base/features/home/data/models/item_selector.dart';
+import 'package:flutter_base/features/home/domain/entities/restaurant_entity.dart';
 import 'package:flutter_base/features/home/persentaion/Providers/filter_state_notifiers.dart';
 import 'package:flutter_base/features/home/persentaion/widget/filter/horizontal_filter_result_listview.dart';
 import 'package:flutter_base/features/home/persentaion/widget/restaurant_widgets/vertical_restaurant_card.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import '../../../core/models/StateModel.dart';
+import '../../common/presentation/providers/usecases_providers.dart';
 import 'bottom_sheets/filter_bottom_sheet.dart';
 import 'widget/search_with_filter.dart';
 
@@ -17,7 +20,12 @@ class SeeAllScreenForCategory extends ConsumerStatefulWidget {
   final String? title;
   final int? cuisineId;
   final int? categoryId;
-  const SeeAllScreenForCategory( {super.key,this.title, this.cuisineId, this.categoryId,});
+  const SeeAllScreenForCategory({
+    super.key,
+    this.title,
+    this.cuisineId,
+    this.categoryId,
+  });
 
   @override
   ConsumerState<SeeAllScreenForCategory> createState() =>
@@ -32,11 +40,20 @@ class _SeeAllScreenForCategoryState
   int? selectedRatingIndex;
   RangeValues? selectRangeValues;
   String? searchValue;
+  int page = 0;
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((callback) {
+      fetchRestaurants(page);
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var filterResult = ref.watch(restaurantFilterProvider);
+    var restaurantsResult = ref.watch(restaurantSearchProvider);
 
-    print("filter result $filterResult");
     return Scaffold(
         backgroundColor: const Color(0xffFAFAFA),
         appBar: CustomAppBar(
@@ -57,8 +74,11 @@ class _SeeAllScreenForCategoryState
                   showFilterBottomSheet();
                 },
                 hintTxt: "Type of food, restaurant name",
-                onTextChangeListener: (value){
+                delay: 1,
+                onTextChangeListener: (value) {
                   searchValue = value;
+                  page = 0;
+                  fetchRestaurants(page);
                 },
               ),
             ),
@@ -69,18 +89,20 @@ class _SeeAllScreenForCategoryState
                 ? HorizontalFilterResultListview(
                     list: filterResult,
                     onItemDelete: (item) {
-                      if(item?.type == FilterType.Sort) {
+                      if (item?.type == FilterType.Sort) {
                         selectedSortByItemIndex = null;
-                      }else if(item?.type == FilterType.Rating){
+                      } else if (item?.type == FilterType.Rating) {
                         selectedRatingIndex = null;
-                      }else if(item?.type == FilterType.Price){
+                      } else if (item?.type == FilterType.Price) {
                         selectRangeValues = null;
-                      }else if(item?.type == FilterType.Cuisines){
+                      } else if (item?.type == FilterType.Cuisines) {
                         selectedCuisinesIndex = null;
                       }
                       ref
                           .read(restaurantFilterProvider.notifier)
                           .deleteItem(item!);
+                      page = 0;
+                      fetchRestaurants(page);
                     },
                   )
                 : const SizedBox(),
@@ -88,23 +110,28 @@ class _SeeAllScreenForCategoryState
               height: 20,
             ),
             Expanded(
-              child: PaginatedListView(
-                  dataList: [
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                  ],
+              child: PaginatedListView<Restaurant>(
+                  dataList: restaurantsResult.data ??
+                      [
+                        Restaurant(),
+                        Restaurant(),
+                        Restaurant(),
+                        Restaurant(),
+                        Restaurant(),
+                      ],
                   scrollPhysics: const AlwaysScrollableScrollPhysics(
                       parent: BouncingScrollPhysics()),
                   paginated: true,
-                  builder: (item) => const Skeletonizer(
+                  pageLoading:
+                      restaurantsResult.state == DataState.MORE_LOADING,
+                  onBottomReached: () {
+                    fetchRestaurants(++page);
+                  },
+                  builder: (item) => Skeletonizer(
                         enabled: false,
-                        child: VerticalRestaurantCard(),
+                        child: VerticalRestaurantCard(
+                          restaurant: item
+                        ),
                       )),
             )
           ],
@@ -155,7 +182,20 @@ class _SeeAllScreenForCategoryState
                 ref
                     .read(restaurantFilterProvider.notifier)
                     .updateStatue(filterList);
+                page = 0;
+                fetchRestaurants(page);
               },
             ));
+  }
+
+  void fetchRestaurants(int page) {
+    ref.read(restaurantSearchProvider.notifier).call(
+        page: page,
+        localeIsoCode: "en",
+        size: 10.toString(),
+        categoryId: widget.categoryId,
+        restaurant: searchValue?.isNotEmpty == true ? searchValue : null,
+        cuisineId: widget.cuisineId ?? selectedCuisinesIndex,
+        minRating: selectedRatingIndex?.toString());
   }
 }
