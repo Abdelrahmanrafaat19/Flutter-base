@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_base/core/Theme/app_theme.dart';
+import 'package:flutter_base/core/constants/app_routes.dart';
 import 'package:flutter_base/core/constants/constants.dart';
 import 'package:flutter_base/core/widgets/app_button.dart';
 import 'package:flutter_base/features/notification/data/repositories/notification_permission_repo_imple.dart';
+import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class NotificationPermissionScreen extends StatefulWidget {
@@ -62,13 +64,15 @@ class _NotificationPermissionScreenState
                 backColor: AppTheme.mainAppColor,
                 onPress: () async {
                   NotificationPermissionRepoImple()
-                      .requestNotificationPermission();
+                      .requestNotificationPermission(context);
                 }),
             SizedBox(
               height: 16,
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                context.go(locationPermissionScreenRoute);
+              },
               child: Text(
                 "Maybe Later",
                 style: TextStyle(

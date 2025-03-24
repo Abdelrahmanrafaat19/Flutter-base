@@ -13,3 +13,7 @@ class ValidationStateNotifier extends StateNotifier<Map<String,String>>{
 final validationLoginProvider = StateNotifierProvider<ValidationStateNotifier, Map<String,String>>((ref) {
   return ValidationStateNotifier();
 });
+
+final validationSignUpProvider = StateNotifierProvider<ValidationStateNotifier, Map<String,String>>((ref) {
+  return ValidationStateNotifier();
+});

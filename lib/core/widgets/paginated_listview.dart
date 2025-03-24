@@ -18,6 +18,7 @@ class PaginatedListView<T> extends StatelessWidget {
   final ScrollPhysics? scrollPhysics;
   final OnRefreshScreen? onRefreshScreen;
   final bool? enableSwipe;
+  final Axis? scrollDirection;
   PaginatedListView(
       {Key? key,
         required this.dataList,
@@ -32,7 +33,7 @@ class PaginatedListView<T> extends StatelessWidget {
         this.loadingWidget,
         this.withDivider,
         this.onRefreshScreen,
-        this.enableSwipe})
+        this.enableSwipe, this.scrollDirection})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -42,6 +43,7 @@ class PaginatedListView<T> extends StatelessWidget {
           ? ListView.separated(
         physics: scrollPhysics ?? const BouncingScrollPhysics(),
         shrinkWrap: true,
+        scrollDirection:scrollDirection??Axis.vertical ,
         padding: padding ??
             const EdgeInsets.only(left: 0, right: 0, bottom: 50),
         itemCount: paginated ? dataList.length + 1 : dataList.length,
@@ -78,6 +80,7 @@ class PaginatedListView<T> extends StatelessWidget {
           return Future.delayed(const Duration(seconds: 1));
         },
         child: ListView.builder(
+          scrollDirection:scrollDirection??Axis.vertical ,
           physics: scrollPhysics ?? const BouncingScrollPhysics(),
           shrinkWrap: true,
           padding: padding ??
@@ -108,9 +111,10 @@ class PaginatedListView<T> extends StatelessWidget {
       )
           : ListView.builder(
         physics: scrollPhysics ?? const BouncingScrollPhysics(),
+        scrollDirection:scrollDirection??Axis.vertical ,
         shrinkWrap: true,
         padding: padding ??
-            const EdgeInsets.only(left: 0, right: 0, bottom: 50),
+            const EdgeInsets.only(left: 0, right: 0, bottom: 0),
         itemCount:
         paginated ? dataList.length + 1 : dataList.length,
         controller: _paginatedListController,
@@ -136,6 +140,7 @@ class PaginatedListView<T> extends StatelessWidget {
           : Center(
           child: SingleChildScrollView(
             controller: _paginatedListController,
+            scrollDirection:scrollDirection??Axis.vertical ,
             physics: const AlwaysScrollableScrollPhysics(
                 parent: BouncingScrollPhysics()),
             child: Text(

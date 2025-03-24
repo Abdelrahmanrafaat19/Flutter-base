@@ -24,6 +24,7 @@ class OTPScreen extends ConsumerStatefulWidget {
   final String? lastName;
   final String? password;
   final OTPType otpType;
+
   const OTPScreen({
     super.key,
     required this.phone,
@@ -67,7 +68,7 @@ class _OtpScreenState extends ConsumerState<OTPScreen> {
     handleState(signUpStateNotifierProvider, showLoading: true, showToast: true,
         onSuccess: (res) {
       if (widget.otpType == OTPType.SignUp) {
-        navigateToHomeScreen();
+        context.go(notificationPermissionScreenRoute);
       } else if (widget.otpType == OTPType.Update) {}
     });
 
@@ -272,9 +273,10 @@ class _OtpScreenState extends ConsumerState<OTPScreen> {
   }
 
   void sendOtp() {
-    ref
-        .read(sendOtpStateNotifierProvider.notifier)
-        .call(phoneNumber: widget.phone);
+    ref.read(sendOtpStateNotifierProvider.notifier).call(
+          phoneNumber: widget.phone,
+          checkExistence: widget.otpType == OTPType.Update,
+        );
   }
 
   void createAccount() {
@@ -291,7 +293,6 @@ class _OtpScreenState extends ConsumerState<OTPScreen> {
   }
 
   void navigateToChangePasswordScreen() {
-    context.push(changePasswordScreenRoute,
-        extra: {PHONE_KEY: widget.phone});
+    context.push(changePasswordScreenRoute, extra: {PHONE_KEY: widget.phone});
   }
 }

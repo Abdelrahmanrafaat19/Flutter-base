@@ -21,7 +21,9 @@ class _VerticalRestaurantCardState extends State<VerticalRestaurantCard> {
         clipBehavior: Clip.antiAlias,
         width: double.infinity,
         margin: const EdgeInsets.symmetric(
-            horizontal: defaultPaddingHorizontal, vertical: 8),
+          horizontal: defaultPaddingHorizontal,
+          vertical: 8,
+        ),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
@@ -48,11 +50,15 @@ class _VerticalRestaurantCardState extends State<VerticalRestaurantCard> {
                   width: 65,
                   height: 22,
                   padding: const EdgeInsetsDirectional.symmetric(
-                      horizontal: 5, vertical: 6),
+                    horizontal: 5,
+                    vertical: 6,
+                  ),
                   decoration: const BoxDecoration(
-                      color: AppTheme.lightGreen,
-                      borderRadius: BorderRadiusDirectional.only(
-                          topEnd: Radius.circular(defaultButtonRadius))),
+                    color: AppTheme.lightGreen,
+                    borderRadius: BorderRadiusDirectional.only(
+                      topEnd: Radius.circular(defaultButtonRadius),
+                    ),
+                  ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -164,10 +170,10 @@ class _VerticalRestaurantCardState extends State<VerticalRestaurantCard> {
                             maxLines: 1,
                           ),
                         ),
-                        const Spacer(),
+                         const Spacer(),
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: defaultPaddingHorizontal),
+                              horizontal: 12),
                           child: SVGIcons.localSVG(favoriteIconPath,
                               width: 24, height: 24),
                         ),

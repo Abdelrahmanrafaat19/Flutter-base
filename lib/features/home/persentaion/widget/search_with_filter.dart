@@ -60,7 +60,7 @@ class _AppSearchBarWithFilterState extends State<AppSearchBarWithFilter> {
     return Row(
       children: [
         Expanded(
-          child: widget.enableSearch == false
+          child: widget.enableSearch == true
               ? InkWell(
                   onTap: () {
                     widget.onSearchClick?.call();
@@ -98,7 +98,9 @@ class _AppSearchBarWithFilterState extends State<AppSearchBarWithFilter> {
                           BorderRadius.circular(defaultButtonRadius),
                           borderSide: BorderSide(color: widget.hasBorder == true ? AppTheme.appGrey8 : Colors.white), // Disabled border color
                         ),
-                        prefixIcon: SVGIcons.searchIcon()),
+                        prefixIcon: InkWell(onTap: () {
+                          widget.onSearchClick?.call();
+                        },child: SVGIcons.searchIcon())),
                     onChanged: (value) {
                       executeAfterDelay(value);
                     },

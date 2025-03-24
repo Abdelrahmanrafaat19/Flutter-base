@@ -20,6 +20,7 @@ class LoginUseCase extends StateNotifier<StateModel<User>> {
 
     if (responseModel.code == 200) {
       var user = UserModel.fromJson(responseModel.data);
+      print("this is Loged User $user");
 
       // save user data
       ref.read(userProvider.notifier).setUser(user);

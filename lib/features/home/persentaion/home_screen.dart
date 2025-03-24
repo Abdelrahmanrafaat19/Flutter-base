@@ -18,6 +18,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/assets.dart';
 import '../../../core/utils/Extensions/utils_exts.dart';
+import '../../location/data/address_model.dart';
+import '../../search/presentation/provider/resturant_use_case_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -27,6 +29,8 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  List<Address> _addresses = [];
+
   @override
   Widget build(BuildContext context) {
     handleChangeHomeStatueBarColor();
@@ -89,18 +93,27 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           ])
                         ],
                       ),
-                      SizedBox(
+                    const SizedBox(
                         height: 24,
                       ),
-                      AppSearchBarWithFilter(
-                        hasBorder: false,
-                        hasFilter: false,
-                        enableSearch: false,
-                        filterIconColor: AppTheme.appBlue,
-                        onSearchClick: () {},
-                        hintTxt: "Type of food, restaurants name",
+                      GestureDetector(
+                        onTap: () {
+                          // ref.read(searchOnRestaurantDataStateNotifierProvider.notifier).call(
+                          //     page:0, size: 10,localeIsoCode: "en");
+                          context.push(searchScreenRoute);
+
+                        },
+                        child: AppSearchBarWithFilter(
+                          hasBorder: false,
+                          hasFilter: false,
+                          enableSearch: false,
+                          filterIconColor: AppTheme.appBlue,
+                          onSearchClick: () {
+                          },
+                          hintTxt: "Type of food, restaurants name",
+                        ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 24,
                       ),
                       Row(

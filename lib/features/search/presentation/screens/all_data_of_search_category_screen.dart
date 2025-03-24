@@ -1,76 +1,95 @@
-// features/home/persentaion/see_all_screen_for_category.dart
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_base/core/constants/constants.dart';
-import 'package:flutter_base/core/constants/eunms.dart';
-import 'package:flutter_base/core/widgets/custom_app_bar.dart';
-import 'package:flutter_base/core/widgets/paginated_listview.dart';
-import 'package:flutter_base/features/home/data/item_selector.dart';
-import 'package:flutter_base/features/home/persentaion/Providers/FilterStateNotifiers.dart';
-import 'package:flutter_base/features/home/persentaion/widget/filter/horizontal_filter_result_listview.dart';
-import 'package:flutter_base/features/home/persentaion/widget/restaurant_widgets/vertical_restaurant_card.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import '../../../core/Theme/app_theme.dart';
-import 'bottom_sheets/filter_bottom_sheet.dart';
-import 'widget/search_with_filter.dart';
 
-class SeeAllScreenForCategory extends ConsumerStatefulWidget {
-  const SeeAllScreenForCategory({super.key});
+import '../../../../core/Constants/Constants.dart';
+import '../../../../core/Theme/app_theme.dart';
+import '../../../../core/constants/eunms.dart';
+import '../../../../core/widgets/custom_app_bar.dart';
+import '../../../../core/widgets/paginated_listview.dart';
+import '../../../home/data/item_selector.dart';
+import '../../../home/persentaion/Providers/FilterStateNotifiers.dart';
+import '../../../home/persentaion/bottom_sheets/filter_bottom_sheet.dart';
+import '../../../home/persentaion/widget/filter/horizontal_filter_result_listview.dart';
+import '../../../home/persentaion/widget/restaurant_widgets/vertical_restaurant_card.dart';
+import '../../../home/persentaion/widget/search_with_filter.dart';
+
+class AllDataOfSearchCategoryScreen extends ConsumerStatefulWidget {
+  final String title;
+
+  const AllDataOfSearchCategoryScreen({super.key, required this.title});
 
   @override
-  ConsumerState<SeeAllScreenForCategory> createState() =>
-      _SeeAllScreenForCategoryState();
+  ConsumerState<AllDataOfSearchCategoryScreen> createState() =>
+      _AllDataOfSearchCategoryScreenState();
 }
 
-class _SeeAllScreenForCategoryState
-    extends ConsumerState<SeeAllScreenForCategory> {
+class _AllDataOfSearchCategoryScreenState
+    extends ConsumerState<AllDataOfSearchCategoryScreen> {
+  final TextEditingController searchController = TextEditingController();
   List<FilterItemSelector> filterList = [];
   int? selectedSortByItemIndex;
   int? selectedCuisinesIndex;
   int? selectedRatingIndex;
   RangeValues? selectRangeValues;
+  RangeValues? selectDistantRangeValues;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var filterResult = ref.watch(restaurantFilterProvider);
-
-    print("filter result $filterResult");
     return Scaffold(
-        backgroundColor: const Color(0xffFAFAFA),
-        appBar: CustomAppBar(
-          navigated: true,
-          appContext: context,
-          title: "Trending Now",
-        ),
-        body: Column(
+      appBar: CustomAppBar(
+        navigated: true,
+        appContext: context,
+        title: widget.title,
+        customCallBack: () {
+          filterResult.clear();
+          context.pop();
+        },
+      ),
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: defaultPaddingHorizontal),
+              padding: EdgeInsets.symmetric(horizontal: 20),
               child: AppSearchBarWithFilter(
+                controller: searchController,
                 hasFilter: true,
                 enableSearch: true,
-                onFilterClick: () {
-                  showFilterBottomSheet();
-                },
                 filterIconColor: AppTheme.appGrey15,
-                hintTxt: "Type of food, restaurant name",
+                onFilterClick: () {
+                  showFilterWithDistantBottomSheet();
+                },
+                onTextChangeListener: (p0) {
+                  setState(() {});
+                },
+                hintTxt: "Search for restaurant, cuisines....",
               ),
             ),
-            SizedBox(
-              height: filterResult.isNotEmpty ? 20 : 0,
-            ),
+            filterResult.isNotEmpty
+                ? SizedBox(
+                    height: 20,
+                  )
+                : SizedBox(),
             filterResult.isNotEmpty
                 ? HorizontalFilterResultListview(
                     list: filterResult,
                     onItemDelete: (item) {
-                      if(item?.type == FilterType.Sort) {
+                      if (item?.type == FilterType.Sort) {
                         selectedSortByItemIndex = null;
-                      }else if(item?.type == FilterType.Rating){
+                      } else if (item?.type == FilterType.Rating) {
                         selectedRatingIndex = null;
-                      }else if(item?.type == FilterType.Price){
+                      } else if (item?.type == FilterType.Price) {
                         selectRangeValues = null;
-                      }else if(item?.type == FilterType.Cuisines){
+                      } else if (item?.type == FilterType.Cuisines) {
                         selectedCuisinesIndex = null;
                       }
                       ref
@@ -79,7 +98,7 @@ class _SeeAllScreenForCategoryState
                     },
                   )
                 : const SizedBox(),
-            const SizedBox(
+            SizedBox(
               height: 8,
             ),
             Expanded(
@@ -101,12 +120,14 @@ class _SeeAllScreenForCategoryState
                         enabled: false,
                         child: VerticalRestaurantCard(),
                       )),
-            )
+            ),
           ],
-        ));
+        ),
+      ),
+    );
   }
 
-  void showFilterBottomSheet() {
+  void showFilterWithDistantBottomSheet() {
     showModalBottomSheet(
         isScrollControlled: true,
         backgroundColor: Colors.white,
@@ -115,20 +136,24 @@ class _SeeAllScreenForCategoryState
                 topRight: Radius.circular(10), topLeft: Radius.circular(10))),
         context: context,
         builder: (BuildContext context) => FilterBottomSheet(
+              hasDistant: true,
               initSortByItemIndex: selectedSortByItemIndex,
               initCuisinesIndex: selectedCuisinesIndex,
               initRatingIndex: selectedRatingIndex,
               initRatingValue: selectRangeValues,
-              onFilterApply:
-                  (sortByItemIndex, cuisinesIndex, ratingIndex, rangeValues,_) {
+              initDistantRatingValue: selectDistantRangeValues,
+          onFilterApply: (sortByItemIndex, cuisinesIndex,
+                  ratingIndex, rangeValues, rangeDistantValue) {
                 print("sortByItemIndex $sortByItemIndex \n"
                     "cuisinesIndex $cuisinesIndex\n"
                     "ratingIndex $ratingIndex\n"
-                    "rangeValues $rangeValues");
+                    "rangeValues $rangeValues"
+                    "range Distant Value id  $rangeDistantValue");
                 selectedSortByItemIndex = sortByItemIndex;
                 selectedCuisinesIndex = cuisinesIndex;
                 selectedRatingIndex = ratingIndex;
                 selectRangeValues = rangeValues;
+                selectDistantRangeValues = rangeDistantValue;
                 ref.read(restaurantFilterProvider.notifier).updateStatue([]);
                 filterList.clear();
                 if (selectedSortByItemIndex != null) {
@@ -144,6 +169,12 @@ class _SeeAllScreenForCategoryState
                   filterList.add(FilterItemSelector(
                       name: "${rangeValues?.start} - ${rangeValues?.end}",
                       type: FilterType.Price));
+                }
+                if (selectDistantRangeValues != null) {
+                  filterList.add(FilterItemSelector(
+                      name:
+                          "${rangeDistantValue?.start} - ${rangeDistantValue?.end}",
+                      type: FilterType.Distant));
                 }
                 print(filterList.length);
                 ref

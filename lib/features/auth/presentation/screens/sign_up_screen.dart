@@ -8,6 +8,7 @@ import 'package:flutter_base/core/localization/Keys.dart';
 import 'package:flutter_base/core/utils/extensions/request_handle_extension.dart';
 import 'package:flutter_base/core/widgets/app_button.dart';
 import 'package:flutter_base/core/widgets/custom_app_bar.dart';
+import 'package:flutter_base/features/auth/presentation/providers/auth_validation_provider.dart';
 import 'package:flutter_base/features/auth/presentation/providers/usecase_provider.dart';
 import 'package:flutter_base/features/auth/presentation/widgets/phone_number_field.dart';
 import 'package:flutter_base/features/auth/presentation/widgets/auth_header_widget.dart';
@@ -39,6 +40,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   bool isPasswordVisibleConfirmPassword = true;
   final _formKey = GlobalKey<FormState>();
   final FocusNode _focusNode = FocusNode();
+  bool isAgree = false;
 
   bool isFirstNameValidate = true;
   bool isLastNameValidate = true;
@@ -47,14 +49,62 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   bool isPasswordValidate = true;
   bool isComfirmPasswordValidate = true;
 
+  void _toggleCheckbox() {
+    setState(() {
+      isAgree = !isAgree;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final validState = ref.watch(validationSignUpProvider);
+    debugPrint("this is Phone ${validState.containsKey("phone").toString()}");
 
-    handleState(checkIfDataValidStateNotifierProvider, showLoading: true,
-        onSuccess: (res) {
-      goToSendOtp();
-    });
+    handleState(
+      checkIfDataValidStateNotifierProvider,
+      showLoading: true,
+      onSuccess: (res) {
+        // goToSendOtp();
+        List errors=[
+          "email : Email is inValid",
+          "phoneNumber : phone is inValid",
+        ];
+        Map<String, String> errorMap = {
 
+        };
+
+        for (String error in (errors ?? [])) {
+          if (error.contains("email")) {
+            errorMap["email"] = error;
+
+          }
+          if (error.contains("phoneNumber")) {
+            errorMap["phoneNumber"] = error;
+          }
+          if (error.contains("name")) {
+            errorMap["name"] = error;
+          }
+        }
+        debugPrint("this Error Map $errorMap");
+        ref.read(validationSignUpProvider.notifier).updateStatue(errorMap);
+      },
+      onFail: (res) {
+        Map<String, String> errorMap = {};
+
+        for (String error in (res.errors ?? [])) {
+          if (error.contains("email")) {
+            errorMap["email"] = error;
+          }
+          if (error.contains("phone")) {
+            errorMap["phone"] = error;
+          }
+          if (error.contains("name")) {
+            errorMap["name"] = error;
+          }
+        }
+        ref.read(validationSignUpProvider.notifier).updateStatue(errorMap);
+      },
+    );
     return Scaffold(
       appBar: CustomAppBar(
         navigated: true,
@@ -101,6 +151,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
                           return "letters only, at least 2 characters";
                         }
+                        // if(validState.containsKey("name"))
+
                         isFirstNameValidate = true;
 
                         return null;
@@ -140,58 +192,67 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               ),
               const SizedBox(height: 16),
               PhoneNumberField(
-                isPhoneNumberIsValidate: isPhoneNumberValidate,
+                isPhoneNumberIsValidate: !validState.containsKey("phone"),
                 controller: _phoneController,
                 validator: (phone) {
-                  if (_phoneNumber?.completeNumberWithPlus == null || _phoneNumber?.completeNumberWithPlus.isEmpty == true) {
-                    isPhoneNumberValidate = false;
+                  if (_phoneNumber?.completeNumberWithPlus == null ||
+                      _phoneNumber?.completeNumberWithPlus.isEmpty == true) {
+                    // isPhoneNumberValidate = false;
                     return 'Phone number is required';
                   }
                   final RegExp phoneRegExp = RegExp(r"^\+\d{1,3}\d{7,12}$");
-                  if (!phoneRegExp.hasMatch(_phoneNumber!.completeNumberWithPlus)) {
-                    isPhoneNumberValidate = false;
+                  if (!phoneRegExp
+                      .hasMatch(_phoneNumber!.completeNumberWithPlus)) {
+                    // isPhoneNumberValidate = false;
                     return 'Enter a valid phone number (e.g., +1234567890)';
                   }
-                  isPhoneNumberValidate = true;
+                  if (validState.containsKey("phoneNumber")) {
+                    return validState["phoneNumber"];
+                  }
+                  // isPhoneNumberValidate = true;
 
                   return null;
                 },
-                onChanged: (value){
+                onChanged: (value) {
                   _phoneNumber = value;
+                  ref.read(validationSignUpProvider.notifier).updateStatue({});
                   print("onChanged phone : $value");
+
                 },
               ),
               const SizedBox(height: 16),
               LabeledTextField(
-                isvalidate: isemailValidate,
+                mode: AutovalidateMode.onUserInteraction,
+                isvalidate: !validState.containsKey("email"),
                 controller: _emailController,
                 hint: "example@gmail.com",
                 validator: (email) {
+
                   if (email != null && email.isNotEmpty) {
                     final RegExp emailRegExp = RegExp(
                         r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
                     if (!emailRegExp.hasMatch(email)) {
-                      isemailValidate = false;
+                      // isemailValidate = false;
                       return 'Enter a valid email address';
                     }
+
                   }
-                  isemailValidate = true;
+                  if (validState.containsKey("email")) {
+                    return validState["email"];
+                  }
+
+
+                    // isemailValidate = true;
                   return null; // Email is optional, so we allow empty input
                 },
-                label: Row(
-                  children: [
-                    const Text(
-                      "Email",
-                      style: AppTheme.style14BoldBlack,
-                    ),
-                    const SizedBox(width: 12),
-                    Text(
-                      "(Optional)",
-                      style: AppTheme.style14BoldBlack.copyWith(
-                          color: AppTheme.gray, fontWeight: FontWeight.normal),
-                    ),
-                  ],
+                label: const Text(
+                  "Email",
+                  style: AppTheme.style14BoldBlack,
                 ),
+                onChanged: (value) {
+                  _emailController.text=value;
+                  ref.read(validationSignUpProvider.notifier).updateStatue({});
+                },
               ),
               const SizedBox(height: 16),
               LabeledTextField(
@@ -290,15 +351,28 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               const SizedBox(height: 12),
               Row(
                 children: [
-                  Checkbox(
-                      value: false,
-                      side: const BorderSide(
-                          color: AppTheme.mainAppColor, width: 1),
-                      fillColor: const WidgetStatePropertyAll(
-                        Colors.transparent,
-                      ),
-                      onChanged: (value) {}),
-                  const Text('Agree to ', style: AppTheme.styleblack16normal),
+                  GestureDetector(
+                    onTap: _toggleCheckbox,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      width: 24,
+                      height: 24,
+                      decoration: BoxDecoration(
+                          color: isAgree
+                              ? AppTheme.orangeAppColor
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(
+                              color: isAgree
+                                  ? AppTheme.orangeAppColor
+                                  : AppTheme.codeA1A4AAColor)),
+                      child: isAgree
+                          ? const Icon(Icons.check,
+                              color: Colors.white, size: 15)
+                          : null,
+                    ),
+                  ),
+                  const Text(' Agree to ', style: AppTheme.styleblack16normal),
                   GestureDetector(
                     onTap: () {},
                     child: Text(
@@ -330,7 +404,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 children: [
                   const Text('Have an account?   '),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      context.push(loginScreenRoute);
+                    },
                     child: Text(
                       'Login',
                       style: AppTheme.styleblack16normal.copyWith(
@@ -359,26 +435,26 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   }
 
   void goToSendOtp() {
-    context.push(otpScreenRoute,extra: {
-      FIRST_NAME_KEY : _firstNameController.text,
-      LAST_NAME_KEY : _lastNameController.text,
-      PHONE_KEY : _phoneNumber?.completeNumberWithPlus,
-      EMAIL_KEY : _emailController.text,
-      PASSWORD_KEY : _passwordController.text,
-      OTP_TYPE_KEY : OTPType.SignUp
+    context.push(otpScreenRoute, extra: {
+      FIRST_NAME_KEY: _firstNameController.text,
+      LAST_NAME_KEY: _lastNameController.text,
+      PHONE_KEY: _phoneNumber?.completeNumberWithPlus,
+      EMAIL_KEY: _emailController.text,
+      PASSWORD_KEY: _passwordController.text,
+      OTP_TYPE_KEY: OTPType.SignUp
     });
   }
+
   void checkIfDataValid() {
     ref.read(checkIfDataValidStateNotifierProvider.notifier).call(
-          firstName: _firstNameController.text,
-          lastName: _lastNameController.text,
-          email: _emailController.text,
-          phoneNumber: _phoneNumber?.completeNumberWithPlus,
-          password: _passwordController.text
-        );
+        firstName: _firstNameController.text,
+        lastName: _lastNameController.text,
+        email: _emailController.text,
+        phoneNumber: _phoneNumber?.completeNumberWithPlus,
+        password: _passwordController.text);
   }
 
   void sendOtp() {
-    context.go(otpScreenRoute,extra: {});
+    context.go(otpScreenRoute, extra: {});
   }
 }

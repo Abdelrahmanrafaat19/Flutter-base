@@ -17,6 +17,20 @@ const LAST_NAME_KEY = 'lastName';
 const PASSWORD_KEY = 'password';
 const OTP_TYPE_KEY = 'otpType';
 
+const FILTER_LIST_KEY="filterList";
+const SELECT_RANGE_VALUE_KEY="selectRangeValues";
+const SELECTED_SORT_BY_ITEM_INDEX_KEY="selectedSortByItemIndex";
+const SELECT_RATING_INDEX_KEY="selectedRatingIndex";
+const SELECT_CUISINES_INDEX_KEY="selectedCuisinesIndex";
+const SELECT_DISTANT_RANGE_VALUES_KEY="selectDistantRangeValues";
+
+
+/*
+* filterList: [],
+            selectRangeValues: ,
+            selectedSortByItemIndex: ,
+            selectedRatingIndex: ,
+            selectedCuisinesIndex: ,selectDistantRangeValues: ,*/
 // CONST
 const defaultPaddingHorizontal = 16.0;
 const defaultButtonRadius = 8.0;

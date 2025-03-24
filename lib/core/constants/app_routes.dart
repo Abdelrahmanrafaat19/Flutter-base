@@ -14,5 +14,6 @@ const cuisinesScreenRoute = '/cuisinesScreenScreen';
 const seeAllScreenForCategoryRoute = '/seeAllScreenForCategory';
 const searchScreenRoute="/searchScreenRoute";
 const searchScreenResultRoute="/searchScreenResultRoute";
+const allDataOfSearchCategoryRoute="/allDataOfSearchCategoryRoute";
 
 const otpScreenRoute = '/otp';

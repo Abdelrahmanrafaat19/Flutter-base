@@ -48,24 +48,22 @@ class AuthRepositoryImp extends AuthRepository {
   }
 
   @override
-  FutureResponseModel sendOtp({String? phoneNumber}) {
-    return _dataSource.sendOtp(phoneNumber: phoneNumber);
+  FutureResponseModel sendOtp({
+    String? phoneNumber,
+    bool? checkExistence ,
+  }) {
+    return _dataSource.sendOtp(
+        phoneNumber: phoneNumber, checkExistence: checkExistence);
   }
 
   @override
   FutureResponseModel verifyOtp({String? phoneNumber, String? otp}) {
-    return _dataSource.verifyOtp(
-      phoneNumber: phoneNumber,
-      otp: otp
-    );
+    return _dataSource.verifyOtp(phoneNumber: phoneNumber, otp: otp);
   }
 
   @override
   FutureResponseModel forgetPassword({String? phoneNumber, String? password}) {
     return _dataSource.forgetPassword(
-      phoneNumber: phoneNumber,
-      password: password
-    );
+        phoneNumber: phoneNumber, password: password);
   }
-
 }

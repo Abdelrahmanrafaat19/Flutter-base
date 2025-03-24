@@ -1,23 +1,53 @@
 // features/search/presentation/screens/search_result_screen.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
+import '../../../../core/Constants/Constants.dart';
 import '../../../../core/Theme/app_theme.dart';
+import '../../../../core/constants/eunms.dart';
 import '../../../../core/widgets/custom_app_bar.dart';
+import '../../../../core/widgets/paginated_listview.dart';
+import '../../../home/data/item_selector.dart';
+import '../../../home/persentaion/Providers/FilterStateNotifiers.dart';
+import '../../../home/persentaion/bottom_sheets/filter_bottom_sheet.dart';
+import '../../../home/persentaion/widget/filter/horizontal_filter_result_listview.dart';
 import '../../../home/persentaion/widget/restaurant_widgets/vertical_restaurant_card.dart';
 import '../../../home/persentaion/widget/search_with_filter.dart';
+import '../widgets/food_item_list.dart';
 
-class SearchResultScreen extends StatefulWidget {
-  const SearchResultScreen({super.key});
+class SearchResultScreen extends ConsumerStatefulWidget {
+  List<FilterItemSelector>? filterList;
+
+  int? selectedSortByItemIndex;
+  int? selectedCuisinesIndex;
+  int? selectedRatingIndex;
+  RangeValues? selectRangeValues;
+  RangeValues? selectDistantRangeValues;
+
+   SearchResultScreen({
+    super.key,
+     this.filterList,
+     this.selectDistantRangeValues,
+     this.selectedCuisinesIndex,
+     this.selectedRatingIndex,
+     this.selectedSortByItemIndex,
+     this.selectRangeValues,
+  });
 
   @override
-  State<SearchResultScreen> createState() => _SearchResultScreenState();
+  ConsumerState<SearchResultScreen> createState() => _SearchResultScreenState();
 }
 
-class _SearchResultScreenState extends State<SearchResultScreen> {
+class _SearchResultScreenState extends ConsumerState<SearchResultScreen> {
   final TextEditingController searchController = TextEditingController();
+
+  int? sortByItemIndex;
 
   @override
   Widget build(BuildContext context) {
+    var filterResult = ref.watch(restaurantFilterProvider);
+
     return Scaffold(
       appBar: CustomAppBar(
         navigated: true,
@@ -36,99 +66,170 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
                 hasFilter: true,
                 enableSearch: true,
                 filterIconColor: AppTheme.appGrey15,
-                onFilterClick: () {},
+                onFilterClick: () {
+                  showFilterWithDistantBottomSheet();
+
+                },
                 onTextChangeListener: (p0) {
                   setState(() {});
                 },
                 hintTxt: "Search for restaurant, cuisines....",
               ),
             ),
+            filterResult.isNotEmpty
+                ? SizedBox(
+              height: 20,
+            )
+                : SizedBox(),
+            filterResult.isNotEmpty
+                ? HorizontalFilterResultListview(
+              list: filterResult,
+              onItemDelete: (item) {
+                if (item?.type == FilterType.Sort) {
+                  widget.selectedSortByItemIndex = null;
+                } else if (item?.type == FilterType.Rating) {
+                  widget.selectedRatingIndex = null;
+                } else if (item?.type == FilterType.Price) {
+                  widget.selectRangeValues = null;
+                } else if (item?.type == FilterType.Cuisines) {
+                  widget.selectedCuisinesIndex = null;
+                } else if (item?.type == FilterType.Distant) {
+                  widget.selectDistantRangeValues = null;
+                }
+                ref
+                    .read(restaurantFilterProvider.notifier)
+                    .deleteItem(item!);
+              },
+            )
+                : const SizedBox(),
+            SizedBox(
+              height: 8,
+            ),
+
+
             Expanded(
-                child: Container(
-              child: ListView.builder(
-                itemCount: 5,
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      VerticalRestaurantCard(),
-                      index % 2 == 0
-                          ? Container(
+              child: PaginatedListView(
+                  dataList: [
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                  ],
+                  scrollPhysics: const AlwaysScrollableScrollPhysics(
+                      parent: BouncingScrollPhysics()),
+                  paginated: true,
+                  builder: (item) => Skeletonizer(
+                        enabled: false,
+                        child: Column(
+                          children: [
+                            VerticalRestaurantCard(),
+                            Container(
                               width: double.infinity,
-                              height: 150,
-                              margin: EdgeInsets.symmetric(horizontal: 10),
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: 5,
-                                itemBuilder: (context, index) {
-                                  return Container(
-                                    width: 130,
-                                    height: 150,
-                                    margin: EdgeInsets.symmetric(
-                                      horizontal: 7,
-                                    ),
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: AppTheme.appGrey8,
-                                        ),
-                                        color: AppTheme.whiteColor,
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Image.network(
-                                          "https://s3-alpha-sig.figma.com/img/952a/0bb4/9ae8b4e2b41dce4f68e8ec0d19430726?Expires=1742774400&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=oDhIFQ1GjQEhmq89TuYlRmo0SG7bSBb8P0zpvA6KpgjWhTS3W2h95JhPPsdhMPgn8ZtEStgEvbMicbOYlWOzCKKF~sYB07jbEuSgzkZRBXANZHTp571AQOJFMD0aGOlbbZTKoWKPoUXy2Lo9ZXE7h1lufVKW5J4zCICfiPOXZ6PWq06Qvxq1oS1fg8uAXpORk9T07VG0GygAKXuO49Erv89yBUr9zIKl-9V0LLJbaudWNa97RqDjjSU6VGBU6y3VON44O6omx7tKF3zsKcNtedx~z-OxFW9P8euqlSrjGP4A9xGr6gXY3WK97RQJx63gPmWyBT53Y6Skpifhm15WNg__",
-                                          width: 56,
-                                          height: 56,
-                                        ),
-                                        SizedBox(
-                                          height: 12,
-                                        ),
-                                        Text(
-                                          "Original Mushroom Burger",
-                                          textAlign: TextAlign.center,
-                                          style: AppTheme
-                                              .fonStyle13W50022252BColor,
-                                        ),
-                                        SizedBox(
-                                          height: 12,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              "45.99 ",
-                                              style: AppTheme
-                                                  .fontStyleW70018code008080Color,
-                                            ),
-                                            Text(
-                                              "LE",
-                                              style: AppTheme
-                                                  .fontStyleW70018code008080Color
-                                                  .copyWith(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
+                              height: 170,
+                              padding: EdgeInsets.only(
+                                top: 9,
+                              ),
+                              child: PaginatedListView(
+                                  scrollDirection: Axis.horizontal,
+                                  dataList: [
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                  ],
+                                  scrollPhysics:
+                                      const AlwaysScrollableScrollPhysics(
+                                          parent: BouncingScrollPhysics()),
+                                  paginated: true,
+                                  builder: (item) => Skeletonizer(
+                                        enabled: false,
+                                        child: FoodItemList(),
+                                      )),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.only(
+                                top: 16,
+                                left: 16,
+                                right: 16,
+                                bottom: 10,
+                              ),
+                              child: Divider(
+                                height: 2,
+                                color: AppTheme.appGrey8,
                               ),
                             )
-                          : SizedBox(),
-                    ],
-                  );
-                },
-              ),
-            ))
+                          ],
+                        ),
+                      )),
+            )
           ],
         ),
       ),
     );
+  }
+  void showFilterWithDistantBottomSheet() {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        backgroundColor: Colors.white,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(10), topLeft: Radius.circular(10))),
+        context: context,
+        builder: (BuildContext context) => FilterBottomSheet(
+          hasDistant: true,
+          initSortByItemIndex: widget.selectedSortByItemIndex,
+          initCuisinesIndex: widget.selectedCuisinesIndex,
+          initRatingIndex:widget. selectedRatingIndex,
+          initRatingValue: widget.selectRangeValues,
+          initDistantRatingValue: widget.selectDistantRangeValues,
+          onFilterApply: (sortByItemIndex, cuisinesIndex,
+              ratingIndex, rangeValues, rangeDistantValue) {
+            print("sortByItemIndex $sortByItemIndex \n"
+                "cuisinesIndex $cuisinesIndex\n"
+                "ratingIndex $ratingIndex\n"
+                "rangeValues $rangeValues"
+                "range Distant Value id  $rangeDistantValue");
+            widget. selectedSortByItemIndex = sortByItemIndex;
+            widget.selectedCuisinesIndex = cuisinesIndex;
+            widget.selectedRatingIndex = ratingIndex;
+            widget. selectRangeValues = rangeValues;
+            widget. selectDistantRangeValues = rangeDistantValue;
+            ref.read(restaurantFilterProvider.notifier).updateStatue([]);
+            widget. filterList!.clear();
+            if (widget.selectedSortByItemIndex != null) {
+              widget.filterList!.add(sortByItems[widget.selectedSortByItemIndex!]);
+            }
+            if (widget.selectedCuisinesIndex != null) {
+               widget.filterList!.add(sortByItems[widget.selectedSortByItemIndex!]);
+            }
+            if (widget.selectedRatingIndex != null) {
+              widget.filterList!.add(ratings[widget.selectedRatingIndex!]);
+            }
+            if (widget.selectRangeValues != null) {
+              widget.filterList!.add(FilterItemSelector(
+                  name: "${rangeValues?.start} - ${rangeValues?.end}",
+                  type: FilterType.Price));
+            }
+            if (widget.selectDistantRangeValues != null) {
+              widget.filterList!.add(FilterItemSelector(
+                  name:
+                  "${rangeDistantValue?.start} - ${rangeDistantValue?.end}",
+                  type: FilterType.Distant));
+            }
+            print(widget.filterList!.length);
+            ref
+                .read(restaurantFilterProvider.notifier)
+                .updateStatue(widget.filterList!);
+
+          },
+        ));
   }
 }

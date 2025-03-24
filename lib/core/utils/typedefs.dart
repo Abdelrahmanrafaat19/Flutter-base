@@ -11,7 +11,8 @@ typedef FutureResponseModel = Future<ResponseModel>;
 typedef VoidCallback = Function();
 typedef FilterSelectCallBack = Function(int?);
 typedef FilterDeleteItemCallBack = Function(FilterItemSelector?);
-typedef FilterResult = Function(int?, int?,int?,RangeValues?);
+typedef FilterResult = Function(int?, int?,int?,RangeValues?,RangeValues?);
+typedef FilterDistantResult = Function(int?, int?,int?,RangeValues?,RangeValues?);
 
 
 // paginatedListView

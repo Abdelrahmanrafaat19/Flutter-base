@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_base/core/constants/app_routes.dart';
 import 'package:flutter_base/features/location/domain/repositories/address_permission_repo.dart';
+import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class AddressPermissionRepoImple implements AddressPermissionRepo {
@@ -11,6 +13,7 @@ class AddressPermissionRepoImple implements AddressPermissionRepo {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Location permission granted")),
       );
+      context.go(mainScreenRoute);
     } else if (status.isDenied) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Location permission denied")),

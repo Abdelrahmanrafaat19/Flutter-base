@@ -15,14 +15,25 @@ class FilterBottomSheet extends StatefulWidget {
   final int? initSortByItemIndex;
   final int? initCuisinesIndex;
   final int? initRatingIndex;
+  final bool? hasDistant;
   final RangeValues? initRatingValue;
-  final FilterResult onFilterApply;
-  const FilterBottomSheet(
-      {super.key,
-      required this.onFilterApply,
-      this.initSortByItemIndex,
-      this.initCuisinesIndex,
-      this.initRatingIndex, this.initRatingValue});
+  final RangeValues? initDistantRatingValue;
+  final FilterResult? onFilterApply;
+  final FilterDistantResult? onFilterIsDistantApply;
+  final Widget? screen;
+
+  const FilterBottomSheet({
+    super.key,
+    this.onFilterApply,
+    this.initSortByItemIndex,
+    this.initCuisinesIndex,
+    this.initRatingIndex,
+    this.initRatingValue,
+    this.initDistantRatingValue,
+    this.hasDistant = false,
+    this.onFilterIsDistantApply,
+    this.screen,
+  });
 
   @override
   State<FilterBottomSheet> createState() => _FilterBottomSheetState();
@@ -30,6 +41,7 @@ class FilterBottomSheet extends StatefulWidget {
 
 class _FilterBottomSheetState extends State<FilterBottomSheet> {
   RangeValues? selectRangeValues;
+  RangeValues? selectRangeDistantValues;
   int? selectedSortByItemIndex;
   int? selectedCuisinesIndex;
   int? selectedRatingIndex;
@@ -72,13 +84,13 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     selectedCuisinesIndex = widget.initCuisinesIndex;
     selectedRatingIndex = widget.initRatingIndex;
     selectRangeValues = widget.initRatingValue;
-    print(
-        "sortByItemIndex $selectedSortByItemIndex \n"
-            "cuisinesIndex $selectedCuisinesIndex\n"
-            "ratingIndex $selectedRatingIndex\n"
-    );
+    selectRangeDistantValues = widget.initDistantRatingValue;
+    print("sortByItemIndex $selectedSortByItemIndex \n"
+        "cuisinesIndex $selectedCuisinesIndex\n"
+        "ratingIndex $selectedRatingIndex\n");
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     calculateCuisinesHeight();
@@ -108,6 +120,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                       selectedCuisinesIndex = null;
                       selectedSortByItemIndex = null;
                       selectRangeValues =
+                          const RangeValues(filterPriceStart, filterPriceEnd);
+                      selectRangeDistantValues =
                           const RangeValues(filterPriceStart, filterPriceEnd);
                     });
                   },
@@ -247,8 +261,11 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 ),
                 Spacer(),
                 Text(
-                  "${selectRangeValues?.start.round()?? filterPriceStart} - ${selectRangeValues?.end.round() ?? filterPriceEnd}",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  "${selectRangeValues?.start.round() ?? filterPriceStart} \$ - ${selectRangeValues?.end.round() ?? filterPriceEnd} \$",
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.orangeAppColor),
                 ),
               ],
             ),
@@ -256,12 +273,15 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               height: defaultPaddingHorizontal,
             ),
             RangeSlider(
-              values: selectRangeValues ?? const RangeValues(filterPriceStart, filterPriceEnd),
+              values: selectRangeValues ??
+                  const RangeValues(filterPriceStart, filterPriceEnd),
               min: 0,
               max: 100,
-              divisions: 10, // Optional: Creates steps
+              divisions: 10,
+              // Optional: Creates steps
               labels: RangeLabels(
-                (selectRangeValues?.start.round()?? filterPriceStart).toString(),
+                (selectRangeValues?.start.round() ?? filterPriceStart)
+                    .toString(),
                 (selectRangeValues?.end.round() ?? filterPriceEnd).toString(),
               ),
               onChanged: (RangeValues values) {
@@ -269,11 +289,67 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   selectRangeValues = values;
                 });
               },
-              activeColor: AppTheme.orangeAppColor, // Change active track color
+              activeColor: AppTheme.orangeAppColor,
+              // Change active track color
               inactiveColor: Colors.grey[300], // Change inactive track color
             ),
             SizedBox(
               height: defaultPaddingHorizontal,
+            ),
+            widget.hasDistant == true
+                ? Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            "Distance Range",
+                            style: AppTheme
+                                .styleWithTextBlackAdelleSansExtendedFonts16w700,
+                          ),
+                          Spacer(),
+                          Text(
+                            "${selectRangeDistantValues?.start.round() ?? filterPriceStart} KM - ${selectRangeDistantValues?.end.round() ?? filterPriceEnd} KM",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: AppTheme.orangeAppColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: defaultPaddingHorizontal,
+                      ),
+                      RangeSlider(
+                        values: selectRangeDistantValues ??
+                            const RangeValues(filterPriceStart, filterPriceEnd),
+                        min: 0,
+                        max: 100,
+                        divisions: 10,
+                        // Optional: Creates steps
+                        labels: RangeLabels(
+                          (selectRangeDistantValues?.start.round() ??
+                                  filterPriceStart)
+                              .toString(),
+                          (selectRangeDistantValues?.end.round() ??
+                                  filterPriceEnd)
+                              .toString(),
+                        ),
+                        onChanged: (RangeValues values) {
+                          setState(() {
+                            selectRangeDistantValues = values;
+                          });
+                        },
+                        activeColor: AppTheme.orangeAppColor,
+                        // Change active track color
+                        inactiveColor:
+                            Colors.grey[300], // Change inactive track color
+                      ),
+                    ],
+                  )
+                : SizedBox(),
+            SizedBox(
+              height:  widget.hasDistant == true? defaultPaddingHorizontal:0.0,
             ),
             AppButton(
                 enabled: enableFilterBtu(),
@@ -282,12 +358,16 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 height: 56,
                 text: "Show Results",
                 onPress: () {
-                  widget.onFilterApply.call(
+
+                    widget.onFilterApply!.call(
                       selectedSortByItemIndex,
                       selectedCuisinesIndex,
                       selectedRatingIndex,
-                      selectRangeValues);
-                  context.pop();
+                      selectRangeValues,
+                      selectRangeDistantValues,);
+
+             context.pop();
+
                 }),
             SizedBox(
               height: defaultPaddingHorizontal,

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_base/core/Theme/app_theme.dart';
+import 'package:flutter_base/core/constants/app_routes.dart';
 import 'package:flutter_base/core/constants/constants.dart';
 import 'package:flutter_base/core/widgets/app_button.dart';
+import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../data/repositories/address_permission_repo_imple.dart';
@@ -69,7 +71,9 @@ class _LocationPermissionScreenState extends State<LocationPermissionScreen> {
               height: 16,
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                context.go(searchLocationScreenRoute);
+              },
               child: Text(
                 "Enter Location Manually",
                 style: TextStyle(

@@ -23,6 +23,8 @@ import 'features/auth/presentation/screens/otp_screen.dart';
 import 'features/auth/presentation/screens/sign_up_screen.dart';
 import 'features/home/persentaion/cuisines_screen.dart';
 import 'features/home/persentaion/see_all_screen_for_category.dart';
+import 'features/search/domain/use_cases/fetch_restaurant_data_use_case.dart';
+import 'features/search/presentation/screens/all_data_of_search_category_screen.dart';
 import 'features/search/presentation/screens/search_result_screen.dart';
 
 late SharedPreferences prefs;
@@ -92,6 +94,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
 
+
   // await Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.currentPlatform,
   // );
@@ -109,15 +112,23 @@ void main() async {
 
   ago.setLocaleMessages('ar', ago.ArMessages());
   //Main App
-  runApp(ProviderScope(
-      child: EasyLocalization(supportedLocales: const [
-    Locale("en"),
-    Locale("ar"),
-  ], path: 'assets/translations', child: MyApp())));
+  runApp(
+    ProviderScope(
+      child: EasyLocalization(
+        supportedLocales: const [
+          Locale("en"),
+          Locale("ar"),
+        ],
+        path: 'assets/translations',
+        child: MyApp(),
+      ),
+    ),
+  );
 }
 
 class MyApp extends ConsumerWidget {
   final appLang;
+
   MyApp({Key? key, this.appLang}) : super(key: key);
 
   @override
@@ -145,12 +156,12 @@ class MyApp extends ConsumerWidget {
     routes: <GoRoute>[
       GoRoute(
         path: splashScreenRoute,
-        builder: (BuildContext context, GoRouterState state) => const             SplashScreen(),
-
+        builder: (BuildContext context, GoRouterState state) => SplashScreen(),
       ),
       GoRoute(
         path: mainScreenRoute,
-        builder: (BuildContext context, GoRouterState state) => const MainScreen(),
+        builder: (BuildContext context, GoRouterState state) =>
+            const MainScreen(),
       ),
       GoRoute(
         path: loginScreenRoute,
@@ -209,18 +220,34 @@ class MyApp extends ConsumerWidget {
       ),
       GoRoute(
         path: searchScreenRoute,
-        builder: (BuildContext context, GoRouterState state) =>
-            SearchScreen(),
+        builder: (BuildContext context, GoRouterState state) => SearchScreen(),
       ),
       GoRoute(
         path: seeAllScreenForCategoryRoute,
         builder: (BuildContext context, GoRouterState state) =>
-         const   SeeAllScreenForCategory(),
+            const SeeAllScreenForCategory(),
       ),
       GoRoute(
-        path: searchScreenResultRoute,
-        builder: (BuildContext context, GoRouterState state) =>
-            SearchResultScreen(),
+          path: searchScreenResultRoute,
+          builder: (BuildContext context, GoRouterState state) {
+            var extra = state.extra as Map;
+            return SearchResultScreen(
+              filterList: extra[FILTER_LIST_KEY],
+              selectRangeValues: extra[SELECT_RANGE_VALUE_KEY],
+              selectedSortByItemIndex: extra[SELECTED_SORT_BY_ITEM_INDEX_KEY],
+              selectedRatingIndex: extra[SELECT_RATING_INDEX_KEY],
+              selectedCuisinesIndex: extra[SELECT_CUISINES_INDEX_KEY],
+              selectDistantRangeValues: extra[SELECT_DISTANT_RANGE_VALUES_KEY],
+            );
+          }),
+      GoRoute(
+        path: allDataOfSearchCategoryRoute,
+        builder: (BuildContext context, GoRouterState state) {
+          var extra = state.extra as String;
+          return AllDataOfSearchCategoryScreen(
+            title: extra,
+          );
+        },
       ),
     ],
   );

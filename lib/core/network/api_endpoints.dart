@@ -1,4 +1,4 @@
-const mainAppUrl = 'http://ec2-16-171-240-213.eu-north-1.compute.amazonaws.com/api/eatsnbeats/';
+const mainAppUrl = 'http://ec2-13-48-255-109.eu-north-1.compute.amazonaws.com/api/eatsnbeats/';
 const mainAppUrlDomain = 'http://ajazsademo-001-site1.atempurl.com/public/';
 
 const userRegisterEndPoint = "users/createUser";
@@ -17,3 +17,5 @@ const updateUserContactInfoEndpoint = "member/updateUserContactInfo";
 const deleteUserContactInfoEndpoint = "member/deleteUserAllContactInfo";
 const getUserContactInfoEndpoint = "member/getUserContactInfo";
 const getOtherUserContactInfoEndpoint = "userContactInfoProfile";
+const fetchAllRestaurantEndPoint="restaurant";
+const searchOnResturantEndPoint="restaurant/search";

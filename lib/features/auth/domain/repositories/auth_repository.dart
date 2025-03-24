@@ -21,7 +21,7 @@ abstract class AuthRepository {
   });
 
 
-  FutureResponseModel sendOtp({String? phoneNumber});
+  FutureResponseModel sendOtp({String? phoneNumber,  bool? checkExistence });
 
   FutureResponseModel verifyOtp({String? phoneNumber,String? otp});
 
