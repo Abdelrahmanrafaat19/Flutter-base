@@ -4,8 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_base/core/Constants/Constants.dart';
 import 'package:flutter_base/core/Theme/app_theme.dart';
 import 'package:flutter_base/core/constants/app_routes.dart';
+import 'package:flutter_base/core/models/StateModel.dart';
 import 'package:flutter_base/core/widgets/svg_icons.dart';
 import 'package:flutter_base/features/auth/domain/providers/user_provider.dart';
+import 'package:flutter_base/features/home/domain/entities/category_entity.dart';
+import 'package:flutter_base/features/home/domain/entities/cuisine_entity.dart';
+import 'package:flutter_base/features/home/persentaion/Providers/usecase_provider.dart';
 import 'package:flutter_base/features/home/persentaion/widget/category_widgets/horizontal_category_listview_with_title.dart';
 import 'package:flutter_base/features/home/persentaion/bottom_sheets/filter_bottom_sheet.dart';
 import 'package:flutter_base/features/home/persentaion/widget/restaurant_widgets/home_restaurant_listview.dart';
@@ -32,9 +36,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   List<Address> _addresses = [];
 
   @override
-  Widget build(BuildContext context) {
-    handleChangeHomeStatueBarColor();
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((callback) {
+      ref
+          .read(fetchCuisinesStateNotifierProvider.notifier)
+          .call(featured: false);
+      // ref.read(fetchCategoriesStateNotifierProvider.notifier).call();
+    });
+    super.initState();
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    final cuisinesState = ref.watch(fetchCuisinesStateNotifierProvider);
+    final categoriesState = ref.watch(fetchCategoriesStateNotifierProvider);
+    handleChangeHomeStatueBarColor();
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -122,7 +138,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             icon: SVGIcons.localSVG(calendarIconPath,
                                 width: 24, height: 24),
                             title: "Reserve a table",
-                            onClick: () {},
+                            onClick: () {
+                              ref
+                                  .read(fetchCategoriesStateNotifierProvider
+                                      .notifier)
+                                  .call();
+                            },
                           ),
                           const Spacer(),
                           ServiceOptions(
@@ -148,18 +169,41 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
                 Column(
                   children: [
-                    HorizontalCategoryListWithTitle(
-                        list: ["", "", "", "", "", "", ""],
-                        showLoading: false,
-                        itemClick: () {},
-                        onSeeAllClickListener: () {
-                          navigateToShowAllCategories();
-                        }),
+                    cuisinesState.data?.isNotEmpty == true
+                        ? HorizontalCuisinesListWithTitle(
+                            list: cuisinesState.data ??
+                                [
+                                  Cuisine(),
+                                  Cuisine(),
+                                  Cuisine(),
+                                  Cuisine(),
+                                  Cuisine(),
+                                ],
+                            showLoading:
+                                cuisinesState.state == DataState.LOADING,
+                            itemClick: () {},
+                            onSeeAllClickListener: () {
+                              navigateToShowAllCategories();
+                            })
+                        : const SizedBox(),
                     SizedBox(
                       height: 24,
                     ),
-                    HomeRestaurantListview(
-                        restaurants: ["", "", ""], showLoading: false)
+                    categoriesState.data?.isNotEmpty == true
+                        ? HomeRestaurantListview(
+                            restaurants: categoriesState.data ??
+                                [
+                                  CategoryEntity(),
+                                  CategoryEntity(),
+                                  CategoryEntity(),
+                                ],
+                            showLoading:
+                                categoriesState.state == DataState.LOADING,
+                          )
+                        : SizedBox(),
+                    SizedBox(
+                      height: 60,
+                    )
                   ],
                 ),
               ],

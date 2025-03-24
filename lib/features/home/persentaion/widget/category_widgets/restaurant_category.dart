@@ -3,12 +3,12 @@ import 'package:flutter_base/core/Constants/Constants.dart';
 import 'package:flutter_base/core/Theme/app_theme.dart';
 import 'package:flutter_base/core/widgets/circle_image.dart';
 
-class RestaurantCategory extends StatelessWidget {
+class CuisineCard extends StatelessWidget {
   final String? categoryImg;
   final String? categoryName;
   final double width;
   final double height;
-  const RestaurantCategory({super.key, this.categoryImg, this.categoryName, required this.width, required this.height});
+  const CuisineCard({super.key, this.categoryImg, this.categoryName, required this.width, required this.height});
 
   @override
   Widget build(BuildContext context) {

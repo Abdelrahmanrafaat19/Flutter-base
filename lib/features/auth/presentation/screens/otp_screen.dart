@@ -13,6 +13,7 @@ import '../../../../core/Theme/app_theme.dart';
 import '../../../../core/constants/eunms.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/custom_app_bar.dart';
+import '../../../../core/widgets/language_text.dart';
 import '../widgets/otp_fields.dart';
 import '../providers/auth_enable_btu_providers.dart';
 import '../widgets/timer_counter.dart';
@@ -78,15 +79,10 @@ class _OtpScreenState extends ConsumerState<OTPScreen> {
           title: context.tr(otpKey),
           navigated: true,
           isCenter: false,
-          trailingWidget: Padding(
-            padding: const EdgeInsets.symmetric(
+          trailingWidget: const Padding(
+            padding: EdgeInsets.symmetric(
                 horizontal: defaultPaddingHorizontal),
-            child: Center(
-              child: Text(
-                "اللغه العربيه",
-                style: AppTheme.styleWithTextBlackAdelleSansExtendedFonts16w400,
-              ),
-            ),
+            child: LanguageText(),
           )),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -196,75 +192,6 @@ class _OtpScreenState extends ConsumerState<OTPScreen> {
     );
   }
 
-/*
-  void sendOtp() async {
-    ref.read(sendOtpForLoginStateProvider.notifier).sendOtp(widget.phone);
-  }
-
-  void verifyPhone(String phone,String? code) async {
-    ref.read(confirmResetCodeStateProvider.notifier).confirmReset(phone, code);
-  }
-
-  void initFcmToken() async{
-    //FCM
-    final fcmToken = await FirebaseMessaging.instance.getToken();
-    ref.read(updateFcmTokenStateProvider.notifier).calculateInstantOrder(
-        fcmToken: fcmToken
-    );
-  }
-
-  void login() async {
-    var sessionId = ref.read(getSessionHandlerStateNotifier.notifier).checkIfSessionIdExist();
-    if(sessionId?.isNotEmpty == true){
-      ref.read(loginStateNotifierProvider.notifier)
-          .login(widget.phone,sessionId: sessionId);
-    }else{
-      ref.read(loginStateNotifierProvider.notifier)
-          .login(widget.phone);
-    }
-  }
-
-  void signUp() {
-    var sessionId = ref.read(getSessionHandlerStateNotifier.notifier).checkIfSessionIdExist();
-    if(sessionId?.isNotEmpty == true){
-      ref.read(signUpStateNotifierProvider.notifier).signUp(
-          image: widget.image,
-          name: widget.name,
-          phone: widget.phone,
-          email: widget.email?.isNotEmpty == true ? widget.email : null,
-          cityId: "${widget.cityId}",
-        sessionId: sessionId
-      );
-    }else{
-      ref.read(signUpStateNotifierProvider.notifier).signUp(
-          image: widget.image,
-          name: widget.name,
-          phone: widget.phone,
-          email: widget.email?.isNotEmpty == true ? widget.email : null,
-          cityId: "${widget.cityId}",
-      );
-    }
-
-  }
-
-  void updatePhone() {
-    ref.read(updateProfileStateProvider.notifier).updateProfile(
-        phone: widget.phone
-    );
-  }
-
-  void updateMainScreen(){
-    ref.read(homeDataStateNotifiers.notifier).getHomeData();
-    ref.read(getNewOrderStateProvider.notifier).getOrders();
-    ref.read(getCurrentOrderStateProvider.notifier).getOrders();
-    ref.read(getFinishOrderStateProvider.notifier).getOrders();
-    ref.read(getCanselOrderStateProvider.notifier).getOrders();
-    ref.read(fetchCardDetailsStateNotifies.notifier).getCardDetails();
-    ref.read(getWishListProductsStateNotifier.notifier).fetchAllProductsInWishlist();
-    ref.read(getWishListServicesStateNotifier.notifier).fetchAllServicesInWishlist();
-  }
-*/
-
   void verifyOtp() {
     if (otpFieldsKeys.currentState?.formKey.currentState?.validate() == true) {
       ref.read(verifyOtpStateNotifierProvider.notifier).call(
@@ -284,7 +211,7 @@ class _OtpScreenState extends ConsumerState<OTPScreen> {
         firstName: widget.firstName,
         lastName: widget.lastName,
         email: widget.email,
-        phoneNumber: widget.phone,
+        phoneNumber: widget.phone.replaceAll("+", ""),
         password: widget.password);
   }
 

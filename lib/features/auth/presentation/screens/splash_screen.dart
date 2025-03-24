@@ -51,7 +51,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
         // }
       }
 
-      WidgetsBinding.instance.addPostFrameCallback((_) {});
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        // commonCalls();
+      });
     });
 
     super.initState();

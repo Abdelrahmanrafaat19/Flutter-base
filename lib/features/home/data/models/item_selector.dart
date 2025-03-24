@@ -1,4 +1,4 @@
-import '../../../core/constants/eunms.dart';
+import '../../../../core/constants/eunms.dart';
 
 class ItemSelector{
   int? id;

@@ -7,7 +7,7 @@ import 'package:flutter_base/core/constants/eunms.dart';
 import 'package:flutter_base/core/widgets/svg_icons.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../features/home/data/item_selector.dart';
+import '../../features/home/data/models/item_selector.dart';
 
 const USER_KEY = 'user_key';
 const PHONE_KEY = 'phone';
@@ -16,6 +16,10 @@ const FIRST_NAME_KEY = 'firstName';
 const LAST_NAME_KEY = 'lastName';
 const PASSWORD_KEY = 'password';
 const OTP_TYPE_KEY = 'otpType';
+const LANG_KEY = 'lang';
+const TITLE_KEY = 'title';
+const CUISINE_ID_KEY = 'cuisineId';
+const CATEGORY_ID_KEY = 'categoryId';
 
 const FILTER_LIST_KEY="filterList";
 const SELECT_RANGE_VALUE_KEY="selectRangeValues";

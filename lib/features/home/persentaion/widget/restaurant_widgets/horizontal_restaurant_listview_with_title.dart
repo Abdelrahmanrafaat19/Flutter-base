@@ -1,19 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/core/Constants/Constants.dart';
+import 'package:flutter_base/core/utils/typedefs.dart';
+import 'package:flutter_base/features/home/domain/entities/category_entity.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../title_with_see_all.dart';
 import 'horizontal_restaurant_card.dart';
 
 class HorizontalRestaurantListWithTitle extends StatefulWidget {
-  final List<String> list;
+  final CategoryEntity categoryItem;
   final bool showLoading;
-  final VoidCallback itemClick;
-  final VoidCallback onSeeAllClickListener;
+  final OnRestaurantClick itemClick;
+  final OnSeeAllCategoryClick onSeeAllClickListener;
   const HorizontalRestaurantListWithTitle(
       {super.key,
-      required this.list,
+      required this.categoryItem,
       required this.showLoading,
       required this.itemClick,
       required this.onSeeAllClickListener});
@@ -31,11 +33,12 @@ class _HorizontalRestaurantListWithTitleState
       Skeletonizer(
         enabled: widget.showLoading,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: defaultPaddingHorizontal),
+          padding:
+              const EdgeInsets.symmetric(horizontal: defaultPaddingHorizontal),
           child: TitleWithSeeAll(
-            title: "Trending Now",
+            title: widget.categoryItem.description ?? "",
             onClickOnSeeAll: () {
-              widget.onSeeAllClickListener.call();
+              widget.onSeeAllClickListener.call(widget.categoryItem);
             },
           ),
         ),
@@ -52,11 +55,14 @@ class _HorizontalRestaurantListWithTitleState
                 enabled: widget.showLoading,
                 child: InkWell(
                   onTap: () {
-                    widget.itemClick.call();
+                    widget.itemClick.call(widget.categoryItem.rsRestaurants?[index]);
                   },
                   child: Padding(
-                    padding: const EdgeInsetsDirectional.only(start: defaultPaddingHorizontal),
-                    child: HorizontalRestaurantCard(),
+                    padding: const EdgeInsetsDirectional.only(
+                        start: defaultPaddingHorizontal),
+                    child: HorizontalRestaurantCard(
+                      restaurant: widget.categoryItem.rsRestaurants?[index],
+                    ),
                   ),
                 ),
               );
@@ -64,7 +70,9 @@ class _HorizontalRestaurantListWithTitleState
             separatorBuilder: (context, index) => const SizedBox(
                   width: 0,
                 ),
-            itemCount: widget.showLoading ? 5 : widget.list.length),
+            itemCount: widget.showLoading
+                ? 5
+                : widget.categoryItem.rsRestaurants?.length ?? 0),
       ),
     ]);
   }

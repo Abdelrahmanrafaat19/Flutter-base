@@ -11,6 +11,8 @@ import 'package:flutter_base/features/location/presentation/widgets/search_field
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/localization/Keys.dart';
+import '../../widgets/address_item.dart';
+import '../../widgets/search_field_widget.dart';
 
 class SearchLocationScreen extends StatefulWidget {
   const SearchLocationScreen({super.key});

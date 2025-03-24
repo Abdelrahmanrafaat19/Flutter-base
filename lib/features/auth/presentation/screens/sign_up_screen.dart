@@ -17,6 +17,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/widgets/language_text.dart';
+import '../providers/auth_validation_provider.dart';
 import '../widgets/labeled_text_field.dart';
 import '../widgets/phone_number.dart';
 
@@ -112,12 +114,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         title: context.tr(signUpKey),
         trailingWidget: const Padding(
           padding: EdgeInsets.symmetric(horizontal: defaultPaddingHorizontal),
-          child: Center(
-            child: Text(
-              "Arabic",
-              style: AppTheme.styleWithTextBlackAdelleSansExtendedFonts16w400,
-            ),
-          ),
+          child: LanguageText(),
         ),
       ),
       body: Form(
@@ -151,8 +148,6 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
                           return "letters only, at least 2 characters";
                         }
-                        // if(validState.containsKey("name"))
-
                         isFirstNameValidate = true;
 
                         return null;
@@ -195,15 +190,13 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 isPhoneNumberIsValidate: !validState.containsKey("phone"),
                 controller: _phoneController,
                 validator: (phone) {
-                  if (_phoneNumber?.completeNumberWithPlus == null ||
-                      _phoneNumber?.completeNumberWithPlus.isEmpty == true) {
-                    // isPhoneNumberValidate = false;
+                  if (_phoneNumber?.completeNumberWithPlus == null || _phoneNumber?.completeNumberWithPlus.isEmpty == true) {
+                    isPhoneNumberValidate = false;
                     return 'Phone number is required';
                   }
                   final RegExp phoneRegExp = RegExp(r"^\+\d{1,3}\d{7,12}$");
-                  if (!phoneRegExp
-                      .hasMatch(_phoneNumber!.completeNumberWithPlus)) {
-                    // isPhoneNumberValidate = false;
+                  if (!phoneRegExp.hasMatch(_phoneNumber!.completeNumberWithPlus)) {
+                    isPhoneNumberValidate = false;
                     return 'Enter a valid phone number (e.g., +1234567890)';
                   }
                   if (validState.containsKey("phoneNumber")) {
@@ -235,7 +228,6 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                       // isemailValidate = false;
                       return 'Enter a valid email address';
                     }
-
                   }
                   if (validState.containsKey("email")) {
                     return validState["email"];

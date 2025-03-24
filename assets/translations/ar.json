@@ -4,5 +4,7 @@
   "signUp" : "Sign Up",
   "signOut" : "الأشتراك",
   "otp" : "OTP",
-  "changepassword" : "تغيير كلمة المرور"
+  "changepassword" : "تغيير كلمة المرور",
+  "arabic" : "اللغة العربية",
+  "english" : "English"
 }

@@ -27,7 +27,7 @@ class CuisinesScreen extends StatelessWidget {
               mainAxisSpacing: MediaQuery.of(context).size.height * 0.0379,
               childAspectRatio: 2 / 1.7),
           itemBuilder: (context, index) {
-            return RestaurantCategory(
+            return CuisineCard(
               width: double.infinity,
               height: double.infinity,
               categoryImg: "https://t3.ftcdn.net/jpg/02/52/38/80/360_F_252388016_KjPnB9vglSCuUJAumCDNbmMzGdzPAucK.jpg",

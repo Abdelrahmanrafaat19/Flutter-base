@@ -1,5 +1,6 @@
 import 'package:flutter_base/core/utils/FaceIDHelper.dart';
 import 'package:flutter_base/core/utils/extensions/request_handle_extension.dart';
+import 'package:flutter_base/core/widgets/language_text.dart';
 import 'package:flutter_base/core/widgets/svg_icons.dart';
 import 'package:flutter_base/features/auth/presentation/widgets/phone_number_field.dart';
 import 'package:go_router/go_router.dart';
@@ -63,14 +64,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         navigated: true,
         appContext: context,
         title: context.tr(signInKey),
-        trailingWidget: Padding(
+        trailingWidget: const Padding(
           padding: EdgeInsets.symmetric(horizontal: defaultPaddingHorizontal),
-          child: Center(
-            child: Text(
-              "Arabic",
-              style: AppTheme.styleWithTextBlackAdelleSansExtendedFonts16w400,
-            ),
-          ),
+          child: LanguageText(),
         ),
       ),
       body: SingleChildScrollView(

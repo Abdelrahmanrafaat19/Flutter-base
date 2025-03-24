@@ -1,22 +1,32 @@
-// features/home/persentaion/see_all_screen_for_category.dart
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/core/constants/constants.dart';
 import 'package:flutter_base/core/constants/eunms.dart';
 import 'package:flutter_base/core/widgets/custom_app_bar.dart';
 import 'package:flutter_base/core/widgets/paginated_listview.dart';
-import 'package:flutter_base/features/home/data/item_selector.dart';
-import 'package:flutter_base/features/home/persentaion/Providers/FilterStateNotifiers.dart';
+import 'package:flutter_base/features/home/data/models/item_selector.dart';
+import 'package:flutter_base/features/home/domain/entities/restaurant_entity.dart';
+import 'package:flutter_base/features/home/persentaion/Providers/filter_state_notifiers.dart';
 import 'package:flutter_base/features/home/persentaion/widget/filter/horizontal_filter_result_listview.dart';
 import 'package:flutter_base/features/home/persentaion/widget/restaurant_widgets/vertical_restaurant_card.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import '../../../core/models/StateModel.dart';
+import '../../common/presentation/providers/usecases_providers.dart';
 import '../../../core/Theme/app_theme.dart';
 import 'bottom_sheets/filter_bottom_sheet.dart';
 import 'widget/search_with_filter.dart';
 
 class SeeAllScreenForCategory extends ConsumerStatefulWidget {
-  const SeeAllScreenForCategory({super.key});
+  final String? title;
+  final int? cuisineId;
+  final int? categoryId;
+  const SeeAllScreenForCategory({
+    super.key,
+    this.title,
+    this.cuisineId,
+    this.categoryId,
+  });
 
   @override
   ConsumerState<SeeAllScreenForCategory> createState() =>
@@ -30,17 +40,27 @@ class _SeeAllScreenForCategoryState
   int? selectedCuisinesIndex;
   int? selectedRatingIndex;
   RangeValues? selectRangeValues;
+  String? searchValue;
+  int page = 0;
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((callback) {
+      fetchRestaurants(page);
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var filterResult = ref.watch(restaurantFilterProvider);
+    var restaurantsResult = ref.watch(restaurantSearchProvider);
 
-    print("filter result $filterResult");
     return Scaffold(
         backgroundColor: const Color(0xffFAFAFA),
         appBar: CustomAppBar(
           navigated: true,
           appContext: context,
-          title: "Trending Now",
+          title: widget.title,
         ),
         body: Column(
           children: [
@@ -48,13 +68,19 @@ class _SeeAllScreenForCategoryState
               padding: const EdgeInsets.symmetric(
                   horizontal: defaultPaddingHorizontal),
               child: AppSearchBarWithFilter(
+                hasFilterData: filterResult.isNotEmpty,
                 hasFilter: true,
                 enableSearch: true,
                 onFilterClick: () {
                   showFilterBottomSheet();
                 },
-                filterIconColor: AppTheme.appGrey15,
                 hintTxt: "Type of food, restaurant name",
+                delay: 1,
+                onTextChangeListener: (value) {
+                  searchValue = value;
+                  page = 0;
+                  fetchRestaurants(page);
+                },
               ),
             ),
             SizedBox(
@@ -64,42 +90,49 @@ class _SeeAllScreenForCategoryState
                 ? HorizontalFilterResultListview(
                     list: filterResult,
                     onItemDelete: (item) {
-                      if(item?.type == FilterType.Sort) {
+                      if (item?.type == FilterType.Sort) {
                         selectedSortByItemIndex = null;
-                      }else if(item?.type == FilterType.Rating){
+                      } else if (item?.type == FilterType.Rating) {
                         selectedRatingIndex = null;
-                      }else if(item?.type == FilterType.Price){
+                      } else if (item?.type == FilterType.Price) {
                         selectRangeValues = null;
-                      }else if(item?.type == FilterType.Cuisines){
+                      } else if (item?.type == FilterType.Cuisines) {
                         selectedCuisinesIndex = null;
                       }
                       ref
                           .read(restaurantFilterProvider.notifier)
                           .deleteItem(item!);
+                      page = 0;
+                      fetchRestaurants(page);
                     },
                   )
                 : const SizedBox(),
             const SizedBox(
-              height: 8,
+              height: 20,
             ),
             Expanded(
-              child: PaginatedListView(
-                  dataList: [
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                  ],
+              child: PaginatedListView<Restaurant>(
+                  dataList: restaurantsResult.data ??
+                      [
+                        Restaurant(),
+                        Restaurant(),
+                        Restaurant(),
+                        Restaurant(),
+                        Restaurant(),
+                      ],
                   scrollPhysics: const AlwaysScrollableScrollPhysics(
                       parent: BouncingScrollPhysics()),
                   paginated: true,
-                  builder: (item) => const Skeletonizer(
+                  pageLoading:
+                      restaurantsResult.state == DataState.MORE_LOADING,
+                  onBottomReached: () {
+                    fetchRestaurants(++page);
+                  },
+                  builder: (item) => Skeletonizer(
                         enabled: false,
-                        child: VerticalRestaurantCard(),
+                        child: VerticalRestaurantCard(
+                          restaurant: item
+                        ),
                       )),
             )
           ],
@@ -115,12 +148,13 @@ class _SeeAllScreenForCategoryState
                 topRight: Radius.circular(10), topLeft: Radius.circular(10))),
         context: context,
         builder: (BuildContext context) => FilterBottomSheet(
+              enableFilterByCuisine: widget.cuisineId == null,
               initSortByItemIndex: selectedSortByItemIndex,
               initCuisinesIndex: selectedCuisinesIndex,
               initRatingIndex: selectedRatingIndex,
               initRatingValue: selectRangeValues,
               onFilterApply:
-                  (sortByItemIndex, cuisinesIndex, ratingIndex, rangeValues,_) {
+                  (sortByItemIndex, cuisinesIndex, ratingIndex, rangeValues) {
                 print("sortByItemIndex $sortByItemIndex \n"
                     "cuisinesIndex $cuisinesIndex\n"
                     "ratingIndex $ratingIndex\n"
@@ -149,7 +183,20 @@ class _SeeAllScreenForCategoryState
                 ref
                     .read(restaurantFilterProvider.notifier)
                     .updateStatue(filterList);
+                page = 0;
+                fetchRestaurants(page);
               },
             ));
+  }
+
+  void fetchRestaurants(int page) {
+    ref.read(restaurantSearchProvider.notifier).call(
+        page: page,
+        localeIsoCode: "en",
+        size: 10.toString(),
+        categoryId: widget.categoryId,
+        restaurant: searchValue?.isNotEmpty == true ? searchValue : null,
+        cuisineId: widget.cuisineId ?? selectedCuisinesIndex,
+        minRating: selectedRatingIndex?.toString());
   }
 }
