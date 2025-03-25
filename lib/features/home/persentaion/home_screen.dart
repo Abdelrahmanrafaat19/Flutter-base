@@ -40,8 +40,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((callback) {
       ref
           .read(fetchCuisinesStateNotifierProvider.notifier)
-          .call(featured: false);
-      // ref.read(fetchCategoriesStateNotifierProvider.notifier).call();
+          .call(featured: true);
+      ref.read(fetchCategoriesStateNotifierProvider.notifier).call();
     });
     super.initState();
   }
@@ -169,7 +169,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
                 Column(
                   children: [
-                    cuisinesState.data?.isNotEmpty == true
+                    (cuisinesState.state == DataState.SUCCESS &&
+                                cuisinesState.data?.isNotEmpty == true) ||
+                            cuisinesState.state == DataState.LOADING
                         ? HorizontalCuisinesListWithTitle(
                             list: cuisinesState.data ??
                                 [
@@ -189,7 +191,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     SizedBox(
                       height: 24,
                     ),
-                    categoriesState.data?.isNotEmpty == true
+                    (categoriesState.state == DataState.SUCCESS &&
+                        categoriesState.data?.isNotEmpty == true) ||
+                        categoriesState.state == DataState.LOADING
                         ? HomeRestaurantListview(
                             restaurants: categoriesState.data ??
                                 [
