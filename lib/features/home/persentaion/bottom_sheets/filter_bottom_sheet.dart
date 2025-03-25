@@ -21,6 +21,7 @@ class FilterBottomSheet extends StatefulWidget {
   final FilterResult? onFilterApply;
   final FilterDistantResult? onFilterIsDistantApply;
   final Widget? screen;
+  final bool? enableFilterByCuisine;
 
   const FilterBottomSheet({
     super.key,
@@ -33,15 +34,8 @@ class FilterBottomSheet extends StatefulWidget {
     this.hasDistant = false,
     this.onFilterIsDistantApply,
     this.screen,
+    this.enableFilterByCuisine,
   });
-  final bool? enableFilterByCuisine;
-  final FilterResult onFilterApply;
-  const FilterBottomSheet(
-      {super.key,
-      required this.onFilterApply,
-      this.initSortByItemIndex,
-      this.initCuisinesIndex,
-      this.initRatingIndex, this.initRatingValue, this.enableFilterByCuisine});
 
   @override
   State<FilterBottomSheet> createState() => _FilterBottomSheetState();
@@ -98,6 +92,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
         "ratingIndex $selectedRatingIndex\n");
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     calculateCuisinesHeight();
@@ -178,43 +173,47 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             SizedBox(
               height: defaultPaddingHorizontal,
             ),
-
-            widget.enableFilterByCuisine == true?
-            Column(
-              children: [
-                Text(
-                  "Cuisines",
-                  style: AppTheme.styleWithTextBlackAdelleSansExtendedFonts16w700,
-                ),
-                SizedBox(
-                  height: defaultPaddingHorizontal,
-                ),
-                SizedBox(
-                  height: calculateCuisinesHeight(),
-                  child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: crossAxisCount, // 3 widgets per row
-                      crossAxisSpacing: crossAxisSpacing,
-                      mainAxisSpacing: mainAxisSpacing,
-                      childAspectRatio: childAspectRatio, // Adjust based on design
-                    ),
-                    itemCount: cuisines.length,
-                    itemBuilder: (context, index) {
-                      return FilterOptionItem(
-                        state: selectedCuisinesIndex == cuisines[index].id,
-                        id: cuisines[index].id,
-                        optionName: cuisines[index].name ?? "",
-                        onItemSelect: (int) {
-                          setState(() {
-                            selectedCuisinesIndex = cuisines[index].id;
-                          });
-                        },
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ):const SizedBox(),
+            widget.enableFilterByCuisine == true
+                ? Column(
+                    children: [
+                      Text(
+                        "Cuisines",
+                        style: AppTheme
+                            .styleWithTextBlackAdelleSansExtendedFonts16w700,
+                      ),
+                      SizedBox(
+                        height: defaultPaddingHorizontal,
+                      ),
+                      SizedBox(
+                        height: calculateCuisinesHeight(),
+                        child: GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: crossAxisCount, // 3 widgets per row
+                            crossAxisSpacing: crossAxisSpacing,
+                            mainAxisSpacing: mainAxisSpacing,
+                            childAspectRatio:
+                                childAspectRatio, // Adjust based on design
+                          ),
+                          itemCount: cuisines.length,
+                          itemBuilder: (context, index) {
+                            return FilterOptionItem(
+                              state:
+                                  selectedCuisinesIndex == cuisines[index].id,
+                              id: cuisines[index].id,
+                              optionName: cuisines[index].name ?? "",
+                              onItemSelect: (int) {
+                                setState(() {
+                                  selectedCuisinesIndex = cuisines[index].id;
+                                });
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  )
+                : const SizedBox(),
             const SizedBox(
               height: defaultPaddingHorizontal,
             ),
@@ -286,12 +285,15 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               height: defaultPaddingHorizontal,
             ),
             RangeSlider(
-              values: selectRangeValues ?? const RangeValues(filterPriceStart, filterPriceEnd),
+              values: selectRangeValues ??
+                  const RangeValues(filterPriceStart, filterPriceEnd),
               min: 0,
               max: 100,
-              divisions: 10, // Optional: Creates steps
+              divisions: 10,
+              // Optional: Creates steps
               labels: RangeLabels(
-                (selectRangeValues?.start.round()?? filterPriceStart).toString(),
+                (selectRangeValues?.start.round() ?? filterPriceStart)
+                    .toString(),
                 (selectRangeValues?.end.round() ?? filterPriceEnd).toString(),
               ),
               onChanged: (RangeValues values) {
@@ -299,7 +301,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   selectRangeValues = values;
                 });
               },
-              activeColor: AppTheme.orangeAppColor, // Change active track color
+              activeColor: AppTheme.orangeAppColor,
+              // Change active track color
               inactiveColor: Colors.grey[300], // Change inactive track color
             ),
             SizedBox(
@@ -358,7 +361,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   )
                 : SizedBox(),
             SizedBox(
-              height:  widget.hasDistant == true? defaultPaddingHorizontal:0.0,
+              height:
+                  widget.hasDistant == true ? defaultPaddingHorizontal : 0.0,
             ),
             AppButton(
                 enabled: enableFilterBtu(),
@@ -367,15 +371,15 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 height: 56,
                 text: "Show Results",
                 onPress: () {
-                  widget.onFilterApply.call(
-                      selectedSortByItemIndex,
-                      selectedCuisinesIndex,
-                      selectedRatingIndex,
-                      selectRangeValues,
-                      selectRangeDistantValues,);
+                  widget.onFilterApply?.call(
+                    selectedSortByItemIndex,
+                    selectedCuisinesIndex,
+                    selectedRatingIndex,
+                    selectRangeValues,
+                    selectRangeDistantValues,
+                  );
 
-             context.pop();
-
+                  context.pop();
                 }),
             SizedBox(
               height: defaultPaddingHorizontal,

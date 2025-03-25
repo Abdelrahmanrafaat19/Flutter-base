@@ -8,8 +8,10 @@ import '../../../../core/Theme/app_theme.dart';
 import '../../../../core/constants/eunms.dart';
 import '../../../../core/widgets/custom_app_bar.dart';
 import '../../../../core/widgets/paginated_listview.dart';
-import '../../../home/data/item_selector.dart';
-import '../../../home/persentaion/Providers/FilterStateNotifiers.dart';
+import '../../../common/presentation/providers/usecases_providers.dart';
+import '../../../home/data/models/item_selector.dart';
+import '../../../home/domain/entities/restaurant_entity.dart';
+import '../../../home/persentaion/Providers/filter_state_notifiers.dart';
 import '../../../home/persentaion/bottom_sheets/filter_bottom_sheet.dart';
 import '../../../home/persentaion/widget/filter/horizontal_filter_result_listview.dart';
 import '../../../home/persentaion/widget/restaurant_widgets/vertical_restaurant_card.dart';
@@ -24,8 +26,12 @@ class SearchResultScreen extends ConsumerStatefulWidget {
   int? selectedRatingIndex;
   RangeValues? selectRangeValues;
   RangeValues? selectDistantRangeValues;
+  final int? categoryId;
+  final int? cuisineId;
 
-   SearchResultScreen({
+
+
+  SearchResultScreen( {
     super.key,
      this.filterList,
      this.selectDistantRangeValues,
@@ -33,6 +39,8 @@ class SearchResultScreen extends ConsumerStatefulWidget {
      this.selectedRatingIndex,
      this.selectedSortByItemIndex,
      this.selectRangeValues,
+    this.categoryId,
+    this.cuisineId,
   });
 
   @override
@@ -43,10 +51,19 @@ class _SearchResultScreenState extends ConsumerState<SearchResultScreen> {
   final TextEditingController searchController = TextEditingController();
 
   int? sortByItemIndex;
+  String? searchValue;
+  int page = 0;
+  void initState() {
+    // WidgetsBinding.instance.addPostFrameCallback((callback) {
+    //   fetchRestaurants(page);
+    // });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     var filterResult = ref.watch(restaurantFilterProvider);
+    var restaurantsResult = ref.watch(restaurantSearchProvider);
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -65,13 +82,15 @@ class _SearchResultScreenState extends ConsumerState<SearchResultScreen> {
                 controller: searchController,
                 hasFilter: true,
                 enableSearch: true,
-                filterIconColor: AppTheme.appGrey15,
+                // filterIconColor: AppTheme.appGrey15,
                 onFilterClick: () {
                   showFilterWithDistantBottomSheet();
 
                 },
-                onTextChangeListener: (p0) {
-                  setState(() {});
+                onTextChangeListener: (value) {
+                  searchValue = value;
+                  page = 0;
+                  fetchRestaurants(page);
                 },
                 hintTxt: "Search for restaurant, cuisines....",
               ),
@@ -110,14 +129,11 @@ class _SearchResultScreenState extends ConsumerState<SearchResultScreen> {
             Expanded(
               child: PaginatedListView(
                   dataList: [
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
+                    Restaurant(),
+                    Restaurant(),
+                    Restaurant(),
+                    Restaurant(),
+                    Restaurant(),
                   ],
                   scrollPhysics: const AlwaysScrollableScrollPhysics(
                       parent: BouncingScrollPhysics()),
@@ -126,7 +142,9 @@ class _SearchResultScreenState extends ConsumerState<SearchResultScreen> {
                         enabled: false,
                         child: Column(
                           children: [
-                            VerticalRestaurantCard(),
+                            VerticalRestaurantCard(
+                                restaurant: item
+                            ),
                             Container(
                               width: double.infinity,
                               height: 170,
@@ -231,5 +249,15 @@ class _SearchResultScreenState extends ConsumerState<SearchResultScreen> {
 
           },
         ));
+  }
+  void fetchRestaurants(int page) {
+    ref.read(restaurantSearchProvider.notifier).call(
+        page: page,
+        localeIsoCode: "en",
+        size: 10.toString(),
+        categoryId: widget.categoryId,
+        restaurant: searchValue?.isNotEmpty == true ? searchValue : null,
+        cuisineId: widget.cuisineId ?? widget.selectedCuisinesIndex,
+        minRating: widget.selectedRatingIndex?.toString());
   }
 }

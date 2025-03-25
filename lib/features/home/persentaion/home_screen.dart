@@ -123,7 +123,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           hasBorder: false,
                           hasFilter: false,
                           enableSearch: false,
-                          filterIconColor: AppTheme.appBlue,
+                          // filterIconColor: AppTheme.appBlue,
                           onSearchClick: () {
                           },
                           hintTxt: "Type of food, restaurants name",

@@ -6,7 +6,9 @@ import 'package:flutter_base/core/widgets/app_button.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../../data/repositories/address_permission_repo_imple.dart';
+import '../../../location/data/repositories/address_permission_repo_imple.dart';
+
+
 
 class LocationPermissionScreen extends StatefulWidget {
   const LocationPermissionScreen({super.key});

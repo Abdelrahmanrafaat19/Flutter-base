@@ -8,8 +8,10 @@ import '../../../../core/Theme/app_theme.dart';
 import '../../../../core/constants/eunms.dart';
 import '../../../../core/widgets/custom_app_bar.dart';
 import '../../../../core/widgets/paginated_listview.dart';
-import '../../../home/data/item_selector.dart';
-import '../../../home/persentaion/Providers/FilterStateNotifiers.dart';
+
+import '../../../home/data/models/item_selector.dart';
+
+import '../../../home/persentaion/Providers/filter_state_notifiers.dart';
 import '../../../home/persentaion/bottom_sheets/filter_bottom_sheet.dart';
 import '../../../home/persentaion/widget/filter/horizontal_filter_result_listview.dart';
 import '../../../home/persentaion/widget/restaurant_widgets/vertical_restaurant_card.dart';
@@ -64,7 +66,7 @@ class _AllDataOfSearchCategoryScreenState
                 controller: searchController,
                 hasFilter: true,
                 enableSearch: true,
-                filterIconColor: AppTheme.appGrey15,
+                // filterIconColor: AppTheme.appGrey15,
                 onFilterClick: () {
                   showFilterWithDistantBottomSheet();
                 },
@@ -169,12 +171,6 @@ class _AllDataOfSearchCategoryScreenState
                   filterList.add(FilterItemSelector(
                       name: "${rangeValues?.start} - ${rangeValues?.end}",
                       type: FilterType.Price));
-                }
-                if (selectDistantRangeValues != null) {
-                  filterList.add(FilterItemSelector(
-                      name:
-                          "${rangeDistantValue?.start} - ${rangeDistantValue?.end}",
-                      type: FilterType.Distant));
                 }
                 print(filterList.length);
                 ref

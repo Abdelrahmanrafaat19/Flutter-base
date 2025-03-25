@@ -28,7 +28,7 @@ class RestaurantDataSource {
     bool? isOpen,
   }) {
     return _httpOps.postData(
-      endPoint: searchOnResturantEndPoint,
+      endPoint: restaurantSearchEndPoint,
       authorized: true,
       params: "?page=$page&size=$size&localeIsoCode=$localeIsoCode",
       data: {

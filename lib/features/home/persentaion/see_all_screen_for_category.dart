@@ -145,7 +145,7 @@ class _SeeAllScreenForCategoryState
         backgroundColor: Colors.white,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-                topRight: Radius.circular(10), topLeft: Radius.circular(10))),
+                topRight: Radius.circular(10), topLeft: Radius.circular(10),),),
         context: context,
         builder: (BuildContext context) => FilterBottomSheet(
               enableFilterByCuisine: widget.cuisineId == null,
@@ -154,7 +154,7 @@ class _SeeAllScreenForCategoryState
               initRatingIndex: selectedRatingIndex,
               initRatingValue: selectRangeValues,
               onFilterApply:
-                  (sortByItemIndex, cuisinesIndex, ratingIndex, rangeValues) {
+                  (sortByItemIndex, cuisinesIndex, ratingIndex, rangeValues,valueDistant) {
                 print("sortByItemIndex $sortByItemIndex \n"
                     "cuisinesIndex $cuisinesIndex\n"
                     "ratingIndex $ratingIndex\n"

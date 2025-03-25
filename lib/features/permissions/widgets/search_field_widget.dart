@@ -18,7 +18,7 @@ class _SearchFieldWidgetState extends State<SearchFieldWidget> {
   @override
   Widget build(BuildContext context) {
     return AppSearchBarWithFilter(
-      filterIconColor: AppTheme.appGrey15,
+      // filterIconColor: AppTheme.appGrey15,
       controller: widget.controller,
       hasFilter: false,
       enableSearch: true,

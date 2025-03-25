@@ -211,9 +211,20 @@ class MyApp extends ConsumerWidget {
             CuisinesScreen(),
       ),
       GoRoute(
-        path: seeAllScreenForCategoryRoute,
+        path: searchScreenRoute,
         builder: (BuildContext context, GoRouterState state) =>
-            const SeeAllScreenForCategory(),
+            SearchScreen(),
+      ),
+      GoRoute(
+        path: seeAllScreenForCategoryRoute,
+        builder: (BuildContext context, GoRouterState state) {
+          var extra = state.extra as Map;
+          return SeeAllScreenForCategory(
+            title: extra[TITLE_KEY],
+            cuisineId: extra[CUISINE_ID_KEY],
+            categoryId: extra[CATEGORY_ID_KEY],
+          );
+        },
       ),
       GoRoute(
           path: searchScreenResultRoute,
@@ -236,14 +247,7 @@ class MyApp extends ConsumerWidget {
             title: extra,
           );
         },
-        builder: (BuildContext context, GoRouterState state) {
-          var extra = state.extra as Map;
-          return SeeAllScreenForCategory(
-            title: extra[TITLE_KEY],
-            cuisineId: extra[CUISINE_ID_KEY],
-            categoryId: extra[CATEGORY_ID_KEY],
-          );
-        },
+
       ),
     ],
   );

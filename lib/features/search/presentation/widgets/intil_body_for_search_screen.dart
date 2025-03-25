@@ -5,8 +5,8 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/Constants/Constants.dart';
 import '../../../../core/constants/app_routes.dart';
 import '../../../../core/constants/eunms.dart';
-import '../../../home/data/item_selector.dart';
-import '../../../home/persentaion/Providers/FilterStateNotifiers.dart';
+
+import '../../../home/persentaion/Providers/filter_state_notifiers.dart';
 import '../../../home/persentaion/bottom_sheets/filter_bottom_sheet.dart';
 import '../../../home/persentaion/widget/filter/horizontal_filter_result_listview.dart';
 import '../screens/search_result_screen.dart';

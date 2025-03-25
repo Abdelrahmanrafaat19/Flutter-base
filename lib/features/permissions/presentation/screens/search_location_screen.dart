@@ -6,8 +6,6 @@ import 'package:flutter_base/core/widgets/custom_app_bar.dart';
 import 'package:flutter_base/core/widgets/svg_icons.dart';
 import 'package:flutter_base/features/location/data/address_model.dart';
 import 'package:flutter_base/features/location/domain/address_storage.dart';
-import 'package:flutter_base/features/location/presentation/widgets/address_item.dart';
-import 'package:flutter_base/features/location/presentation/widgets/search_field_widget.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/localization/Keys.dart';

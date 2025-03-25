@@ -19,9 +19,10 @@ class AppSearchBarWithFilter extends StatefulWidget {
   final OnTextChangeListener? onTextChangeListener;
   final TextEditingController? controller;
   final bool? enableSearch;
-  final Color filterIconColor;
+  final Color? filterIconColor;
   final String? hintTxt;
   final Widget? postIcon;
+
   const AppSearchBarWithFilter(
       {super.key,
       required this.hasFilter,
@@ -33,8 +34,9 @@ class AppSearchBarWithFilter extends StatefulWidget {
       this.controller,
       this.hintTxt,
       this.postIcon,
-      this.hasBorder = true, this.hasFilterData = false});
-      this.postIcon, this.hasBorder = true, required this.filterIconColor});
+      this.hasBorder = true,
+      this.hasFilterData = false,
+       this.filterIconColor});
 
   @override
   State<AppSearchBarWithFilter> createState() => _AppSearchBarWithFilterState();
@@ -63,7 +65,7 @@ class _AppSearchBarWithFilterState extends State<AppSearchBarWithFilter> {
     return Row(
       children: [
         Expanded(
-          child: widget.enableSearch == false
+          child: widget.enableSearch == true
               ? InkWell(
                   onTap: () {
                     widget.onSearchClick?.call();
@@ -184,18 +186,20 @@ class _AppSearchBarWithFilterState extends State<AppSearchBarWithFilter> {
                   child: Stack(children: [
                     SVGIcons.localSVG("assets/images/filter_icon.svg",
                         width: 24, height: 24),
-                    widget.hasFilterData ?Align(
-                      alignment: AlignmentDirectional.topEnd,
-                      child: Container(
-                        margin: EdgeInsetsDirectional.only(end: 2,bottom: 1),
-                        width: 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                            color: AppTheme.appRed,
-                            shape: BoxShape.circle
-                        ),
-                      ),
-                    ) :SizedBox(),
+                    widget.hasFilterData
+                        ? Align(
+                            alignment: AlignmentDirectional.topEnd,
+                            child: Container(
+                              margin:
+                                  EdgeInsetsDirectional.only(end: 2, bottom: 1),
+                              width: 8,
+                              height: 8,
+                              decoration: BoxDecoration(
+                                  color: AppTheme.appRed,
+                                  shape: BoxShape.circle),
+                            ),
+                          )
+                        : SizedBox(),
                   ]),
                 ),
               )

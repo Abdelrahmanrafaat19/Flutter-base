@@ -16,8 +16,9 @@ import '../../../../core/Theme/app_theme.dart';
 import '../../../../core/constants/eunms.dart';
 import '../../../../core/widgets/svg_icons.dart';
 import '../../../auth/presentation/providers/usecase_provider.dart';
-import '../../../home/data/item_selector.dart';
-import '../../../home/persentaion/Providers/FilterStateNotifiers.dart';
+import '../../../common/presentation/providers/usecases_providers.dart';
+import '../../../home/data/models/item_selector.dart';
+import '../../../home/persentaion/Providers/filter_state_notifiers.dart';
 import '../../../home/persentaion/bottom_sheets/filter_bottom_sheet.dart';
 import '../provider/resturant_use_case_provider.dart';
 import '../widgets/intil_body_for_search_screen.dart';
@@ -25,7 +26,11 @@ import '../widgets/search_item_list_initil_body.dart';
 import '../widgets/search_screen_body_not_exixt_data.dart';
 
 class SearchScreen extends ConsumerStatefulWidget {
-  const SearchScreen({super.key});
+
+
+  final int? cuisineId;
+  final int? categoryId;
+  const SearchScreen( {super.key,this.cuisineId, this.categoryId,});
 
   @override
   ConsumerState<SearchScreen> createState() => _SearchScreenState();
@@ -37,8 +42,10 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   int? selectedSortByItemIndex;
   int? selectedCuisinesIndex;
   int? selectedRatingIndex;
+  String? searchValue;
   RangeValues? selectRangeValues;
   RangeValues? selectDistantRangeValues;
+  int page = 0;
   List<Map<String, dynamic>> data = [
     {
       "title": "See all restaurants",
@@ -111,12 +118,15 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                   controller: searchController,
                   hasFilter: true,
                   enableSearch: true,
-                  filterIconColor: AppTheme.appGrey15,
+                  // filterIconColor: AppTheme.appGrey15,
                   onFilterClick: () {
                     showFilterWithDistantBottomSheet();
                   },
-                  onTextChangeListener: (p0) {
-                    setState(() {});
+
+                  onTextChangeListener: (value) {
+                    searchValue = value;
+                    page = 0;
+                    fetchRestaurants(page);
                   },
                   hintTxt: "Search for restaurant, cuisines....",
                 ),
@@ -210,7 +220,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       int? selectedCuisinesIndex,
       int? selectedRatingIndex,
       int? selectedSortByItemIndex,
-      RangeValues? selectRangeValues}) {
+      RangeValues? selectRangeValues}) async {
+    // fetchRestaurants(page);
     context.push(searchScreenResultRoute,extra: {
       FILTER_LIST_KEY:filterList,
       SELECT_DISTANT_RANGE_VALUES_KEY:selectDistantRangeValues,
@@ -219,5 +230,15 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       SELECT_RATING_INDEX_KEY:selectedRatingIndex,
       SELECT_RANGE_VALUE_KEY:selectRangeValues,
     });
+  }
+  void fetchRestaurants(int page) {
+    ref.read(restaurantSearchProvider.notifier).call(
+        page: page,
+        localeIsoCode: "en",
+        size: 10.toString(),
+        categoryId: widget.categoryId,
+        restaurant: searchValue?.isNotEmpty == true ? searchValue : null,
+        cuisineId: widget.cuisineId ?? selectedCuisinesIndex,
+        minRating:selectedRatingIndex?.toString());
   }
 }
