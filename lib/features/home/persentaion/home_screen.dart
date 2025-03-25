@@ -183,7 +183,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 ],
                             showLoading:
                                 cuisinesState.state == DataState.LOADING,
-                            itemClick: () {},
+                            itemClick: (cuisine) {
+                              navigateToCuisineRestaurants(cuisine);
+                            },
                             onSeeAllClickListener: () {
                               navigateToShowAllCategories();
                             })
@@ -230,5 +232,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           .4,
         ),
         statusBarIcons: Brightness.light);
+  }
+
+  void navigateToCuisineRestaurants(Cuisine cuisine) {
+    context.push(seeAllScreenForCategoryRoute, extra: {
+      TITLE_KEY: cuisine.id,
+      CUISINE_ID_KEY: cuisine.id,
+    });
   }
 }

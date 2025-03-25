@@ -5,12 +5,13 @@ import 'package:flutter_base/features/home/domain/entities/cuisine_entity.dart';
 import 'package:flutter_base/features/home/persentaion/widget/category_widgets/restaurant_category.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
+import '../../../../../core/utils/typedefs.dart';
 import '../title_with_see_all.dart';
 
 class HorizontalCuisinesListWithTitle extends StatefulWidget {
   final List<Cuisine> list;
   final bool showLoading;
-  final VoidCallback itemClick;
+  final OnCuisineItemClick itemClick;
   final VoidCallback onSeeAllClickListener;
   const HorizontalCuisinesListWithTitle(
       {super.key,
@@ -51,7 +52,7 @@ class _HorizontalCuisinesListWithTitleState extends State<HorizontalCuisinesList
                     enabled: widget.showLoading ,
                     child: InkWell(
                       onTap: (){
-                        widget.itemClick.call();
+                        widget.itemClick.call(widget.list[index]);
                       },
                       child: Padding(
                         padding: const EdgeInsetsDirectional.only(start: defaultPaddingHorizontal),
