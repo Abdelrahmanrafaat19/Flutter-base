@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/providers/common_repository_providers.dart';
 
-final restaurantSearchProvider = StateNotifierProvider.autoDispose<RestaurantSearchUseCase,StateModel<List<Restaurant>>>((ref) {
-  return RestaurantSearchUseCase(ref,ref.read(commonRepoProvider));
+final restaurantSearchProvider = StateNotifierProvider.autoDispose<
+    RestaurantSearchUseCase, StateModel<List<Restaurant>>>((ref) {
+  return RestaurantSearchUseCase(ref, ref.read(commonRepoProvider));
 });

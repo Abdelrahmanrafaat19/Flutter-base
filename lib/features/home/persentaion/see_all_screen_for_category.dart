@@ -49,7 +49,7 @@ class _SeeAllScreenForCategoryState
     WidgetsBinding.instance.addPostFrameCallback((callback) {
       cuisines.clear();
       var cuisinesList = ref.read(fetchAllCuisinesStateNotifierProvider);
-      cuisines = cuisinesList.data??[];
+      cuisines = cuisinesList.data ?? [];
       fetchRestaurants(page);
     });
     super.initState();
@@ -135,9 +135,7 @@ class _SeeAllScreenForCategoryState
                   },
                   builder: (item) => Skeletonizer(
                         enabled: restaurantsResult.state == DataState.LOADING,
-                        child: VerticalRestaurantCard(
-                          restaurant: item
-                        ),
+                        child: VerticalRestaurantCard(restaurant: item),
                       )),
             )
           ],
@@ -174,13 +172,10 @@ class _SeeAllScreenForCategoryState
                   filterList.add(sortByItems[selectedSortByItemIndex!]);
                 }
                 if (selectedCuisinesIndex != null) {
-                  filterList.add(
-                      FilterItemSelector(
-                        id: cuisines[selectedCuisinesIndex!].id,
-                        name: cuisines[selectedCuisinesIndex!].name,
-                        type: FilterType.Cuisines
-                      )
-                  );
+                  filterList.add(FilterItemSelector(
+                      id: cuisines[selectedCuisinesIndex!].id,
+                      name: cuisines[selectedCuisinesIndex!].name,
+                      type: FilterType.Cuisines));
                 }
                 if (selectedRatingIndex != null) {
                   filterList.add(ratings[selectedRatingIndex!]);
@@ -207,7 +202,12 @@ class _SeeAllScreenForCategoryState
         size: 10.toString(),
         categoryId: widget.categoryId,
         restaurant: searchValue?.isNotEmpty == true ? searchValue : null,
-        cuisineId: widget.cuisineId ?? selectedCuisinesIndex,
-        minRating: selectedRatingIndex?.toString());
+        cuisineId: widget.cuisineId ??
+            (selectedCuisinesIndex != null
+                ? cuisines[selectedCuisinesIndex!].id
+                : null),
+        minRating: selectedRatingIndex != null
+            ? ratings[selectedRatingIndex!].name.toString()
+            : null);
   }
 }

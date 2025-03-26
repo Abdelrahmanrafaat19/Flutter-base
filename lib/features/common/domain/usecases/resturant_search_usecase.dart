@@ -1,6 +1,5 @@
 import 'package:flutter_base/features/common/domain/repositories/common_repository.dart';
 import 'package:flutter_base/features/home/data/models/restaurant_model.dart';
-import 'package:flutter_base/features/home/domain/entities/category_entity.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/models/ResponseModel.dart';
 import '../../../../core/models/StateModel.dart';
@@ -24,8 +23,8 @@ class RestaurantSearchUseCase
     bool? isOpen,
   }) async {
 
-    if (/*state.data?.lastPage != null &&*/
-        (page??0) > (/*state.data?.data?.products?.lastPage ?? 0*/ 2)) return;
+    if (state.pagination?.lastPage != null &&
+        (page??0) > (state.pagination?.lastPage ?? 0)) return;
 
     state = page != 0
         ? StateModel(data: state.data, state: DataState.MORE_LOADING)
@@ -52,10 +51,19 @@ class RestaurantSearchUseCase
       List<Restaurant> restaurants = (responseModel.data as List)
           .map((item) => toRestaurantEntity(RestaurantModel.fromJson(item)))
           .toList();
-      state = StateModel(
-          state: DataState.SUCCESS,
-          data: restaurants,
-          message: responseModel.message);
+
+      if ((page??0) > 0) {
+        List<Restaurant> list = state.data ??[];
+        list = [...list,...restaurants];
+
+        state = StateModel.success(list,paginationModel: responseModel.pagination);
+      }else{
+        state = StateModel(
+            state: DataState.SUCCESS,
+            data: restaurants,
+            message: responseModel.message,pagination: responseModel.pagination);
+      }
+
     } else {
       state = StateModel(
           state: DataState.ERROR,
