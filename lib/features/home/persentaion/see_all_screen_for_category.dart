@@ -5,6 +5,7 @@ import 'package:flutter_base/core/constants/eunms.dart';
 import 'package:flutter_base/core/widgets/custom_app_bar.dart';
 import 'package:flutter_base/core/widgets/paginated_listview.dart';
 import 'package:flutter_base/features/home/data/models/item_selector.dart';
+import 'package:flutter_base/features/home/domain/entities/cuisine_entity.dart';
 import 'package:flutter_base/features/home/domain/entities/restaurant_entity.dart';
 import 'package:flutter_base/features/home/persentaion/Providers/filter_state_notifiers.dart';
 import 'package:flutter_base/features/home/persentaion/widget/filter/horizontal_filter_result_listview.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import '../../../core/models/StateModel.dart';
 import '../../common/presentation/providers/usecases_providers.dart';
+import 'Providers/usecase_provider.dart';
 import 'bottom_sheets/filter_bottom_sheet.dart';
 import 'widget/search_with_filter.dart';
 
@@ -41,9 +43,13 @@ class _SeeAllScreenForCategoryState
   RangeValues? selectRangeValues;
   String? searchValue;
   int page = 0;
+  List<Cuisine> cuisines = [];
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((callback) {
+      cuisines.clear();
+      var cuisinesList = ref.read(fetchAllCuisinesStateNotifierProvider);
+      cuisines = cuisinesList.data??[];
       fetchRestaurants(page);
     });
     super.initState();
@@ -128,7 +134,7 @@ class _SeeAllScreenForCategoryState
                     fetchRestaurants(++page);
                   },
                   builder: (item) => Skeletonizer(
-                        enabled: false,
+                        enabled: restaurantsResult.state == DataState.LOADING,
                         child: VerticalRestaurantCard(
                           restaurant: item
                         ),
@@ -154,7 +160,7 @@ class _SeeAllScreenForCategoryState
               initRatingValue: selectRangeValues,
               onFilterApply:
                   (sortByItemIndex, cuisinesIndex, ratingIndex, rangeValues) {
-                print("sortByItemIndex $sortByItemIndex \n"
+                debugPrint("sortByItemIndex $sortByItemIndex \n"
                     "cuisinesIndex $cuisinesIndex\n"
                     "ratingIndex $ratingIndex\n"
                     "rangeValues $rangeValues");
@@ -168,7 +174,13 @@ class _SeeAllScreenForCategoryState
                   filterList.add(sortByItems[selectedSortByItemIndex!]);
                 }
                 if (selectedCuisinesIndex != null) {
-                  // filterList.add(sortByItems[selectedSortByItemIndex]);
+                  filterList.add(
+                      FilterItemSelector(
+                        id: cuisines[selectedCuisinesIndex!].id,
+                        name: cuisines[selectedCuisinesIndex!].name,
+                        type: FilterType.Cuisines
+                      )
+                  );
                 }
                 if (selectedRatingIndex != null) {
                   filterList.add(ratings[selectedRatingIndex!]);

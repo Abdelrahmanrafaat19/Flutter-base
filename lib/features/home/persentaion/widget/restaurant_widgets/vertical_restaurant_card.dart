@@ -93,14 +93,22 @@ class _VerticalRestaurantCardState extends State<VerticalRestaurantCard> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          widget.restaurant?.name ?? "",
-                          style: AppTheme
-                              .styleWithTextBlackAdelleSansExtendedFonts16w500,
+                        Skeleton.replace(
+                          replacement: Container(
+                            width: 150,
+                            height: 20,
+                            color: Colors.white,
+                          ),
+                          child: Text(
+                            widget.restaurant?.name ?? "",
+                            style: AppTheme
+                                .styleWithTextBlackAdelleSansExtendedFonts16w500,
+                          ),
                         ),
                         Skeleton.ignore(
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 18.0),
                             child: Row(
                               children: [
                                 SVGIcons.localSVG(ratingStarIconPath,
@@ -124,15 +132,17 @@ class _VerticalRestaurantCardState extends State<VerticalRestaurantCard> {
                     ),
                     Skeleton.replace(
                       replacement: Container(
-                        width: double.infinity,
+                        width: 100,
                         height: 20,
                         color: Colors.white,
-                      ),child: Row(
+                      ),
+                      child: Row(
                         children: [
-                          SVGIcons.localSVG(clockIconPath, width: 16, height: 16),
+                          SVGIcons.localSVG(clockIconPath,
+                              width: 16, height: 16),
                           const Padding(
-                            padding:
-                                EdgeInsetsDirectional.symmetric(horizontal: 6.0),
+                            padding: EdgeInsetsDirectional.symmetric(
+                                horizontal: 6.0),
                             child: Text(
                               "20 Mins",
                               style: AppTheme.styleWithAppGrey7Fonts14w400,
@@ -151,8 +161,8 @@ class _VerticalRestaurantCardState extends State<VerticalRestaurantCard> {
                           SVGIcons.localSVG(categoryIconPath,
                               width: 16, height: 16),
                           const Padding(
-                            padding:
-                                EdgeInsetsDirectional.symmetric(horizontal: 6.0),
+                            padding: EdgeInsetsDirectional.symmetric(
+                                horizontal: 6.0),
                             child: Text(
                               "Mexican",
                               style: AppTheme.styleWithAppGrey7Fonts14w400,
@@ -166,10 +176,17 @@ class _VerticalRestaurantCardState extends State<VerticalRestaurantCard> {
                     ),
                     Row(
                       children: [
-                        Skeleton.ignore(child: SVGIcons.localSVG(gpsIconPath, width: 16, height: 16)),
-                         Padding(
-                          padding:
-                          const EdgeInsetsDirectional.symmetric(horizontal: 6.0),
+                        Skeleton.replace(
+                            replacement: Container(
+                              width: 70,
+                              height: 20,
+                              color: Colors.white,
+                            ),
+                            child: SVGIcons.localSVG(gpsIconPath,
+                                width: 16, height: 16)),
+                        Padding(
+                          padding: const EdgeInsetsDirectional.symmetric(
+                              horizontal: 6.0),
                           child: Text(
                             widget.restaurant?.location ?? "",
                             style: AppTheme.styleWithAppGrey7Fonts14w400,
@@ -178,11 +195,13 @@ class _VerticalRestaurantCardState extends State<VerticalRestaurantCard> {
                           ),
                         ),
                         const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: defaultPaddingHorizontal),
-                          child: SVGIcons.localSVG(favoriteIconPath,
-                              width: 24, height: 24),
+                        Skeleton.ignore(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: defaultPaddingHorizontal),
+                            child: SVGIcons.localSVG(favoriteIconPath,
+                                width: 24, height: 24),
+                          ),
                         ),
                       ],
                     ),

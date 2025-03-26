@@ -51,11 +51,18 @@ class _HorizontalRestaurantCardState extends State<HorizontalRestaurantCard> {
             height: 115,
             child: Stack(
               children: [
-                ImageView(
-                  width: 275,
-                  height: 115,
-                  initialImg:
-                      "https://t3.ftcdn.net/jpg/02/52/38/80/360_F_252388016_KjPnB9vglSCuUJAumCDNbmMzGdzPAucK.jpg",
+                Skeleton.replace(
+                  replacement: Container(
+                    width: 275,
+                    height: 115,
+                    color: Colors.white,
+                  ),
+                  child: ImageView(
+                    width: 275,
+                    height: 115,
+                    initialImg:
+                        "https://t3.ftcdn.net/jpg/02/52/38/80/360_F_252388016_KjPnB9vglSCuUJAumCDNbmMzGdzPAucK.jpg",
+                  ),
                 ),
                 Skeleton.ignore(
                   child: Align(

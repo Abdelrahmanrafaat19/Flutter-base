@@ -11,6 +11,10 @@ final fetchCuisinesStateNotifierProvider =
     StateNotifierProvider.autoDispose<FetchCuisinesUseCase, StateModel<List<Cuisine>>>(
         (ref) => FetchCuisinesUseCase(ref, ref.read(homeRepoProvider)));
 
+final fetchAllCuisinesStateNotifierProvider =
+    StateNotifierProvider<FetchCuisinesUseCase, StateModel<List<Cuisine>>>(
+        (ref) => FetchCuisinesUseCase(ref, ref.read(homeRepoProvider)));
+
 final fetchCategoriesStateNotifierProvider =
     StateNotifierProvider.autoDispose<FetchCategoriesUseCase, StateModel<List<CategoryEntity>>>(
         (ref) => FetchCategoriesUseCase(ref, ref.read(homeRepoProvider)));

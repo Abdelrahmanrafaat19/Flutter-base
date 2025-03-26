@@ -34,12 +34,12 @@ class HttpOperations {
                 'Authorization': 'Bearer $userToken',
                 'Content-Type': 'application/json',
                 'accept': 'application/hal+json',
-                'lang': AppLocalizations.globalLocale?.languageCode ?? "en"
+                // 'lang': AppLocalizations.globalLocale?.languageCode ?? "en"
               }
             : {
                 'Content-Type': 'application/json',
                 'accept': 'application/hal+json',
-                'lang': AppLocalizations.globalLocale?.languageCode ?? "en"
+                // 'lang': AppLocalizations.globalLocale?.languageCode ?? "en"
               },
         body: json.encode(data ?? {}),
       );
