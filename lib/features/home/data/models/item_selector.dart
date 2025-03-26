@@ -14,5 +14,6 @@ class FilterItemSelector{
   String? image;
   FilterType? type;
 
+
   FilterItemSelector({this.id, this.name, this.image, this.type});
 }

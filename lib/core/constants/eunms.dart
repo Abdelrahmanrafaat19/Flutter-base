@@ -7,5 +7,6 @@ enum FilterType{
   Sort,
   Cuisines,
   Rating,
-  Price
+  Price,
+  Distant
 }

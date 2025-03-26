@@ -1,3 +1,4 @@
+// core/constants/app_routes.dart
 //PAGES_ROUTS
 
 const splashScreenRoute = '/';
@@ -11,5 +12,8 @@ const notificationPermissionScreenRoute = '/notificationPermission';
 const searchLocationScreenRoute = '/searchLocationScreen';
 const cuisinesScreenRoute = '/cuisinesScreenScreen';
 const seeAllScreenForCategoryRoute = '/seeAllScreenForCategory';
+const searchScreenRoute="/searchScreenRoute";
+const searchScreenResultRoute="/searchScreenResultRoute";
+const allDataOfSearchCategoryRoute="/allDataOfSearchCategoryRoute";
 
 const otpScreenRoute = '/otp';

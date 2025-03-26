@@ -18,17 +18,27 @@ class FilterBottomSheet extends ConsumerStatefulWidget {
   final int? initSortByItemIndex;
   final int? initCuisinesIndex;
   final int? initRatingIndex;
+  final bool? hasDistant;
   final RangeValues? initRatingValue;
+  final RangeValues? initDistantRatingValue;
+  final FilterResult? onFilterApply;
+  final FilterDistantResult? onFilterIsDistantApply;
+  final Widget? screen;
   final bool? enableFilterByCuisine;
-  final FilterResult onFilterApply;
-  const FilterBottomSheet(
-      {super.key,
-      required this.onFilterApply,
-      this.initSortByItemIndex,
-      this.initCuisinesIndex,
-      this.initRatingIndex,
-      this.initRatingValue,
-      this.enableFilterByCuisine});
+
+  const FilterBottomSheet({
+    super.key,
+    this.onFilterApply,
+    this.initSortByItemIndex,
+    this.initCuisinesIndex,
+    this.initRatingIndex,
+    this.initRatingValue,
+    this.initDistantRatingValue,
+    this.hasDistant = false,
+    this.onFilterIsDistantApply,
+    this.screen,
+    this.enableFilterByCuisine,
+  });
 
   @override
   ConsumerState<FilterBottomSheet> createState() => _FilterBottomSheetState();
@@ -36,6 +46,7 @@ class FilterBottomSheet extends ConsumerStatefulWidget {
 
 class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
   RangeValues? selectRangeValues;
+  RangeValues? selectRangeDistantValues;
   int? selectedSortByItemIndex;
   int? selectedCuisinesIndex;
   int? selectedRatingIndex;
@@ -66,6 +77,7 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
             cuisineIds: []);
       }
     });
+    selectRangeDistantValues = widget.initDistantRatingValue;
     super.initState();
   }
 
@@ -74,7 +86,6 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
     final cuisines = ref.watch(fetchAllCuisinesStateNotifierProvider);
     calculateCuisinesHeight(cuisines.data ?? []);
 
-    print("cuisines size : ${cuisines.data?.length}");
     return Padding(
       padding: const EdgeInsets.all(defaultPaddingHorizontal),
       child: SingleChildScrollView(
@@ -100,6 +111,8 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
                       selectedCuisinesIndex = null;
                       selectedSortByItemIndex = null;
                       selectRangeValues =
+                          const RangeValues(filterPriceStart, filterPriceEnd);
+                      selectRangeDistantValues =
                           const RangeValues(filterPriceStart, filterPriceEnd);
                     });
                   },
@@ -285,11 +298,68 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
                   selectRangeValues = values;
                 });
               },
-              activeColor: AppTheme.orangeAppColor, // Change active track color
+              activeColor: AppTheme.orangeAppColor,
+              // Change active track color
               inactiveColor: Colors.grey[300], // Change inactive track color
             ),
             SizedBox(
               height: defaultPaddingHorizontal,
+            ),
+            widget.hasDistant == true
+                ? Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            "Distance Range",
+                            style: AppTheme
+                                .styleWithTextBlackAdelleSansExtendedFonts16w700,
+                          ),
+                          Spacer(),
+                          Text(
+                            "${selectRangeDistantValues?.start.round() ?? filterPriceStart} KM - ${selectRangeDistantValues?.end.round() ?? filterPriceEnd} KM",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: AppTheme.orangeAppColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: defaultPaddingHorizontal,
+                      ),
+                      RangeSlider(
+                        values: selectRangeDistantValues ??
+                            const RangeValues(filterPriceStart, filterPriceEnd),
+                        min: 0,
+                        max: 100,
+                        divisions: 10,
+                        // Optional: Creates steps
+                        labels: RangeLabels(
+                          (selectRangeDistantValues?.start.round() ??
+                                  filterPriceStart)
+                              .toString(),
+                          (selectRangeDistantValues?.end.round() ??
+                                  filterPriceEnd)
+                              .toString(),
+                        ),
+                        onChanged: (RangeValues values) {
+                          setState(() {
+                            selectRangeDistantValues = values;
+                          });
+                        },
+                        activeColor: AppTheme.orangeAppColor,
+                        // Change active track color
+                        inactiveColor:
+                            Colors.grey[300], // Change inactive track color
+                      ),
+                    ],
+                  )
+                : SizedBox(),
+            SizedBox(
+              height:
+                  widget.hasDistant == true ? defaultPaddingHorizontal : 0.0,
             ),
             AppButton(
                 enabled: enableFilterBtu(),
@@ -298,11 +368,14 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
                 height: 56,
                 text: "Show Results",
                 onPress: () {
-                  widget.onFilterApply.call(
-                      selectedSortByItemIndex,
-                      selectedCuisinesIndex,
-                      selectedRatingIndex,
-                      selectRangeValues);
+                  widget.onFilterApply?.call(
+                    selectedSortByItemIndex,
+                    selectedCuisinesIndex,
+                    selectedRatingIndex,
+                    selectRangeValues,
+                    selectRangeDistantValues,
+                  );
+
                   context.pop();
                 }),
             SizedBox(

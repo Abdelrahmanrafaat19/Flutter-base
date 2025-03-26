@@ -7,6 +7,7 @@ import 'package:flutter_base/features/auth/presentation/screens/forget_password_
 import 'package:flutter_base/features/auth/presentation/screens/splash_screen.dart';
 import 'package:flutter_base/features/permissions/presentation/screens/search_location_screen.dart';
 import 'package:flutter_base/features/main/main_screen.dart';
+import 'package:flutter_base/features/search/presentation/screens/search_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,6 +24,9 @@ import 'features/home/persentaion/home_screen.dart';
 import 'features/home/persentaion/see_all_screen_for_category.dart';
 import 'features/permissions/presentation/screens/location_permission_screen.dart';
 import 'features/permissions/presentation/screens/notification_permission_screen.dart';
+import 'features/search/domain/use_cases/fetch_restaurant_data_use_case.dart';
+import 'features/search/presentation/screens/all_data_of_search_category_screen.dart';
+import 'features/search/presentation/screens/search_result_screen.dart';
 
 late SharedPreferences prefs;
 
@@ -145,7 +149,7 @@ class MyApp extends ConsumerWidget {
       GoRoute(
         path: splashScreenRoute,
         builder: (BuildContext context, GoRouterState state) =>
-            const SplashScreen(),
+            LoginScreen(),
       ),
       GoRoute(
         path: mainScreenRoute,
@@ -207,6 +211,11 @@ class MyApp extends ConsumerWidget {
             CuisinesScreen(),
       ),
       GoRoute(
+        path: searchScreenRoute,
+        builder: (BuildContext context, GoRouterState state) =>
+            SearchScreen(),
+      ),
+      GoRoute(
         path: seeAllScreenForCategoryRoute,
         builder: (BuildContext context, GoRouterState state) {
           var extra = state.extra as Map;
@@ -216,6 +225,29 @@ class MyApp extends ConsumerWidget {
             categoryId: extra[CATEGORY_ID_KEY],
           );
         },
+      ),
+      GoRoute(
+          path: searchScreenResultRoute,
+          builder: (BuildContext context, GoRouterState state) {
+            var extra = state.extra as Map;
+            return SearchResultScreen(
+              filterList: extra[FILTER_LIST_KEY],
+              selectRangeValues: extra[SELECT_RANGE_VALUE_KEY],
+              selectedSortByItemIndex: extra[SELECTED_SORT_BY_ITEM_INDEX_KEY],
+              selectedRatingIndex: extra[SELECT_RATING_INDEX_KEY],
+              selectedCuisinesIndex: extra[SELECT_CUISINES_INDEX_KEY],
+              selectDistantRangeValues: extra[SELECT_DISTANT_RANGE_VALUES_KEY],
+            );
+          }),
+      GoRoute(
+        path: allDataOfSearchCategoryRoute,
+        builder: (BuildContext context, GoRouterState state) {
+          var extra = state.extra as String;
+          return AllDataOfSearchCategoryScreen(
+            title: extra,
+          );
+        },
+
       ),
     ],
   );

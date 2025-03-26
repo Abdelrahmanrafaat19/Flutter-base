@@ -21,7 +21,7 @@ class ResultFilterItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsetsDirectional.only(start: 8),
+      padding: const EdgeInsetsDirectional.only(start: 16),
       child: Container(
         padding: const EdgeInsetsDirectional.symmetric(
             horizontal: defaultPaddingHorizontal),

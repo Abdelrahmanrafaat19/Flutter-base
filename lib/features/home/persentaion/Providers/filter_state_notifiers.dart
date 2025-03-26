@@ -20,3 +20,6 @@ class FilterStateNotifiers extends StateNotifier<List<FilterItemSelector>>{
 final restaurantFilterProvider = StateNotifierProvider.autoDispose<FilterStateNotifiers, List<FilterItemSelector>>((ref) {
   return FilterStateNotifiers();
 });
+// final restaurantDistantFilterProvider = StateNotifierProvider.autoDispose<FilterStateNotifiers, List<FilterItemSelector>>((ref) {
+//   return FilterStateNotifiers();
+// });

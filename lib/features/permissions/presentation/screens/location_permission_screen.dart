@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_base/core/Theme/app_theme.dart';
+import 'package:flutter_base/core/constants/app_routes.dart';
 import 'package:flutter_base/core/constants/constants.dart';
 import 'package:flutter_base/core/widgets/app_button.dart';
+import 'package:go_router/go_router.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-class LocationPermissionScreen extends StatelessWidget {
+import '../../../location/data/repositories/address_permission_repo_imple.dart';
+
+
+
+class LocationPermissionScreen extends StatefulWidget {
   const LocationPermissionScreen({super.key});
 
+  @override
+  State<LocationPermissionScreen> createState() =>
+      _LocationPermissionScreenState();
+}
+
+class _LocationPermissionScreenState extends State<LocationPermissionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,16 +60,22 @@ class LocationPermissionScreen extends StatelessWidget {
               height: 50,
             ),
             AppButton(
-                width: double.infinity,
-                height: defaultButtonHeight,
-                text: "Allow Location Access",
-                backColor: AppTheme.mainAppColor,
-                onPress: () {}),
+              width: double.infinity,
+              height: defaultButtonHeight,
+              text: "Allow Location Access",
+              backColor: AppTheme.mainAppColor,
+              onPress: () async {
+                await AddressPermissionRepoImple()
+                    .requestLocationPermission(context);
+              },
+            ),
             SizedBox(
               height: 16,
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                context.go(searchLocationScreenRoute);
+              },
               child: Text(
                 "Enter Location Manually",
                 style: TextStyle(

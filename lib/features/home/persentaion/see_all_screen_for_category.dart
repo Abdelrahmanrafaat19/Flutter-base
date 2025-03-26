@@ -14,6 +14,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import '../../../core/models/StateModel.dart';
 import '../../common/presentation/providers/usecases_providers.dart';
+import '../../../core/Theme/app_theme.dart';
 import 'Providers/usecase_provider.dart';
 import 'bottom_sheets/filter_bottom_sheet.dart';
 import 'widget/search_with_filter.dart';
@@ -157,8 +158,8 @@ class _SeeAllScreenForCategoryState
               initRatingIndex: selectedRatingIndex,
               initRatingValue: selectRangeValues,
               onFilterApply:
-                  (sortByItemIndex, cuisinesIndex, ratingIndex, rangeValues) {
-                debugPrint("sortByItemIndex $sortByItemIndex \n"
+                  (sortByItemIndex, cuisinesIndex, ratingIndex, rangeValues,valueDistant) {
+                print("sortByItemIndex $sortByItemIndex \n"
                     "cuisinesIndex $cuisinesIndex\n"
                     "ratingIndex $ratingIndex\n"
                     "rangeValues $rangeValues");

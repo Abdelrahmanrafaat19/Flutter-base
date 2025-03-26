@@ -59,23 +59,27 @@ class AuthRemoteDataSource {
     );
   }
 
-  FutureResponseModel sendOtp({String? phoneNumber}) {
+  FutureResponseModel sendOtp({
+    String? phoneNumber,
+    bool? checkExistence ,
+  }) {
     return _httpOps.postData(
       authorized: false,
       endPoint: sendOtpEndPoint,
+      params: "?checkExistence=$checkExistence",
       data: {"phoneNumber": phoneNumber.toString()},
     );
   }
 
-  FutureResponseModel verifyOtp({String? phoneNumber,String? otp}) {
+  FutureResponseModel verifyOtp({String? phoneNumber, String? otp}) {
     return _httpOps.postData(
       authorized: false,
       endPoint: verifyOtpEndPoint,
-      data: {"phoneNumber": phoneNumber.toString(),"otp": otp.toString()},
+      data: {"phoneNumber": phoneNumber.toString(), "otp": otp.toString()},
     );
   }
 
-  FutureResponseModel forgetPassword({String? phoneNumber,String? password}) {
+  FutureResponseModel forgetPassword({String? phoneNumber, String? password}) {
     return _httpOps.putData(
       authorized: false,
       endPoint: usersEndPoint,
@@ -83,5 +87,4 @@ class AuthRemoteDataSource {
       data: {"password": password.toString()},
     );
   }
-
 }
