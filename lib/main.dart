@@ -149,7 +149,7 @@ class MyApp extends ConsumerWidget {
       GoRoute(
         path: splashScreenRoute,
         builder: (BuildContext context, GoRouterState state) =>
-            LoginScreen(),
+            const SplashScreen(),
       ),
       GoRoute(
         path: mainScreenRoute,

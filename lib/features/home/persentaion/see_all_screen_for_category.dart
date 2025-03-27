@@ -15,6 +15,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 import '../../../core/models/StateModel.dart';
 import '../../common/presentation/providers/usecases_providers.dart';
 import '../../../core/Theme/app_theme.dart';
+import '../../search/presentation/widgets/search_screen_body_not_exixt_data.dart';
 import 'Providers/usecase_provider.dart';
 import 'bottom_sheets/filter_bottom_sheet.dart';
 import 'widget/search_with_filter.dart';
@@ -117,27 +118,33 @@ class _SeeAllScreenForCategoryState
               height: 20,
             ),
             Expanded(
-              child: PaginatedListView<Restaurant>(
-                  dataList: restaurantsResult.data ??
-                      [
-                        Restaurant(),
-                        Restaurant(),
-                        Restaurant(),
-                        Restaurant(),
-                        Restaurant(),
-                      ],
-                  scrollPhysics: const AlwaysScrollableScrollPhysics(
-                      parent: BouncingScrollPhysics()),
-                  paginated: true,
-                  pageLoading:
-                      restaurantsResult.state == DataState.MORE_LOADING,
-                  onBottomReached: () {
-                    fetchRestaurants(++page);
-                  },
-                  builder: (item) => Skeletonizer(
-                        enabled: restaurantsResult.state == DataState.LOADING,
-                        child: VerticalRestaurantCard(restaurant: item),
-                      )),
+              child: !(restaurantsResult.data?.isEmpty == true &&
+                      restaurantsResult.state == DataState.SUCCESS)
+                  ? PaginatedListView<Restaurant>(
+                      dataList: restaurantsResult.data ??
+                          [
+                            Restaurant(),
+                            Restaurant(),
+                            Restaurant(),
+                            Restaurant(),
+                            Restaurant(),
+                          ],
+                      scrollPhysics: const AlwaysScrollableScrollPhysics(
+                          parent: BouncingScrollPhysics()),
+                      paginated: true,
+                      pageLoading:
+                          restaurantsResult.state == DataState.MORE_LOADING,
+                      onBottomReached: () {
+                        fetchRestaurants(++page);
+                      },
+                      builder: (item) => Skeletonizer(
+                            enabled:
+                                restaurantsResult.state == DataState.LOADING,
+                            child: VerticalRestaurantCard(restaurant: item),
+                          ))
+                  : const SearchScreenBodyNotExixtData(
+                      withBtu: false,
+                    ),
             )
           ],
         ));
@@ -157,8 +164,8 @@ class _SeeAllScreenForCategoryState
               initCuisinesIndex: selectedCuisinesIndex,
               initRatingIndex: selectedRatingIndex,
               initRatingValue: selectRangeValues,
-              onFilterApply:
-                  (sortByItemIndex, cuisinesIndex, ratingIndex, rangeValues,valueDistant) {
+              onFilterApply: (sortByItemIndex, cuisinesIndex, ratingIndex,
+                  rangeValues, valueDistant) {
                 print("sortByItemIndex $sortByItemIndex \n"
                     "cuisinesIndex $cuisinesIndex\n"
                     "ratingIndex $ratingIndex\n"

@@ -80,7 +80,7 @@ class _AppSearchBarWithFilterState extends State<AppSearchBarWithFilter> {
                         fillColor: Colors.white,
                         filled: true,
                         contentPadding: EdgeInsets.symmetric(horizontal: 12),
-                        labelText: widget.hintTxt,
+                        hintText: widget.hintTxt,
                         suffixIcon: widget.postIcon,
                         hintStyle: AppTheme.style14normalblack
                             .copyWith(color: AppTheme.appGrey10),
@@ -133,7 +133,7 @@ class _AppSearchBarWithFilterState extends State<AppSearchBarWithFilter> {
                       fillColor: Colors.white,
                       filled: true,
                       contentPadding: EdgeInsets.symmetric(horizontal: 12),
-                      labelText: widget.hintTxt,
+                      hintText: widget.hintTxt,
                       labelStyle: AppTheme
                           .styleWithTextAppGrey4RegularFonts14w400
                           .copyWith(color: AppTheme.appGrey10),
