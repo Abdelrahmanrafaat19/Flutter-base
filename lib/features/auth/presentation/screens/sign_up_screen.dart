@@ -66,29 +66,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       checkIfDataValidStateNotifierProvider,
       showLoading: true,
       onSuccess: (res) {
-        // goToSendOtp();
-        List errors=[
-          "email : Email is inValid",
-          "phoneNumber : phone is inValid",
-        ];
-        Map<String, String> errorMap = {
-
-        };
-
-        for (String error in (errors ?? [])) {
-          if (error.contains("email")) {
-            errorMap["email"] = error;
-
-          }
-          if (error.contains("phoneNumber")) {
-            errorMap["phoneNumber"] = error;
-          }
-          if (error.contains("name")) {
-            errorMap["name"] = error;
-          }
-        }
-        debugPrint("this Error Map $errorMap");
-        ref.read(validationSignUpProvider.notifier).updateStatue(errorMap);
+        goToSendOtp();
       },
       onFail: (res) {
         Map<String, String> errorMap = {};
@@ -99,6 +77,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
           }
           if (error.contains("phone")) {
             errorMap["phone"] = error;
+
           }
           if (error.contains("name")) {
             errorMap["name"] = error;
@@ -190,17 +169,20 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 isPhoneNumberIsValidate: !validState.containsKey("phone"),
                 controller: _phoneController,
                 validator: (phone) {
-                  if (_phoneNumber?.completeNumberWithPlus == null || _phoneNumber?.completeNumberWithPlus.isEmpty == true) {
+                  if (_phoneNumber?.completeNumberWithPlus == null ||
+                      _phoneNumber?.completeNumberWithPlus.isEmpty == true) {
                     isPhoneNumberValidate = false;
                     return 'Phone number is required';
                   }
                   final RegExp phoneRegExp = RegExp(r"^\+\d{1,3}\d{7,12}$");
-                  if (!phoneRegExp.hasMatch(_phoneNumber!.completeNumberWithPlus)) {
+                  if (!phoneRegExp
+                      .hasMatch(_phoneNumber!.completeNumberWithPlus)) {
                     isPhoneNumberValidate = false;
                     return 'Enter a valid phone number (e.g., +1234567890)';
                   }
-                  if (validState.containsKey("phoneNumber")) {
-                    return validState["phoneNumber"];
+                  if (validState.containsKey("phone")) {
+                    String errorMessage = validState["phone"]!.replaceFirst("phone: ", "");
+                    return errorMessage;
                   }
                   // isPhoneNumberValidate = true;
 
@@ -210,7 +192,6 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   _phoneNumber = value;
                   ref.read(validationSignUpProvider.notifier).updateStatue({});
                   print("onChanged phone : $value");
-
                 },
               ),
               const SizedBox(height: 16),
@@ -220,7 +201,6 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 controller: _emailController,
                 hint: "example@gmail.com",
                 validator: (email) {
-
                   if (email != null && email.isNotEmpty) {
                     final RegExp emailRegExp = RegExp(
                         r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
@@ -230,11 +210,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     }
                   }
                   if (validState.containsKey("email")) {
-                    return validState["email"];
+                    String errorMessage = validState["email"]!.replaceFirst("email: ", "");
+                    return errorMessage;
                   }
 
-
-                    // isemailValidate = true;
+                  // isemailValidate = true;
                   return null; // Email is optional, so we allow empty input
                 },
                 label: const Text(
@@ -242,7 +222,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   style: AppTheme.style14BoldBlack,
                 ),
                 onChanged: (value) {
-                  _emailController.text=value;
+                  _emailController.text = value;
                   ref.read(validationSignUpProvider.notifier).updateStatue({});
                 },
               ),
@@ -442,7 +422,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         firstName: _firstNameController.text,
         lastName: _lastNameController.text,
         email: _emailController.text,
-        phoneNumber: _phoneNumber?.completeNumberWithPlus,
+        phoneNumber: _phoneNumber?.completeNumberWithoutPlus,
         password: _passwordController.text);
   }
 

@@ -236,7 +236,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   void navigateToCuisineRestaurants(Cuisine cuisine) {
     context.push(seeAllScreenForCategoryRoute, extra: {
-      TITLE_KEY: cuisine.id,
+      TITLE_KEY: cuisine.name,
       CUISINE_ID_KEY: cuisine.id,
     });
   }

@@ -127,6 +127,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                     searchValue = value;
                     page = 0;
                     fetchRestaurants(page);
+                    setState(() {
+
+                    });
                   },
                   hintTxt: "Search for restaurant, cuisines....",
                 ),
@@ -139,7 +142,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 ),
                 child: searchController.text.isEmpty
                     ? IntilBodyForSearchScreen(data: data)
-                    : data.length == 0
+                    : data.isNotEmpty
                         ? SearchScreenBodyExictData(data: data)
                         : SearchScreenBodyNotExixtData(),
               ),

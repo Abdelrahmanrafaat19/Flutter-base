@@ -54,9 +54,9 @@ class _SearchResultScreenState extends ConsumerState<SearchResultScreen> {
   String? searchValue;
   int page = 0;
   void initState() {
-    // WidgetsBinding.instance.addPostFrameCallback((callback) {
-    //   fetchRestaurants(page);
-    // });
+    WidgetsBinding.instance.addPostFrameCallback((callback) {
+      fetchRestaurants(page);
+    });
     super.initState();
   }
 
