@@ -59,7 +59,7 @@ class _HorizontalCuisinesListWithTitleState extends State<HorizontalCuisinesList
                         child: CuisineCard(
                           width: 110,
                           height: 80,
-                          categoryImg: "https://t3.ftcdn.net/jpg/02/52/38/80/360_F_252388016_KjPnB9vglSCuUJAumCDNbmMzGdzPAucK.jpg",
+                          categoryImg: widget.list[index].image,
                           categoryName: widget.list[index].name,
                         ),
                       ),

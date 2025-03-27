@@ -18,27 +18,28 @@ class FetchCuisinesUseCase extends StateNotifier<StateModel<List<Cuisine>>> {
     String? localeIsoCode = "en",
     bool? fetchRestaurants = false,
     bool? featured = false,
-    List<int>? categoryIds,
-  })
-  async {
+    List<int>? cuisineIds,
+  }) async {
     state = StateModel.loading();
 
     ResponseModel responseModel = await _homeRepository.fetchCuisines(
-      page: page,
-      size: size,
-      localeIsoCode: localeIsoCode,
-      fetchRestaurants: fetchRestaurants,
-      featured: featured,
-      categoryIds: categoryIds ?? []
-    );
+        page: page,
+        size: size,
+        localeIsoCode: localeIsoCode,
+        fetchRestaurants: fetchRestaurants,
+        featured: featured,
+        cuisineIds: cuisineIds ?? []);
 
     if (responseModel.code == 200) {
       List<Cuisine> cuisines = (responseModel.data as List)
-      .map((item) => toCuisineEntity(CuisineModel.fromJson(item))).toList();
+          .map((item) => toCuisineEntity(CuisineModel.fromJson(item)))
+          .toList();
 
       debugPrint("cuisinesCount : ${cuisines.first.name}");
       state = StateModel(
-          state: DataState.SUCCESS, data: cuisines, message: responseModel.message);
+          state: DataState.SUCCESS,
+          data: cuisines,
+          message: responseModel.message);
     } else {
       state = StateModel(
           state: DataState.ERROR,

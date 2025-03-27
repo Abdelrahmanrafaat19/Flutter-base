@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_base/features/home/persentaion/Providers/usecase_provider.dart';
 import '../../../../core/Utils/Extintions.dart';
+import '../../../../core/localization/LanguageProvider.dart';
 import '../../../../core/utils/extensions/request_handle_extension.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -26,18 +28,21 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 4), () {
       UtilsExts.handleStatusBarColorWithIcon(
           statusBarColor: AppTheme.mainAppColor);
 
+
       final client = ref.read(userProvider.notifier).checkIfUserExist();
 
-      if(client != null) {
+      print("client MMM: ${client?.token}");
+      print("client MMM: ${client != null}");
+      if (client != null) {
         ref.read(userProvider.notifier).setUser(client);
       }
+      commonCalls();
 
-      print(client);
-      context.go(loginScreenRoute);
+
       if (client != null) {
         // initFcmToken();
         context.go(mainScreenRoute);
@@ -51,9 +56,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
         // }
       }
 
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        // commonCalls();
-      });
+
+
     });
 
     super.initState();
@@ -93,5 +97,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  void commonCalls() {
+    ref.read(fetchAllCuisinesStateNotifierProvider.notifier).call(
+        page: "0",
+        size: "1000",
+        localeIsoCode: /*ref.watch(langProvider).toString()*/"en",
+        featured: true,
+        fetchRestaurants: false,cuisineIds: []);
   }
 }

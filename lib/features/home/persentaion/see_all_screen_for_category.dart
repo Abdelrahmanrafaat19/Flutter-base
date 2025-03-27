@@ -5,6 +5,7 @@ import 'package:flutter_base/core/constants/eunms.dart';
 import 'package:flutter_base/core/widgets/custom_app_bar.dart';
 import 'package:flutter_base/core/widgets/paginated_listview.dart';
 import 'package:flutter_base/features/home/data/models/item_selector.dart';
+import 'package:flutter_base/features/home/domain/entities/cuisine_entity.dart';
 import 'package:flutter_base/features/home/domain/entities/restaurant_entity.dart';
 import 'package:flutter_base/features/home/persentaion/Providers/filter_state_notifiers.dart';
 import 'package:flutter_base/features/home/persentaion/widget/filter/horizontal_filter_result_listview.dart';
@@ -14,6 +15,8 @@ import 'package:skeletonizer/skeletonizer.dart';
 import '../../../core/models/StateModel.dart';
 import '../../common/presentation/providers/usecases_providers.dart';
 import '../../../core/Theme/app_theme.dart';
+import '../../search/presentation/widgets/search_screen_body_not_exixt_data.dart';
+import 'Providers/usecase_provider.dart';
 import 'bottom_sheets/filter_bottom_sheet.dart';
 import 'widget/search_with_filter.dart';
 
@@ -42,9 +45,13 @@ class _SeeAllScreenForCategoryState
   RangeValues? selectRangeValues;
   String? searchValue;
   int page = 0;
+  List<Cuisine> cuisines = [];
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((callback) {
+      cuisines.clear();
+      var cuisinesList = ref.read(fetchAllCuisinesStateNotifierProvider);
+      cuisines = cuisinesList.data ?? [];
       fetchRestaurants(page);
     });
     super.initState();
@@ -111,29 +118,33 @@ class _SeeAllScreenForCategoryState
               height: 20,
             ),
             Expanded(
-              child: PaginatedListView<Restaurant>(
-                  dataList: restaurantsResult.data ??
-                      [
-                        Restaurant(),
-                        Restaurant(),
-                        Restaurant(),
-                        Restaurant(),
-                        Restaurant(),
-                      ],
-                  scrollPhysics: const AlwaysScrollableScrollPhysics(
-                      parent: BouncingScrollPhysics()),
-                  paginated: true,
-                  pageLoading:
-                      restaurantsResult.state == DataState.MORE_LOADING,
-                  onBottomReached: () {
-                    fetchRestaurants(++page);
-                  },
-                  builder: (item) => Skeletonizer(
-                        enabled: false,
-                        child: VerticalRestaurantCard(
-                          restaurant: item
-                        ),
-                      )),
+              child: !(restaurantsResult.data?.isEmpty == true &&
+                      restaurantsResult.state == DataState.SUCCESS)
+                  ? PaginatedListView<Restaurant>(
+                      dataList: restaurantsResult.data ??
+                          [
+                            Restaurant(),
+                            Restaurant(),
+                            Restaurant(),
+                            Restaurant(),
+                            Restaurant(),
+                          ],
+                      scrollPhysics: const AlwaysScrollableScrollPhysics(
+                          parent: BouncingScrollPhysics()),
+                      paginated: true,
+                      pageLoading:
+                          restaurantsResult.state == DataState.MORE_LOADING,
+                      onBottomReached: () {
+                        fetchRestaurants(++page);
+                      },
+                      builder: (item) => Skeletonizer(
+                            enabled:
+                                restaurantsResult.state == DataState.LOADING,
+                            child: VerticalRestaurantCard(restaurant: item),
+                          ))
+                  : const SearchScreenBodyNotExixtData(
+                      withBtu: false,
+                    ),
             )
           ],
         ));
@@ -145,7 +156,7 @@ class _SeeAllScreenForCategoryState
         backgroundColor: Colors.white,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-                topRight: Radius.circular(10), topLeft: Radius.circular(10),),),
+                topRight: Radius.circular(10), topLeft: Radius.circular(10))),
         context: context,
         builder: (BuildContext context) => FilterBottomSheet(
               enableFilterByCuisine: widget.cuisineId == null,
@@ -153,8 +164,8 @@ class _SeeAllScreenForCategoryState
               initCuisinesIndex: selectedCuisinesIndex,
               initRatingIndex: selectedRatingIndex,
               initRatingValue: selectRangeValues,
-              onFilterApply:
-                  (sortByItemIndex, cuisinesIndex, ratingIndex, rangeValues,valueDistant) {
+              onFilterApply: (sortByItemIndex, cuisinesIndex, ratingIndex,
+                  rangeValues, valueDistant) {
                 print("sortByItemIndex $sortByItemIndex \n"
                     "cuisinesIndex $cuisinesIndex\n"
                     "ratingIndex $ratingIndex\n"
@@ -169,7 +180,10 @@ class _SeeAllScreenForCategoryState
                   filterList.add(sortByItems[selectedSortByItemIndex!]);
                 }
                 if (selectedCuisinesIndex != null) {
-                  // filterList.add(sortByItems[selectedSortByItemIndex]);
+                  filterList.add(FilterItemSelector(
+                      id: cuisines[selectedCuisinesIndex!].id,
+                      name: cuisines[selectedCuisinesIndex!].name,
+                      type: FilterType.Cuisines));
                 }
                 if (selectedRatingIndex != null) {
                   filterList.add(ratings[selectedRatingIndex!]);
@@ -196,7 +210,12 @@ class _SeeAllScreenForCategoryState
         size: 10.toString(),
         categoryId: widget.categoryId,
         restaurant: searchValue?.isNotEmpty == true ? searchValue : null,
-        cuisineId: widget.cuisineId ?? selectedCuisinesIndex,
-        minRating: selectedRatingIndex?.toString());
+        cuisineId: widget.cuisineId ??
+            (selectedCuisinesIndex != null
+                ? cuisines[selectedCuisinesIndex!].id
+                : null),
+        minRating: selectedRatingIndex != null
+            ? ratings[selectedRatingIndex!].name.toString()
+            : null);
   }
 }

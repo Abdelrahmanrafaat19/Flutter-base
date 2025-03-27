@@ -7,7 +7,7 @@ abstract class HomeRepository {
     String? localeIsoCode,
     bool? fetchRestaurants,
     bool? featured,
-    List<int>? categoryIds,
+    List<int>? cuisineIds,
   });
 
   FutureResponseModel fetchCategories({

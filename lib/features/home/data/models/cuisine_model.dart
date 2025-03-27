@@ -4,11 +4,13 @@ import 'package:flutter_base/features/home/domain/entities/cuisine_entity.dart';
 class CuisineModel {
   final int? id;
   final String? name;
+  final String? image;
   final bool? featured;
 
   CuisineModel({
     this.id,
     this.name,
+    this.image,
     this.featured,
   });
 
@@ -17,6 +19,7 @@ class CuisineModel {
     return CuisineModel(
       id: json['id'],
       name: json['name'],
+      image: json['image'],
       featured: json['featured'],
     );
   }
@@ -25,6 +28,7 @@ class CuisineModel {
     return {
       'id': id,
       'name': name,
+      'image': image,
       'featured': featured,
     };
   }
@@ -34,6 +38,7 @@ Cuisine toCuisineEntity(CuisineModel cuisine) {
   return Cuisine(
     id: cuisine.id,
     name: cuisine.name,
+    image: cuisine.image,
     featured: cuisine.featured,
   );
 }

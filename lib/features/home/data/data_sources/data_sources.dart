@@ -14,7 +14,7 @@ class HomeRemoteDataSource {
     String? localeIsoCode,
     bool? fetchRestaurants,
     bool? featured,
-    List<int>? categoryIds,
+    List<int>? cuisineIds,
   }) {
     return _httpOps.postData(
       authorized: true,
@@ -23,7 +23,7 @@ class HomeRemoteDataSource {
       data: {
         "fetchRestaurants": fetchRestaurants,
         "featured": featured,
-        "categoryIds": categoryIds,
+        "cuisineIds": cuisineIds,
       },
     );
   }

@@ -114,7 +114,7 @@ class PaginatedListView<T> extends StatelessWidget {
         scrollDirection:scrollDirection??Axis.vertical ,
         shrinkWrap: true,
         padding: padding ??
-            const EdgeInsets.only(left: 0, right: 0, bottom: 0),
+            const EdgeInsets.only(left: 0, right: 0, bottom: 50),
         itemCount:
         paginated ? dataList.length + 1 : dataList.length,
         controller: _paginatedListController,

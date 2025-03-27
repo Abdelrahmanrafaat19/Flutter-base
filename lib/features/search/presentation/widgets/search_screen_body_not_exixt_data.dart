@@ -8,15 +8,17 @@ import '../../../../core/Theme/app_theme.dart';
 import '../../../../core/widgets/svg_icons.dart';
 
 class SearchScreenBodyNotExixtData extends StatelessWidget {
-  const SearchScreenBodyNotExixtData({super.key});
+  final bool withBtu;
+  final bool withBackground;
+  const SearchScreenBodyNotExixtData({super.key,this.withBtu = true, this.withBackground = true});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 70),
-      decoration:const  BoxDecoration(
-        color: AppTheme.whiteColor,
+      decoration: BoxDecoration(
+        color: withBackground ?AppTheme.whiteColor:Colors.transparent,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -59,13 +61,13 @@ class SearchScreenBodyNotExixtData extends StatelessWidget {
           const SizedBox(
             height: 35,
           ),
-          AppButton(
+          withBtu ? AppButton(
             width: double.infinity,
             height: defaultButtonHeight,
             text: "Start a New Search",
             backColor: AppTheme.code008080Color,
             onPress: () async {},
-          ),
+          ):const SizedBox(),
         ],
       ),
     );

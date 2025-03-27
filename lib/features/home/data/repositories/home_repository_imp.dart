@@ -32,14 +32,14 @@ class HomeRepositoryImp extends HomeRepository {
       String? localeIsoCode,
       bool? fetchRestaurants,
       bool? featured,
-      List<int>? categoryIds}) {
+      List<int>? cuisineIds}) {
     return _dataSource.fetchCuisines(
         page: page,
         size: size,
         localeIsoCode: localeIsoCode,
         featured: featured,
         fetchRestaurants: fetchRestaurants,
-        categoryIds: categoryIds
+        cuisineIds: cuisineIds
     );
   }
 }
