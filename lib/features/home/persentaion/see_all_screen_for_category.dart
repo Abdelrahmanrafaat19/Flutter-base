@@ -141,7 +141,7 @@ class _SeeAllScreenForCategoryState
                             enabled:
                                 restaurantsResult.state == DataState.LOADING,
                             child: VerticalRestaurantCard(restaurant: item),
-                          ))
+                          ),)
                   : const SearchScreenBodyNotExixtData(
                       withBtu: false,
                     ),
