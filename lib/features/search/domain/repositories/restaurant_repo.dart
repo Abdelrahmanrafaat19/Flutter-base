@@ -16,4 +16,9 @@ abstract class RestaurantRepo {
     int? minRating,
     bool? isOpen,
   });
+  FutureResponseModel searchRestaurantByName({
+    int? page = 0,
+    int? size = 10,
+    Map<String, dynamic>? requestBody
+  });
 }

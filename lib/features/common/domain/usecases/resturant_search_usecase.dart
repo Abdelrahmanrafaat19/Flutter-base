@@ -21,6 +21,7 @@ class RestaurantSearchUseCase
     String? minRating,
     bool? withRestaurants,
     bool? isOpen,
+    bool? isSearchInMenu,
   }) async {
 
     if (state.pagination?.lastPage != null &&
@@ -38,6 +39,7 @@ class RestaurantSearchUseCase
       "minRating": minRating,
       "withRestaurants": withRestaurants,
       "isOpen": isOpen,
+      "searchInMenus": isSearchInMenu,
     }..removeWhere((key, value) => value == null); // Remove null values
 
     print(requestBody);

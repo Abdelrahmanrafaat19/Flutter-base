@@ -26,16 +26,26 @@ class RestaurantRepoImple implements RestaurantRepo {
       int? categoryId,
       int? minRating,
       bool? isOpen}) {
-   return restaurantDataSource.searchOnRestaurant(
-     page: page,
-     size: size,
-     categoryId: categoryId,
-     cuisine: cuisine,
-     minRating: minRating,
-     isOpen: isOpen,
-     localeIsoCode: localeIsoCode,
-     restaurantName: restaurantName,
-     restaurantPhone: restaurantPhone,
-   );
+    return restaurantDataSource.searchOnRestaurant(
+      page: page,
+      size: size,
+      categoryId: categoryId,
+      cuisine: cuisine,
+      minRating: minRating,
+      isOpen: isOpen,
+      localeIsoCode: localeIsoCode,
+      restaurantName: restaurantName,
+      restaurantPhone: restaurantPhone,
+    );
+  }
+
+  @override
+  FutureResponseModel searchRestaurantByName(
+      {int? page, int? size, Map<String, dynamic>? requestBody}) {
+    return restaurantDataSource.searchRestaurantByName(
+      page: page,
+      size: size,
+      requestBody: requestBody,
+    );
   }
 }

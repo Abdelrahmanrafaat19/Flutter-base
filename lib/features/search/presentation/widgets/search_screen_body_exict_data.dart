@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_base/core/Theme/app_theme.dart';
 import 'package:flutter_base/core/constants/assets.dart';
 import 'package:flutter_base/features/search/presentation/widgets/search_item_list_when_exist_data.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../core/Constants/Constants.dart';
+import '../../../../core/constants/app_routes.dart';
 
 class SearchScreenBodyExictData extends StatelessWidget {
   final List data;
@@ -25,10 +29,16 @@ class SearchScreenBodyExictData extends StatelessWidget {
           ),
           Expanded(
             child: ListView.builder(
+              padding: EdgeInsets.zero,
               itemCount: data.length,
               itemBuilder: (context, index) {
                 return SearchItemListWhenExistData(
-                  title: "Italiano Restaurant",
+                  onTap: () {
+                    context.push(searchScreenResultRoute,extra: {
+                      SEARCH_TEXT:data[index]??"",
+                    });
+                  },
+                  title: data[index]??"",
                   address: "85 elnasr street  Rd. elaml",
                   iconPath: restaurantIcons,
                   index: index,

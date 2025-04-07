@@ -25,7 +25,7 @@ class FoodItemList extends StatelessWidget {
         MainAxisAlignment.center,
         children: [
           Image.network(
-            "https://s3-alpha-sig.figma.com/img/952a/0bb4/9ae8b4e2b41dce4f68e8ec0d19430726?Expires=1742774400&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=oDhIFQ1GjQEhmq89TuYlRmo0SG7bSBb8P0zpvA6KpgjWhTS3W2h95JhPPsdhMPgn8ZtEStgEvbMicbOYlWOzCKKF~sYB07jbEuSgzkZRBXANZHTp571AQOJFMD0aGOlbbZTKoWKPoUXy2Lo9ZXE7h1lufVKW5J4zCICfiPOXZ6PWq06Qvxq1oS1fg8uAXpORk9T07VG0GygAKXuO49Erv89yBUr9zIKl-9V0LLJbaudWNa97RqDjjSU6VGBU6y3VON44O6omx7tKF3zsKcNtedx~z-OxFW9P8euqlSrjGP4A9xGr6gXY3WK97RQJx63gPmWyBT53Y6Skpifhm15WNg__",
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuC9a-P4LsUdtmurXIK_ZugkN70_uJbJ7vJw&s",
             width: 56,
             height: 56,
           ),

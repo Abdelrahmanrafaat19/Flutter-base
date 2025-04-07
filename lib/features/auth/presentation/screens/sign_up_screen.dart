@@ -108,62 +108,58 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 marginBottom: 64,
               ),
               const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: LabeledTextField(
-                      controller: _firstNameController,
-                      focusNode: _focusNode,
-                      hint: "yourname",
-                      isvalidate: isFirstNameValidate,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          isFirstNameValidate = false;
-                          return "First name is required";
-                        }
-                        final RegExp nameRegExp = RegExp(r"^[a-zA-Z]{2,}$");
-                        if (!nameRegExp.hasMatch(value)) {
-                          isFirstNameValidate = false;
+              LabeledTextField(
+                controller: _firstNameController,
+                focusNode: _focusNode,
+                hint: "yourname",
+                isvalidate: isFirstNameValidate,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    isFirstNameValidate = false;
+                    return "First name is required";
+                  }
+                  final RegExp nameRegExp = RegExp(r"^[a-zA-Z]{2,}$");
+                  if (!nameRegExp.hasMatch(value)) {
+                    isFirstNameValidate = false;
 
-                          return "letters only, at least 2 characters";
-                        }
-                        isFirstNameValidate = true;
+                    return "letters only, at least 2 characters";
+                  }
+                  isFirstNameValidate = true;
 
-                        return null;
-                      },
-                      label: const Text(
-                        "Firstname",
-                        style: AppTheme.style14BoldBlack,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                      child: LabeledTextField(
-                    isvalidate: isLastNameValidate,
-                    controller: _lastNameController,
-                    hint: "yourname",
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        isLastNameValidate = false;
-                        return "Last name is required";
-                      }
-                      final RegExp nameRegExp = RegExp(r"^[a-zA-Z]{2,}$");
-                      if (!nameRegExp.hasMatch(value)) {
-                        isLastNameValidate = false;
-
-                        return "letters only, at least 2 characters";
-                      }
-                      isLastNameValidate = true;
-                      return null;
-                    },
-                    label: const Text(
-                      "Lastname",
-                      style: AppTheme.style14BoldBlack,
-                    ),
-                  )),
-                ],
+                  return null;
+                },
+                label: const Text(
+                  "Firstname",
+                  style: AppTheme.style14BoldBlack,
+                ),
               ),
+              const SizedBox(
+                height: 16,
+              ),
+              LabeledTextField(
+                isvalidate: isLastNameValidate,
+                controller: _lastNameController,
+                hint: "yourname",
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    isLastNameValidate = false;
+                    return "Last name is required";
+                  }
+                  final RegExp nameRegExp = RegExp(r"^[a-zA-Z]{2,}$");
+                  if (!nameRegExp.hasMatch(value)) {
+                    isLastNameValidate = false;
+
+                    return "letters only, at least 2 characters";
+                  }
+                  isLastNameValidate = true;
+                  return null;
+                },
+                label: const Text(
+                  "Lastname",
+                  style: AppTheme.style14BoldBlack,
+                ),
+              ),
+
               const SizedBox(height: 16),
               PhoneNumberField(
                 isPhoneNumberIsValidate: !validState.containsKey("phone"),
@@ -363,7 +359,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 backColor: AppTheme.mainAppColor,
                 text: "Continue",
                 onPress: () {
-                  if (_formKey.currentState!.validate()) {
+                  if (_formKey.currentState!.validate()&&isAgree==true) {
                     setState(() {});
                     checkIfDataValid();
                     // goToSendOtp();

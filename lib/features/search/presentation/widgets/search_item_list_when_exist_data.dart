@@ -9,63 +9,72 @@ class SearchItemListWhenExistData extends StatelessWidget {
   final String address;
   final String iconPath;
   final int listLength, index;
+  final void Function()? onTap;
+
   const SearchItemListWhenExistData(
       {super.key,
       required this.title,
       required this.address,
       required this.iconPath,
       required this.listLength,
-      required this.index});
+      required this.index,
+      this.onTap,});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-    
-      child: Column(
-        children: [
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 10),
-            child: Row(
-              children: [
-                Column(
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 40,
-                          height: 40,
-                          padding: EdgeInsets.all(5),
-                          child: SVGIcons.localSVG(
-                            iconPath,
-                            width: 24,
-                            height: 24,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            width: 40,
+                            height: 40,
+                            padding: EdgeInsets.all(5),
+                            child: SVGIcons.localSVG(
+                              iconPath,
+                              width: 24,
+                              height: 24,
+                            ),
                           ),
-                        ),
-                        Text(
-                          title,
-                          style: AppTheme.style15SemiBoldBlack,
-                        )
-                      ],
-                    ),
-                    Text(
-                      address,
-                      style: AppTheme.style14W400code8088A4,
-                    ),
-                  ],
-                ),
-                Spacer(),
-                SVGIcons.localSVG(arrowRightIcons,
-                    color: AppTheme.appGrey7, width: 24, height: 24)
-              ],
+                          Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              title,
+                              style: AppTheme.style15SemiBoldBlack,
+                            ),
+                          )
+                        ],
+                      ),
+                      Text(
+                        address,
+                        style: AppTheme.style14W400code8088A4,
+                      ),
+                    ],
+                  ),
+                  Spacer(),
+                  SVGIcons.localSVG(arrowRightIcons,
+                      color: AppTheme.appGrey7, width: 24, height: 24)
+                ],
+              ),
             ),
-          ),
-          index != listLength - 1
-              ? Divider(
-                  height: 2,
-                  color: AppTheme.appGrey8,
-                )
-              : SizedBox()
-        ],
+            index != listLength - 1
+                ? Divider(
+                    height: 2,
+                    color: AppTheme.appGrey8,
+                  )
+                : SizedBox()
+          ],
+        ),
       ),
     );
   }

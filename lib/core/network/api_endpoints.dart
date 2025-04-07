@@ -21,3 +21,4 @@ const deleteUserContactInfoEndpoint = "member/deleteUserAllContactInfo";
 const getUserContactInfoEndpoint = "member/getUserContactInfo";
 const getOtherUserContactInfoEndpoint = "userContactInfoProfile";
 const fetchAllRestaurantEndPoint="restaurant";
+const searchRestaurantNameEndPoint="restaurant/searchRestaurantNames";
