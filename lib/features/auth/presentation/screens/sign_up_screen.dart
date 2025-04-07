@@ -104,10 +104,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const AuthHeaderWidget(
-                marginTop: 36,
-                marginBottom: 64,
+                marginTop: 0.0,
+                marginBottom: 48,
               ),
-              const SizedBox(height: 16),
               LabeledTextField(
                 controller: _firstNameController,
                 focusNode: _focusNode,

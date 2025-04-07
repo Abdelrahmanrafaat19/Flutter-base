@@ -29,8 +29,7 @@ class SearchOnRestaurantByNameUseCase
   }) async {
 
 
-
-        StateModel(state: DataState.MORE_LOADING);
+    state=StateModel(state: DataState.LOADING);
 
 
     // Build a request map and remove null values

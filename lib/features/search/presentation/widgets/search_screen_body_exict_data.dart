@@ -10,7 +10,8 @@ import '../../../../core/constants/app_routes.dart';
 
 class SearchScreenBodyExictData extends StatelessWidget {
   final List data;
-  const SearchScreenBodyExictData({super.key, required this.data});
+  final bool enableLoading;
+  const SearchScreenBodyExictData({super.key, required this.data, required this.enableLoading});
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +34,7 @@ class SearchScreenBodyExictData extends StatelessWidget {
               itemCount: data.length,
               itemBuilder: (context, index) {
                 return SearchItemListWhenExistData(
+                  enableLoading: enableLoading,
                   onTap: () {
                     context.push(searchScreenResultRoute,extra: {
                       SEARCH_TEXT:data[index]??"",

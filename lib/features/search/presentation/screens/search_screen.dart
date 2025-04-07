@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_base/core/constants/app_routes.dart';
 import 'package:flutter_base/core/constants/assets.dart';
 import 'package:flutter_base/core/constants/constants.dart';
+import 'package:flutter_base/core/models/StateModel.dart';
 import 'package:flutter_base/core/widgets/app_button.dart';
 import 'package:flutter_base/features/home/persentaion/widget/search_with_filter.dart';
 import 'package:flutter_base/features/search/presentation/screens/all_data_of_search_category_screen.dart';
@@ -179,8 +180,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 ),
                 child: searchController.text.isEmpty
                     ? IntilBodyForSearchScreen(data: data)
-                    : restName.data?.isNotEmpty == true
-                        ? SearchScreenBodyExictData(data: restName.data! ?? [])
+                    : (restName.state==DataState.SUCCESS&&restName.data?.isNotEmpty == true)||restName.state==DataState.LOADING
+                        ? SearchScreenBodyExictData(enableLoading: restName.state==DataState.LOADING,data: restName.data ?? ["Karim","Karim","Karim","Karim","Karim","Karim","Karim","Karim","Karim","Karim","Karim","Karim",])
                         : const SearchScreenBodyNotExixtData(),
               ),
             ),
