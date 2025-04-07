@@ -14,7 +14,7 @@ class FetchCuisinesUseCase extends StateNotifier<StateModel<List<Cuisine>>> {
 
   void call({
     String? page = "0",
-    String? size = "1",
+    String? size = "6",
     String? localeIsoCode = "en",
     bool? fetchRestaurants = false,
     bool? featured = false,

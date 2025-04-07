@@ -52,7 +52,7 @@ class _VerticalRestaurantCardState extends State<VerticalRestaurantCard> {
                     width: 65,
                     height: 22,
                     padding: const EdgeInsetsDirectional.symmetric(
-                        horizontal: 5, vertical: 6),
+                        horizontal: 3, vertical: 6),
                     decoration: const BoxDecoration(
                         color: AppTheme.lightGreen,
                         borderRadius: BorderRadiusDirectional.only(
