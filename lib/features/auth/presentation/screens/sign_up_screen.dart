@@ -15,6 +15,7 @@ import 'package:flutter_base/features/auth/presentation/widgets/auth_header_widg
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/widgets/language_text.dart';
@@ -358,9 +359,21 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 backColor: AppTheme.mainAppColor,
                 text: "Continue",
                 onPress: () {
-                  if (_formKey.currentState!.validate()&&isAgree==true) {
-                    setState(() {});
-                    checkIfDataValid();
+                  if (_formKey.currentState!.validate()) {
+                    if(isAgree==true){
+                      setState(() {});
+                      checkIfDataValid();
+                    }else{
+                      Fluttertoast.showToast(
+                        msg: "Please Agree to the Terms to Conditions",
+                        toastLength: Toast.LENGTH_SHORT, // or Toast.LENGTH_LONG
+                        gravity: ToastGravity.BOTTOM, // TOP, CENTER, BOTTOM
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.black54,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+                    }
                     // goToSendOtp();
                   }
                 },

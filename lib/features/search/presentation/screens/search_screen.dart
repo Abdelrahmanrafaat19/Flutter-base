@@ -133,16 +133,21 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Row(
+                   Row(
                     children: [
-                      Icon(
-                        Icons.arrow_back_rounded,
-                        color: AppTheme.whiteColor,
+                      InkWell(
+                        onTap:(){
+                          context.pop();
+                        },
+                        child: const Icon(
+                          Icons.arrow_back_rounded,
+                          color: AppTheme.whiteColor,
+                        ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
-                      Text(
+                     const  Text(
                         "Search",
                         style: AppTheme.fontStyleW700Size20ColorWhite,
                       )
