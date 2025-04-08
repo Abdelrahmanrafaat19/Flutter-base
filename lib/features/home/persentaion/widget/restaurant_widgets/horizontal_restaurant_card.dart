@@ -100,7 +100,9 @@ class _HorizontalRestaurantCardState extends State<HorizontalRestaurantCard> {
                           child: Padding(
                             padding:
                                 const EdgeInsets.all(defaultPaddingHorizontal),
-                            child: SVGIcons.localSVG(favoriteIconPath,
+                            child: SVGIcons.localSVG(
+                                widget.restaurant?.isFavorite == true ?
+                                favoriteIconWithBackgroundPath : unFavoriteIconPath,
                                 width: 24, height: 24),
                           ))),
                 )

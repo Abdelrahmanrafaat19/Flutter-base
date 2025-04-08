@@ -14,6 +14,7 @@ class RestaurantModel {
   final double? rating;
   final int? capacity;
   final double? cancellationFee;
+  final bool? isFavorite;
 
   RestaurantModel(
       {this.id,
@@ -28,7 +29,7 @@ class RestaurantModel {
       this.distance,
       this.rating,
       this.capacity,
-      this.cancellationFee});
+      this.cancellationFee,this.isFavorite,});
 
   factory RestaurantModel.fromJson(Map<String, dynamic> json) {
     return RestaurantModel(
@@ -95,5 +96,6 @@ Restaurant toRestaurantEntity(RestaurantModel restaurant) {
     distance: restaurant.distance,
     rating: restaurant.rating,
     capacity: restaurant.capacity,
+    isFavorite: restaurant.isFavorite
   );
 }

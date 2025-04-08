@@ -8,6 +8,7 @@ class Restaurant {
   final double? distance;
   final double? rating;
   final int? capacity;
+  final bool? isFavorite;
 
 
   Restaurant(
@@ -19,5 +20,5 @@ class Restaurant {
         this.isOpen,
         this.distance,
         this.rating,
-        this.capacity});
+        this.capacity,this.isFavorite,});
 }
