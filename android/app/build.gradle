@@ -30,8 +30,8 @@ android {
 
     compileOptions {
         // Align Java source and target compatibility with Kotlin's JVM target
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     defaultConfig {
@@ -46,7 +46,7 @@ android {
 
         // Set the JVM target for Kotlin
         kotlinOptions {
-            jvmTarget = "21"
+            jvmTarget = "17"
         }
     }
 

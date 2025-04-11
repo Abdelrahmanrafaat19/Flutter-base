@@ -143,7 +143,9 @@ class _SearchResultScreenState extends ConsumerState<SearchResultScreen> {
                         child: Column(
                           children: [
                             VerticalRestaurantCard(
-                                restaurant: item
+                                restaurant: item, onChangeFavoriteState: (restaurant) {
+
+                            },
                             ),
                             Container(
                               width: double.infinity,

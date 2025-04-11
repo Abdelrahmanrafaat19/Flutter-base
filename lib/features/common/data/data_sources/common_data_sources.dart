@@ -20,4 +20,17 @@ class CommonRemoteDataSource {
       data: requestBody,
     );
   }
+
+  FutureResponseModel updateFavoriteRestaurantStatus({
+    String? restaurantId,
+    bool? addFavorite
+  }) {
+    return _httpOps.postData(
+      endPoint: favoriteRestaurantsEndPoint,
+      data: {
+        "restaurantId": restaurantId,
+        "addFavorite": addFavorite
+      },
+    );
+  }
 }

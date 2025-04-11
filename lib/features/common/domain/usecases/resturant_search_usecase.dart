@@ -71,4 +71,20 @@ class RestaurantSearchUseCase
           errors: responseModel.errors);
     }
   }
+  void updateFavoriteRestaurantState(int id) {
+    final restaurants = [...?state.data];
+
+      final restaurantIndex = restaurants.indexWhere((res) => res.id == id);
+      print(restaurantIndex);
+      if (restaurantIndex != -1) {
+        final restaurant = restaurants[restaurantIndex];
+        restaurants[restaurantIndex] =
+            restaurant.copyWith(isFavorite: !(restaurant.isFavorite ?? false));
+
+
+        state = StateModel.success(restaurants);
+      }
+
+  }
+
 }

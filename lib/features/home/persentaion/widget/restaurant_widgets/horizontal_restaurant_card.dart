@@ -3,26 +3,36 @@ import 'package:flutter/material.dart';
 import 'package:flutter_base/core/Constants/Constants.dart';
 import 'package:flutter_base/core/Theme/app_theme.dart';
 import 'package:flutter_base/core/constants/assets.dart';
+import 'package:flutter_base/core/utils/extensions/request_handle_extension.dart';
+import 'package:flutter_base/core/utils/typedefs.dart';
 import 'package:flutter_base/core/widgets/circle_image.dart';
 import 'package:flutter_base/core/widgets/svg_icons.dart';
+import 'package:flutter_base/features/common/presentation/providers/usecases_providers.dart';
 import 'package:flutter_base/features/home/domain/entities/restaurant_entity.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class HorizontalRestaurantCard extends StatefulWidget {
+import '../../Providers/usecase_provider.dart';
+
+class HorizontalRestaurantCard extends ConsumerStatefulWidget {
   final Restaurant? restaurant;
-  const HorizontalRestaurantCard({
+  final OnRestaurantClick onChangeFavoriteState;
+  const HorizontalRestaurantCard(  {
     super.key,
-    this.restaurant,
+    this.restaurant,required this.onChangeFavoriteState,
   });
 
   @override
-  State<HorizontalRestaurantCard> createState() =>
+  ConsumerState<HorizontalRestaurantCard> createState() =>
       _HorizontalRestaurantCardState();
 }
 
-class _HorizontalRestaurantCardState extends State<HorizontalRestaurantCard> {
+class _HorizontalRestaurantCardState extends ConsumerState<HorizontalRestaurantCard> {
   @override
   Widget build(BuildContext context) {
+
     return Container(
       width: 275,
       clipBehavior: Clip.antiAlias,
@@ -96,7 +106,11 @@ class _HorizontalRestaurantCardState extends State<HorizontalRestaurantCard> {
                   child: Align(
                       alignment: AlignmentDirectional.topEnd,
                       child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            widget.onChangeFavoriteState(widget.restaurant);
+
+                            // updateFavoriteRestaurantState(widget.restaurant!);
+                          },
                           child: Padding(
                             padding:
                                 const EdgeInsets.all(defaultPaddingHorizontal),
@@ -224,6 +238,12 @@ class _HorizontalRestaurantCardState extends State<HorizontalRestaurantCard> {
           )
         ],
       ),
+    );
+  }
+  void updateFavoriteRestaurantState(Restaurant restaurant) {
+    ref.read(updateFavoriteRestaurantStateProvider.notifier).call(
+        restaurantId: restaurant.id,
+        addFavorite: !(restaurant.isFavorite??false)
     );
   }
 }

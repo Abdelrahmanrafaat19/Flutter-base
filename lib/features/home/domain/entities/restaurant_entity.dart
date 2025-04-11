@@ -8,7 +8,7 @@ class Restaurant {
   final double? distance;
   final double? rating;
   final int? capacity;
-  final bool? isFavorite;
+  bool? isFavorite;
 
 
   Restaurant(
@@ -21,4 +21,29 @@ class Restaurant {
         this.distance,
         this.rating,
         this.capacity,this.isFavorite,});
+  Restaurant copyWith({
+    int? id,
+    String? name,
+    String? address,
+    String? location,
+    int? cuisineId,
+    bool? isOpen,
+    double? distance,
+    double? rating,
+    int? capacity,
+    bool? isFavorite,
+  }) {
+    return Restaurant(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      address: address ?? this.address,
+      location: location ?? this.location,
+      cuisineId: cuisineId ?? this.cuisineId,
+      isOpen: isOpen ?? this.isOpen,
+      distance: distance ?? this.distance,
+      rating: rating ?? this.rating,
+      capacity: capacity ?? this.capacity,
+      isFavorite: isFavorite ?? this.isFavorite,
+    );
+  }
 }

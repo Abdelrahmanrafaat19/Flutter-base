@@ -1,24 +1,32 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_base/core/utils/extensions/request_handle_extension.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../../core/Constants/Constants.dart';
 import '../../../../../core/Theme/app_theme.dart';
 import '../../../../../core/constants/Assets.dart';
+import '../../../../../core/utils/typedefs.dart';
 import '../../../../../core/widgets/svg_icons.dart';
+import '../../../../common/presentation/providers/usecases_providers.dart';
 import '../../../domain/entities/restaurant_entity.dart';
 
-class VerticalRestaurantCard extends StatefulWidget {
+class VerticalRestaurantCard extends ConsumerStatefulWidget {
   final Restaurant? restaurant;
-  const VerticalRestaurantCard({super.key, this.restaurant});
+  final OnRestaurantClick onChangeFavoriteState;
+  const VerticalRestaurantCard( {super.key, this.restaurant,required this.onChangeFavoriteState,});
 
   @override
-  State<VerticalRestaurantCard> createState() => _VerticalRestaurantCardState();
+  ConsumerState<VerticalRestaurantCard> createState() => _VerticalRestaurantCardState();
 }
 
-class _VerticalRestaurantCardState extends State<VerticalRestaurantCard> {
+class _VerticalRestaurantCardState extends ConsumerState<VerticalRestaurantCard> {
   @override
   Widget build(BuildContext context) {
+
     return IntrinsicHeight(
       child: Container(
         clipBehavior: Clip.antiAlias,
@@ -196,13 +204,18 @@ class _VerticalRestaurantCardState extends State<VerticalRestaurantCard> {
                         ),
                         const Spacer(),
                         Skeleton.ignore(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: defaultPaddingHorizontal),
-                            child: SVGIcons.localSVG(
-                                widget.restaurant?.isFavorite == true ?
-                                favoriteIconWithBackgroundPath : unFavoriteIconPath,
-                                width: 24, height: 24),
+                          child: InkWell(
+                            onTap: (){
+                              widget.onChangeFavoriteState.call(widget.restaurant);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: defaultPaddingHorizontal),
+                              child: SVGIcons.localSVG(
+                                  widget.restaurant?.isFavorite == true ?
+                                  favoriteIconWithBackgroundPath : unFavoriteIconPath,
+                                  width: 24, height: 24),
+                            ),
                           ),
                         ),
                       ],

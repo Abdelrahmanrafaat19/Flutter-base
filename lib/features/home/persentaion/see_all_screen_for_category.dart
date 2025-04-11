@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/core/constants/constants.dart';
 import 'package:flutter_base/core/constants/eunms.dart';
+import 'package:flutter_base/core/utils/extensions/request_handle_extension.dart';
 import 'package:flutter_base/core/widgets/custom_app_bar.dart';
 import 'package:flutter_base/core/widgets/paginated_listview.dart';
 import 'package:flutter_base/features/home/data/models/item_selector.dart';
@@ -61,7 +62,9 @@ class _SeeAllScreenForCategoryState
   Widget build(BuildContext context) {
     var filterResult = ref.watch(restaurantFilterProvider);
     var restaurantsResult = ref.watch(restaurantSearchProvider);
-
+    handleState(updateFavoriteRestaurantStateProvider,showLoading: true,onSuccess: (res){
+      ref.read(restaurantSearchProvider.notifier).updateFavoriteRestaurantState(res.data??0);
+    });
     return Scaffold(
         backgroundColor: const Color(0xffFAFAFA),
         appBar: CustomAppBar(
@@ -140,7 +143,9 @@ class _SeeAllScreenForCategoryState
                       builder: (item) => Skeletonizer(
                             enabled:
                                 restaurantsResult.state == DataState.LOADING,
-                            child: VerticalRestaurantCard(restaurant: item),
+                            child: VerticalRestaurantCard(restaurant: item, onChangeFavoriteState: (restaurant) {
+                              updateFavoriteRestaurantState(restaurant!);
+                            },),
                           ))
                   : const SearchScreenBodyNotExixtData(
                       withBtu: false,
@@ -217,5 +222,12 @@ class _SeeAllScreenForCategoryState
         minRating: selectedRatingIndex != null
             ? ratings[selectedRatingIndex!].name.toString()
             : null);
+  }
+
+  void updateFavoriteRestaurantState(Restaurant restaurant) {
+    ref.read(updateFavoriteRestaurantStateProvider.notifier).call(
+        restaurantId: restaurant.id,
+        addFavorite: !(restaurant.isFavorite??false)
+    );
   }
 }

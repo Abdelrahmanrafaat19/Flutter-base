@@ -5,10 +5,12 @@ import 'package:flutter_base/core/Constants/Constants.dart';
 import 'package:flutter_base/core/Theme/app_theme.dart';
 import 'package:flutter_base/core/constants/app_routes.dart';
 import 'package:flutter_base/core/models/StateModel.dart';
+import 'package:flutter_base/core/utils/extensions/request_handle_extension.dart';
 import 'package:flutter_base/core/widgets/svg_icons.dart';
 import 'package:flutter_base/features/auth/domain/providers/user_provider.dart';
 import 'package:flutter_base/features/home/domain/entities/category_entity.dart';
 import 'package:flutter_base/features/home/domain/entities/cuisine_entity.dart';
+import 'package:flutter_base/features/home/domain/entities/restaurant_entity.dart';
 import 'package:flutter_base/features/home/persentaion/Providers/usecase_provider.dart';
 import 'package:flutter_base/features/home/persentaion/widget/category_widgets/horizontal_category_listview_with_title.dart';
 import 'package:flutter_base/features/home/persentaion/bottom_sheets/filter_bottom_sheet.dart';
@@ -22,6 +24,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/assets.dart';
 import '../../../core/utils/Extensions/utils_exts.dart';
+import '../../common/presentation/providers/usecases_providers.dart';
 import '../../location/data/address_model.dart';
 import '../../search/presentation/provider/resturant_use_case_provider.dart';
 
@@ -33,8 +36,8 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  List<Address> _addresses = [];
 
+  // Restaurant
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((callback) {
@@ -48,6 +51,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    handleState(updateFavoriteRestaurantStateProvider,showLoading: true,onSuccess: (res){
+      ref.read(fetchCategoriesStateNotifierProvider.notifier).updateFavoriteRestaurantState(res.data??0);
+    });
+
     final cuisinesState = ref.watch(fetchCuisinesStateNotifierProvider);
     final categoriesState = ref.watch(fetchCategoriesStateNotifierProvider);
     handleChangeHomeStatueBarColor();
@@ -204,7 +212,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   CategoryEntity(),
                                 ],
                             showLoading:
-                                categoriesState.state == DataState.LOADING,
+                                categoriesState.state == DataState.LOADING, onChangeRestaurantState: (restaurant) {
+                              if(restaurant != null) {
+                                updateFavoriteRestaurantState(restaurant);
+                              }
+                      },
                           )
                         : SizedBox(),
                     SizedBox(
@@ -239,5 +251,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       TITLE_KEY: cuisine.name,
       CUISINE_ID_KEY: cuisine.id,
     });
+  }
+
+  void updateFavoriteRestaurantState(Restaurant restaurant) {
+    ref.read(updateFavoriteRestaurantStateProvider.notifier).call(
+        restaurantId: restaurant.id,
+        addFavorite: !(restaurant.isFavorite??false)
+    );
   }
 }

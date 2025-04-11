@@ -12,13 +12,14 @@ class HorizontalRestaurantListWithTitle extends StatefulWidget {
   final CategoryEntity categoryItem;
   final bool showLoading;
   final OnRestaurantClick itemClick;
+  final OnRestaurantClick onChangeRestaurantState;
   final OnSeeAllCategoryClick onSeeAllClickListener;
   const HorizontalRestaurantListWithTitle(
       {super.key,
       required this.categoryItem,
       required this.showLoading,
       required this.itemClick,
-      required this.onSeeAllClickListener});
+      required this.onSeeAllClickListener, required this.onChangeRestaurantState});
 
   @override
   State<HorizontalRestaurantListWithTitle> createState() =>
@@ -55,13 +56,17 @@ class _HorizontalRestaurantListWithTitleState
                 enabled: widget.showLoading,
                 child: InkWell(
                   onTap: () {
-                    widget.itemClick.call(widget.categoryItem.rsRestaurants?[index]);
+                    widget.itemClick
+                        .call(widget.categoryItem.rsRestaurants?[index]);
                   },
                   child: Padding(
                     padding: const EdgeInsetsDirectional.only(
                         start: defaultPaddingHorizontal),
                     child: HorizontalRestaurantCard(
                       restaurant: widget.categoryItem.rsRestaurants?[index],
+                          onChangeFavoriteState: (restaurant) {
+                        widget.onChangeRestaurantState.call(restaurant);
+                      },
                     ),
                   ),
                 ),

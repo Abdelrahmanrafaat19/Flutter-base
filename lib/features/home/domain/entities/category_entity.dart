@@ -16,4 +16,22 @@ class CategoryEntity {
     this.rsRestaurants,
     this.featured,
   });
+  CategoryEntity copyWith({
+    int? id,
+    String? description,
+    int? parentId,
+    bool? fetchRestaurants,
+    List<Restaurant>? rsRestaurants,
+    bool? featured,
+  }) {
+    return CategoryEntity(
+      id: id ?? this.id,
+      description: description ?? this.description,
+      parentId: parentId ?? this.parentId,
+      fetchRestaurants: fetchRestaurants ?? this.fetchRestaurants,
+      rsRestaurants: rsRestaurants ?? this.rsRestaurants,
+      featured: featured ?? this.featured,
+    );
+  }
 }
+

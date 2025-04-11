@@ -6,13 +6,15 @@ import 'package:flutter_base/features/home/persentaion/widget/restaurant_widgets
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/constants/app_routes.dart';
+import '../../../../../core/utils/typedefs.dart';
 
 class HomeRestaurantListview extends StatefulWidget {
   final List<CategoryEntity> restaurants;
   final bool showLoading;
+  final OnRestaurantClick onChangeRestaurantState;
 
   const HomeRestaurantListview(
-      {super.key, required this.restaurants, required this.showLoading});
+      {super.key, required this.restaurants, required this.showLoading,required this.onChangeRestaurantState});
 
   @override
   State<HomeRestaurantListview> createState() => _HomeRestaurantListviewState();
@@ -30,7 +32,9 @@ class _HomeRestaurantListviewState extends State<HomeRestaurantListview> {
                 categoryItem: widget.restaurants[index],
                 showLoading: widget.showLoading,
                 itemClick: onItemClick,
-                onSeeAllClickListener: onSeeAllClickListener),
+                onSeeAllClickListener: onSeeAllClickListener, onChangeRestaurantState: (restaurant) {
+                  widget.onChangeRestaurantState.call(restaurant);
+            },),
           );
         }))
       ],
@@ -45,4 +49,5 @@ class _HomeRestaurantListviewState extends State<HomeRestaurantListview> {
       CATEGORY_ID_KEY: category.id,
     });
   }
+
 }

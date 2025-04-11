@@ -103,26 +103,28 @@ class _AllDataOfSearchCategoryScreenState
             SizedBox(
               height: 8,
             ),
-            Expanded(
-              child: PaginatedListView(
-                  dataList: [
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                  ],
-                  scrollPhysics: const AlwaysScrollableScrollPhysics(
-                      parent: BouncingScrollPhysics()),
-                  paginated: true,
-                  builder: (item) => const Skeletonizer(
-                        enabled: false,
-                        child: VerticalRestaurantCard(),
-                      )),
-            ),
+            // Expanded(
+            //   child: PaginatedListView(
+            //       dataList: [
+            //         "",
+            //         "",
+            //         "",
+            //         "",
+            //         "",
+            //         "",
+            //         "",
+            //         "",
+            //       ],
+            //       scrollPhysics: const AlwaysScrollableScrollPhysics(
+            //           parent: BouncingScrollPhysics()),
+            //       paginated: true,
+            //       builder: (item) => const Skeletonizer(
+            //             enabled: false,
+            //             child: VerticalRestaurantCard(restaurant : item ,onChangeFavoriteState: (restaurant) {
+            //
+            //             },),
+            //           )),
+            // ),
           ],
         ),
       ),

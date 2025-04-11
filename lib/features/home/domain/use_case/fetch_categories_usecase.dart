@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_base/features/home/domain/entities/category_entity.dart';
+import 'package:flutter_base/features/home/domain/entities/restaurant_entity.dart';
 import 'package:flutter_base/features/home/domain/repositories/home_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -42,6 +43,30 @@ class FetchCategoriesUseCase extends StateNotifier<StateModel<List<CategoryEntit
           state: DataState.ERROR,
           message: responseModel.message,
           errors: responseModel.errors);
+    }
+  }
+
+  void updateFavoriteRestaurantState(int id) {
+    final categories = [...?state.data];
+
+    final categoryIndex = categories.indexWhere((category) =>
+    category.rsRestaurants?.any((restaurant) => restaurant.id == id) ?? false);
+
+    if (categoryIndex != -1) {
+      final category = categories[categoryIndex];
+      final restaurants = [...?category.rsRestaurants];
+
+      final restaurantIndex = restaurants.indexWhere((r) => r.id == id);
+      if (restaurantIndex != -1) {
+        final restaurant = restaurants[restaurantIndex];
+        restaurants[restaurantIndex] =
+            restaurant.copyWith(isFavorite: !(restaurant.isFavorite ?? false));
+
+        categories[categoryIndex] =
+            category.copyWith(rsRestaurants: restaurants);
+
+        state = StateModel.success(categories);
+      }
     }
   }
 }

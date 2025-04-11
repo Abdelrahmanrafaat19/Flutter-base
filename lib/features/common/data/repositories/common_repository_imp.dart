@@ -8,16 +8,22 @@ class CommonRepositoryImp extends CommonRepository {
 
   CommonRepositoryImp(this._commonRemoteDataSource);
   @override
-  FutureResponseModel restaurantSearch({
-    String? page,
-    String? size,
-    String? localeIsoCode,
-    Map<String, dynamic>? requestBody
-  }) {
+  FutureResponseModel restaurantSearch(
+      {String? page,
+      String? size,
+      String? localeIsoCode,
+      Map<String, dynamic>? requestBody}) {
     return _commonRemoteDataSource.restaurantSearch(
-      page: page,
-      size: size,
-      localeIsoCode: localeIsoCode, requestBody: requestBody
-    );
+        page: page,
+        size: size,
+        localeIsoCode: localeIsoCode,
+        requestBody: requestBody);
+  }
+
+  @override
+  FutureResponseModel updateFavoriteRestaurantStatus(
+      {String? restaurantId, bool? addFavorite}) {
+    return _commonRemoteDataSource.updateFavoriteRestaurantStatus(
+        restaurantId: restaurantId, addFavorite: addFavorite);
   }
 }

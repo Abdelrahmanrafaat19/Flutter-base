@@ -8,4 +8,9 @@ abstract class CommonRepository{
     String? localeIsoCode,
     Map<String, dynamic>? requestBody
   });
+
+  FutureResponseModel updateFavoriteRestaurantStatus({
+    String? restaurantId,
+    bool? addFavorite
+  });
 }
