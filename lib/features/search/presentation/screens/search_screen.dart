@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_base/core/constants/app_routes.dart';
 import 'package:flutter_base/core/constants/assets.dart';
 import 'package:flutter_base/core/constants/constants.dart';
+import 'package:flutter_base/core/models/StateModel.dart';
 import 'package:flutter_base/core/widgets/app_button.dart';
 import 'package:flutter_base/features/home/persentaion/widget/search_with_filter.dart';
 import 'package:flutter_base/features/search/presentation/screens/all_data_of_search_category_screen.dart';
@@ -18,7 +19,9 @@ import '../../../../core/widgets/svg_icons.dart';
 import '../../../auth/presentation/providers/usecase_provider.dart';
 import '../../../common/presentation/providers/usecases_providers.dart';
 import '../../../home/data/models/item_selector.dart';
+import '../../../home/domain/entities/cuisine_entity.dart';
 import '../../../home/persentaion/Providers/filter_state_notifiers.dart';
+import '../../../home/persentaion/Providers/usecase_provider.dart';
 import '../../../home/persentaion/bottom_sheets/filter_bottom_sheet.dart';
 import '../provider/resturant_use_case_provider.dart';
 import '../widgets/intil_body_for_search_screen.dart';
@@ -26,11 +29,14 @@ import '../widgets/search_item_list_initil_body.dart';
 import '../widgets/search_screen_body_not_exixt_data.dart';
 
 class SearchScreen extends ConsumerStatefulWidget {
-
-
   final int? cuisineId;
   final int? categoryId;
-  const SearchScreen( {super.key,this.cuisineId, this.categoryId,});
+
+  const SearchScreen({
+    super.key,
+    this.cuisineId,
+    this.categoryId,
+  });
 
   @override
   ConsumerState<SearchScreen> createState() => _SearchScreenState();
@@ -46,6 +52,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   RangeValues? selectRangeValues;
   RangeValues? selectDistantRangeValues;
   int page = 0;
+  List<Cuisine> cuisines = [];
   List<Map<String, dynamic>> data = [
     {
       "title": "See all restaurants",
@@ -72,13 +79,22 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       "subTitle": "Cuisine",
     }
   ];
- @override
-  void initState() {
 
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((callback) {
+      cuisines.clear();
+      var cuisinesList = ref.read(fetchAllCuisinesStateNotifierProvider);
+      cuisines = cuisinesList.data ?? [];
+      fetchRestaurants(page);
+    });
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
+    final restName =
+        ref.watch(searchOnRestaurantByNameDataStateNotifierProvider);
     return Scaffold(
       backgroundColor: AppTheme.code006060Color,
       floatingActionButton: FloatingActionButton(
@@ -99,37 +115,67 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             Container(
               width: double.infinity,
               height: 150,
-              padding: EdgeInsets.symmetric(
-                horizontal: defaultPaddingHorizontal,
-                vertical: 25,
+              padding: const EdgeInsets.only(
+                left: defaultPaddingHorizontal,
+                right: defaultPaddingHorizontal,
+                top: 23,
               ),
               decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  AppTheme.code006060Color,
-                  AppTheme.code008080Color,
-                ],
-              )),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: AppSearchBarWithFilter(
-                  controller: searchController,
-                  hasFilter: true,
-                  enableSearch: true,
-                  // filterIconColor: AppTheme.appGrey15,
-                  onFilterClick: () {
-                    showFilterWithDistantBottomSheet();
-                  },
-
-                  onTextChangeListener: (value) {
-                    searchValue = value;
-                    page = 0;
-                    fetchRestaurants(page);
-                  },
-                  hintTxt: "Search for restaurant, cuisines....",
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    AppTheme.code006060Color,
+                    AppTheme.code008080Color,
+                  ],
                 ),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                   Row(
+                    children: [
+                      InkWell(
+                        onTap:(){
+                          context.pop();
+                        },
+                        child: const Icon(
+                          Icons.arrow_back_rounded,
+                          color: AppTheme.whiteColor,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                     const  Text(
+                        "Search",
+                        style: AppTheme.fontStyleW700Size20ColorWhite,
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: AppSearchBarWithFilter(
+                      controller: searchController,
+                      hasFilter: true,
+                      enableSearch: true,
+                      // filterIconColor: AppTheme.appGrey15,
+                      onFilterClick: () {
+                        showFilterBottomSheet();
+                      },
+
+                      onTextChangeListener: (value) {
+                        searchRestaurantByName(value);
+                        print("the Length of Data is ${restName.data?.length}");
+                        setState(() {});
+                      },
+                      hintTxt: "Search for restaurant, cuisines....",
+                    ),
+                  ),
+                ],
               ),
             ),
             Expanded(
@@ -139,9 +185,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 ),
                 child: searchController.text.isEmpty
                     ? IntilBodyForSearchScreen(data: data)
-                    : data.length == 0
-                        ? SearchScreenBodyExictData(data: data)
-                        : SearchScreenBodyNotExixtData(),
+                    : (restName.state==DataState.SUCCESS&&restName.data?.isNotEmpty == true)||restName.state==DataState.LOADING
+                        ? SearchScreenBodyExictData(enableLoading: restName.state==DataState.LOADING,data: restName.data ?? ["Karim","Karim","Karim","Karim","Karim","Karim","Karim","Karim","Karim","Karim","Karim","Karim",])
+                        : const SearchScreenBodyNotExixtData(),
               ),
             ),
           ],
@@ -150,87 +196,150 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     );
   }
 
-  void showFilterWithDistantBottomSheet() {
+  // void showFilterWithDistantBottomSheet() {
+  //   showModalBottomSheet(
+  //     isScrollControlled: true,
+  //     backgroundColor: Colors.white,
+  //     shape: const RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.only(
+  //             topRight: Radius.circular(10), topLeft: Radius.circular(10))),
+  //     context: context,
+  //     builder: (BuildContext context) => FilterBottomSheet(
+  //       hasDistant: true,
+  //       initSortByItemIndex: selectedSortByItemIndex,
+  //       initCuisinesIndex: selectedCuisinesIndex,
+  //       initRatingIndex: selectedRatingIndex,
+  //       initRatingValue: selectRangeValues,
+  //       initDistantRatingValue: selectDistantRangeValues,
+  //       onFilterApply: (sortByItemIndex, cuisinesIndex, ratingIndex,
+  //           rangeValues, rangeDistantValue) {
+  //         print("sortByItemIndex $sortByItemIndex \n"
+  //             "cuisinesIndex $cuisinesIndex\n"
+  //             "ratingIndex $ratingIndex\n"
+  //             "rangeValues $rangeValues"
+  //             "range Distant Value id  $rangeDistantValue");
+  //         selectedSortByItemIndex = sortByItemIndex;
+  //         selectedCuisinesIndex = cuisinesIndex;
+  //         selectedRatingIndex = ratingIndex;
+  //         selectRangeValues = rangeValues;
+  //         selectDistantRangeValues = rangeDistantValue;
+  //         ref.read(restaurantFilterProvider.notifier).updateStatue([]);
+  //         filterList.clear();
+  //         if (selectedSortByItemIndex != null) {
+  //           filterList.add(sortByItems[selectedSortByItemIndex!]);
+  //         }
+  //         if (selectedCuisinesIndex != null) {
+  //           // filterList.add(sortByItems[selectedSortByItemIndex]);
+  //         }
+  //         if (selectedRatingIndex != null) {
+  //           filterList.add(ratings[selectedRatingIndex!]);
+  //         }
+  //         if (selectRangeValues != null) {
+  //           filterList.add(FilterItemSelector(
+  //               name: "${rangeValues?.start} - ${rangeValues?.end}",
+  //               type: FilterType.Price));
+  //         }
+  //         if (selectDistantRangeValues != null) {
+  //           filterList.add(FilterItemSelector(
+  //               name: "${rangeDistantValue?.start} - ${rangeDistantValue?.end}",
+  //               type: FilterType.Distant));
+  //         }
+  //         print(filterList.length);
+  //         ref.read(restaurantFilterProvider.notifier).updateStatue(filterList);
+  //         navigateToSearchScreen(
+  //           filterList: filterList,
+  //           selectDistantRangeValues: selectDistantRangeValues,
+  //           selectedCuisinesIndex: selectedCuisinesIndex,
+  //           selectedRatingIndex: selectedRatingIndex,
+  //           selectedSortByItemIndex: selectedSortByItemIndex,
+  //           selectRangeValues: selectRangeValues,
+  //         );
+  //       },
+  //
+  //     ),
+  //   );
+  // }
+  void showFilterBottomSheet() {
     showModalBottomSheet(
-      isScrollControlled: true,
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topRight: Radius.circular(10), topLeft: Radius.circular(10))),
-      context: context,
-      builder: (BuildContext context) => FilterBottomSheet(
-        hasDistant: true,
-        initSortByItemIndex: selectedSortByItemIndex,
-        initCuisinesIndex: selectedCuisinesIndex,
-        initRatingIndex: selectedRatingIndex,
-        initRatingValue: selectRangeValues,
-        initDistantRatingValue: selectDistantRangeValues,
-        onFilterApply: (sortByItemIndex, cuisinesIndex, ratingIndex,
-            rangeValues, rangeDistantValue) {
-          print("sortByItemIndex $sortByItemIndex \n"
-              "cuisinesIndex $cuisinesIndex\n"
-              "ratingIndex $ratingIndex\n"
-              "rangeValues $rangeValues"
-              "range Distant Value id  $rangeDistantValue");
-          selectedSortByItemIndex = sortByItemIndex;
-          selectedCuisinesIndex = cuisinesIndex;
-          selectedRatingIndex = ratingIndex;
-          selectRangeValues = rangeValues;
-          selectDistantRangeValues = rangeDistantValue;
-          ref.read(restaurantFilterProvider.notifier).updateStatue([]);
-          filterList.clear();
-          if (selectedSortByItemIndex != null) {
-            filterList.add(sortByItems[selectedSortByItemIndex!]);
-          }
-          if (selectedCuisinesIndex != null) {
-            // filterList.add(sortByItems[selectedSortByItemIndex]);
-          }
-          if (selectedRatingIndex != null) {
-            filterList.add(ratings[selectedRatingIndex!]);
-          }
-          if (selectRangeValues != null) {
-            filterList.add(FilterItemSelector(
-                name: "${rangeValues?.start} - ${rangeValues?.end}",
-                type: FilterType.Price));
-          }
-          if (selectDistantRangeValues != null) {
-            filterList.add(FilterItemSelector(
-                name: "${rangeDistantValue?.start} - ${rangeDistantValue?.end}",
-                type: FilterType.Distant));
-          }
-          print(filterList.length);
-          ref.read(restaurantFilterProvider.notifier).updateStatue(filterList);
-          navigateToSearchScreen(
-            filterList: filterList,
-            selectDistantRangeValues: selectDistantRangeValues,
-            selectedCuisinesIndex: selectedCuisinesIndex,
-            selectedRatingIndex: selectedRatingIndex,
-            selectedSortByItemIndex: selectedSortByItemIndex,
-            selectRangeValues: selectRangeValues,
-          );
-        },
-
-      ),
-    );
+        isScrollControlled: true,
+        backgroundColor: Colors.white,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(10), topLeft: Radius.circular(10))),
+        context: context,
+        builder: (BuildContext context) => FilterBottomSheet(
+              hasDistant: true,
+              enableFilterByCuisine: widget.cuisineId == null,
+              initSortByItemIndex: selectedSortByItemIndex,
+              initCuisinesIndex: selectedCuisinesIndex,
+              initRatingIndex: selectedRatingIndex,
+              initRatingValue: selectRangeValues,
+              onFilterApply: (sortByItemIndex, cuisinesIndex, ratingIndex,
+                  rangeValues, valueDistant) {
+                print("sortByItemIndex $sortByItemIndex \n"
+                    "cuisinesIndex $cuisinesIndex\n"
+                    "ratingIndex $ratingIndex\n"
+                    "rangeValues $rangeValues");
+                selectedSortByItemIndex = sortByItemIndex;
+                selectedCuisinesIndex = cuisinesIndex;
+                selectedRatingIndex = ratingIndex;
+                selectRangeValues = rangeValues;
+                ref.read(restaurantFilterProvider.notifier).updateStatue([]);
+                filterList.clear();
+                if (selectedSortByItemIndex != null) {
+                  filterList.add(sortByItems[selectedSortByItemIndex!]);
+                }
+                if (selectedCuisinesIndex != null) {
+                  filterList.add(FilterItemSelector(
+                      id: cuisines[selectedCuisinesIndex!].id,
+                      name: cuisines[selectedCuisinesIndex!].name,
+                      type: FilterType.Cuisines));
+                }
+                if (selectedRatingIndex != null) {
+                  filterList.add(ratings[selectedRatingIndex!]);
+                }
+                if (selectRangeValues != null) {
+                  filterList.add(FilterItemSelector(
+                      name: "${rangeValues?.start} - ${rangeValues?.end}",
+                      type: FilterType.Price));
+                }
+                print(filterList.length);
+                ref
+                    .read(restaurantFilterProvider.notifier)
+                    .updateStatue(filterList);
+                // page = 0;
+                // fetchRestaurants(page);
+                navigateToSearchScreen(
+                  filterList: filterList,
+                  selectDistantRangeValues: selectDistantRangeValues,
+                  selectedCuisinesIndex: selectedCuisinesIndex,
+                  selectedRatingIndex: selectedRatingIndex,
+                  selectedSortByItemIndex: selectedSortByItemIndex,
+                  selectRangeValues: selectRangeValues,
+                );
+              },
+            ));
   }
 
   void navigateToSearchScreen(
-      {required List<FilterItemSelector> filterList,
+      {List<FilterItemSelector>? filterList,
       RangeValues? selectDistantRangeValues,
+      String? searchText,
       int? selectedCuisinesIndex,
       int? selectedRatingIndex,
       int? selectedSortByItemIndex,
       RangeValues? selectRangeValues}) async {
     // fetchRestaurants(page);
-    context.push(searchScreenResultRoute,extra: {
-      FILTER_LIST_KEY:filterList,
-      SELECT_DISTANT_RANGE_VALUES_KEY:selectDistantRangeValues,
-      SELECTED_SORT_BY_ITEM_INDEX_KEY:selectedSortByItemIndex,
-      SELECT_CUISINES_INDEX_KEY:selectedCuisinesIndex,
-      SELECT_RATING_INDEX_KEY:selectedRatingIndex,
-      SELECT_RANGE_VALUE_KEY:selectRangeValues,
+    context.push(searchScreenResultRoute, extra: {
+      FILTER_LIST_KEY: filterList,
+      SELECT_DISTANT_RANGE_VALUES_KEY: selectDistantRangeValues,
+      SELECTED_SORT_BY_ITEM_INDEX_KEY: selectedSortByItemIndex,
+      SELECT_CUISINES_INDEX_KEY: selectedCuisinesIndex,
+      SELECT_RATING_INDEX_KEY: selectedRatingIndex,
+      SELECT_RANGE_VALUE_KEY: selectRangeValues,
     });
   }
+
   void fetchRestaurants(int page) {
     ref.read(restaurantSearchProvider.notifier).call(
         page: page,
@@ -239,6 +348,12 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         categoryId: widget.categoryId,
         restaurant: searchValue?.isNotEmpty == true ? searchValue : null,
         cuisineId: widget.cuisineId ?? selectedCuisinesIndex,
-        minRating:selectedRatingIndex?.toString());
+        minRating: selectedRatingIndex?.toString());
+  }
+
+  void searchRestaurantByName(String textSearch) {
+    ref
+        .read(searchOnRestaurantByNameDataStateNotifierProvider.notifier)
+        .call(searchText: textSearch);
   }
 }

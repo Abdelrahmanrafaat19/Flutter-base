@@ -58,6 +58,7 @@ dependencies:
   local_auth: ^2.3.0
   skeletonizer: ^1.1.0
   permission_handler: 11.3.0
+  fluttertoast: ^8.2.2
 
 
 dev_dependencies:

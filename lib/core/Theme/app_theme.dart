@@ -207,14 +207,17 @@ class AppTheme {
   static const TextStyle style15W400appGrey7Color =
       TextStyle(color: appGrey7, fontSize: 16, fontWeight: FontWeight.w400);
 
-
   static const TextStyle styleWithTextGray7AdelleSansExtendedFonts16w400 =
       TextStyle(color: appGrey7, fontSize: 16, fontWeight: FontWeight.w400);
   static const TextStyle style20SemiBoldcode333740 =
       TextStyle(color: appGunmetal, fontWeight: FontWeight.w500, fontSize: 20);
   static const TextStyle styleWithTextRedAdelleSansExtendedFonts16w400 =
       TextStyle(color: mainAppColor, fontSize: 16, fontWeight: FontWeight.w400);
-
+static const TextStyle fontStyleW700Size20ColorWhite=TextStyle(
+  color: whiteColor,
+  fontWeight: FontWeight.w700,
+  fontSize: 20
+);
   static const TextStyle fontStyle16color333740 = TextStyle(
       color: Color(0xff333740), fontWeight: FontWeight.w400, fontSize: 16);
   static const TextStyle styleWithTextGray7AdelleSansExtendedFonts12w400 =

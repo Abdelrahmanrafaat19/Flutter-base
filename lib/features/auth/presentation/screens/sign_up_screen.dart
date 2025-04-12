@@ -15,6 +15,7 @@ import 'package:flutter_base/features/auth/presentation/widgets/auth_header_widg
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/widgets/language_text.dart';
@@ -66,29 +67,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       checkIfDataValidStateNotifierProvider,
       showLoading: true,
       onSuccess: (res) {
-        // goToSendOtp();
-        List errors=[
-          "email : Email is inValid",
-          "phoneNumber : phone is inValid",
-        ];
-        Map<String, String> errorMap = {
-
-        };
-
-        for (String error in (errors ?? [])) {
-          if (error.contains("email")) {
-            errorMap["email"] = error;
-
-          }
-          if (error.contains("phoneNumber")) {
-            errorMap["phoneNumber"] = error;
-          }
-          if (error.contains("name")) {
-            errorMap["name"] = error;
-          }
-        }
-        debugPrint("this Error Map $errorMap");
-        ref.read(validationSignUpProvider.notifier).updateStatue(errorMap);
+        goToSendOtp();
       },
       onFail: (res) {
         Map<String, String> errorMap = {};
@@ -99,6 +78,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
           }
           if (error.contains("phone")) {
             errorMap["phone"] = error;
+
           }
           if (error.contains("name")) {
             errorMap["name"] = error;
@@ -125,82 +105,80 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const AuthHeaderWidget(
-                marginTop: 36,
-                marginBottom: 64,
+                marginTop: 0.0,
+                marginBottom: 48,
               ),
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: LabeledTextField(
-                      controller: _firstNameController,
-                      focusNode: _focusNode,
-                      hint: "yourname",
-                      isvalidate: isFirstNameValidate,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          isFirstNameValidate = false;
-                          return "First name is required";
-                        }
-                        final RegExp nameRegExp = RegExp(r"^[a-zA-Z]{2,}$");
-                        if (!nameRegExp.hasMatch(value)) {
-                          isFirstNameValidate = false;
+              LabeledTextField(
+                controller: _firstNameController,
+                focusNode: _focusNode,
+                hint: "yourname",
+                isvalidate: isFirstNameValidate,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    isFirstNameValidate = false;
+                    return "First name is required";
+                  }
+                  final RegExp nameRegExp = RegExp(r"^[a-zA-Z]{2,}$");
+                  if (!nameRegExp.hasMatch(value)) {
+                    isFirstNameValidate = false;
 
-                          return "letters only, at least 2 characters";
-                        }
-                        isFirstNameValidate = true;
+                    return "letters only, at least 2 characters";
+                  }
+                  isFirstNameValidate = true;
 
-                        return null;
-                      },
-                      label: const Text(
-                        "Firstname",
-                        style: AppTheme.style14BoldBlack,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                      child: LabeledTextField(
-                    isvalidate: isLastNameValidate,
-                    controller: _lastNameController,
-                    hint: "yourname",
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        isLastNameValidate = false;
-                        return "Last name is required";
-                      }
-                      final RegExp nameRegExp = RegExp(r"^[a-zA-Z]{2,}$");
-                      if (!nameRegExp.hasMatch(value)) {
-                        isLastNameValidate = false;
-
-                        return "letters only, at least 2 characters";
-                      }
-                      isLastNameValidate = true;
-                      return null;
-                    },
-                    label: const Text(
-                      "Lastname",
-                      style: AppTheme.style14BoldBlack,
-                    ),
-                  )),
-                ],
+                  return null;
+                },
+                label: const Text(
+                  "Firstname",
+                  style: AppTheme.style14BoldBlack,
+                ),
               ),
+              const SizedBox(
+                height: 16,
+              ),
+              LabeledTextField(
+                isvalidate: isLastNameValidate,
+                controller: _lastNameController,
+                hint: "yourname",
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    isLastNameValidate = false;
+                    return "Last name is required";
+                  }
+                  final RegExp nameRegExp = RegExp(r"^[a-zA-Z]{2,}$");
+                  if (!nameRegExp.hasMatch(value)) {
+                    isLastNameValidate = false;
+
+                    return "letters only, at least 2 characters";
+                  }
+                  isLastNameValidate = true;
+                  return null;
+                },
+                label: const Text(
+                  "Lastname",
+                  style: AppTheme.style14BoldBlack,
+                ),
+              ),
+
               const SizedBox(height: 16),
               PhoneNumberField(
                 isPhoneNumberIsValidate: !validState.containsKey("phone"),
                 controller: _phoneController,
                 validator: (phone) {
-                  if (_phoneNumber?.completeNumberWithPlus == null || _phoneNumber?.completeNumberWithPlus.isEmpty == true) {
+                  if (_phoneNumber?.completeNumberWithPlus == null ||
+                      _phoneNumber?.completeNumberWithPlus.isEmpty == true) {
                     isPhoneNumberValidate = false;
                     return 'Phone number is required';
                   }
                   final RegExp phoneRegExp = RegExp(r"^\+\d{1,3}\d{7,12}$");
-                  if (!phoneRegExp.hasMatch(_phoneNumber!.completeNumberWithPlus)) {
+                  if (!phoneRegExp
+                      .hasMatch(_phoneNumber!.completeNumberWithPlus)) {
                     isPhoneNumberValidate = false;
                     return 'Enter a valid phone number (e.g., +1234567890)';
                   }
-                  if (validState.containsKey("phoneNumber")) {
-                    return validState["phoneNumber"];
+                  if (validState.containsKey("phone")) {
+                    String errorMessage = validState["phone"]!.replaceFirst("phone: ", "");
+                    return errorMessage;
                   }
                   // isPhoneNumberValidate = true;
 
@@ -210,7 +188,6 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   _phoneNumber = value;
                   ref.read(validationSignUpProvider.notifier).updateStatue({});
                   print("onChanged phone : $value");
-
                 },
               ),
               const SizedBox(height: 16),
@@ -220,7 +197,6 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 controller: _emailController,
                 hint: "example@gmail.com",
                 validator: (email) {
-
                   if (email != null && email.isNotEmpty) {
                     final RegExp emailRegExp = RegExp(
                         r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
@@ -230,11 +206,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     }
                   }
                   if (validState.containsKey("email")) {
-                    return validState["email"];
+                    String errorMessage = validState["email"]!.replaceFirst("email: ", "");
+                    return errorMessage;
                   }
 
-
-                    // isemailValidate = true;
+                  // isemailValidate = true;
                   return null; // Email is optional, so we allow empty input
                 },
                 label: const Text(
@@ -242,7 +218,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   style: AppTheme.style14BoldBlack,
                 ),
                 onChanged: (value) {
-                  _emailController.text=value;
+                  _emailController.text = value;
                   ref.read(validationSignUpProvider.notifier).updateStatue({});
                 },
               ),
@@ -384,8 +360,20 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 text: "Continue",
                 onPress: () {
                   if (_formKey.currentState!.validate()) {
-                    setState(() {});
-                    checkIfDataValid();
+                    if(isAgree==true){
+                      setState(() {});
+                      checkIfDataValid();
+                    }else{
+                      Fluttertoast.showToast(
+                        msg: "Please Agree to the Terms to Conditions",
+                        toastLength: Toast.LENGTH_SHORT, // or Toast.LENGTH_LONG
+                        gravity: ToastGravity.BOTTOM, // TOP, CENTER, BOTTOM
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.black54,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+                    }
                     // goToSendOtp();
                   }
                 },
@@ -442,7 +430,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         firstName: _firstNameController.text,
         lastName: _lastNameController.text,
         email: _emailController.text,
-        phoneNumber: _phoneNumber?.completeNumberWithPlus,
+        phoneNumber: _phoneNumber?.completeNumberWithoutPlus,
         password: _passwordController.text);
   }
 

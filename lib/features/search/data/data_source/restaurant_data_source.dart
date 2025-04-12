@@ -42,4 +42,15 @@ class RestaurantDataSource {
       },
     );
   }
+
+  FutureResponseModel searchRestaurantByName({
+    int? page = 0,
+    int? size = 10,
+    Map<String, dynamic>? requestBody
+  }){
+    return _httpOps.postData(
+      endPoint: searchRestaurantNameEndPoint,
+      data:requestBody,
+    );
+  }
 }

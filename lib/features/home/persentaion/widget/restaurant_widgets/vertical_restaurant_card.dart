@@ -84,7 +84,7 @@ class _VerticalRestaurantCardState extends ConsumerState<VerticalRestaurantCard>
             ),
             Expanded(
               child: Container(
-                padding: EdgeInsetsDirectional.only(start: 16),
+                padding: const EdgeInsetsDirectional.only(start: 16),
                 decoration: BoxDecoration(
                     border: Border.all(color: AppTheme.appGrey8, width: 1),
                     borderRadius: BorderRadiusDirectional.only(

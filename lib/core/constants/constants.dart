@@ -27,6 +27,7 @@ const SELECTED_SORT_BY_ITEM_INDEX_KEY="selectedSortByItemIndex";
 const SELECT_RATING_INDEX_KEY="selectedRatingIndex";
 const SELECT_CUISINES_INDEX_KEY="selectedCuisinesIndex";
 const SELECT_DISTANT_RANGE_VALUES_KEY="selectDistantRangeValues";
+const SEARCH_TEXT="searchText";
 
 
 /*

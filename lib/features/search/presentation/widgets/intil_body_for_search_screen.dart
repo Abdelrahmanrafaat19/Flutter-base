@@ -39,10 +39,7 @@ class _IntilBodyForSearchScreenState
             onTap: () {
               filterResult.clear();
 
-              context.push(
-                allDataOfSearchCategoryRoute,
-                extra: widget.data[index]["title"],
-              );
+              onSeeAllClickListener(widget.data[index]["title"]);
             },
             child: SearchItemListInitilBody(
               listLength: widget.data.length,
@@ -58,5 +55,10 @@ class _IntilBodyForSearchScreenState
     );
   }
 
+  void onSeeAllClickListener(String title) {
+    context.push(seeAllScreenForCategoryRoute, extra: {
+      TITLE_KEY:title,
 
+    });
+  }
 }

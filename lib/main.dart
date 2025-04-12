@@ -149,7 +149,7 @@ class MyApp extends ConsumerWidget {
       GoRoute(
         path: splashScreenRoute,
         builder: (BuildContext context, GoRouterState state) =>
-            const SplashScreen(),
+             LoginScreen(),
       ),
       GoRoute(
         path: mainScreenRoute,
@@ -231,12 +231,14 @@ class MyApp extends ConsumerWidget {
           builder: (BuildContext context, GoRouterState state) {
             var extra = state.extra as Map;
             return SearchResultScreen(
+              searchText: extra[SEARCH_TEXT],
               filterList: extra[FILTER_LIST_KEY],
               selectRangeValues: extra[SELECT_RANGE_VALUE_KEY],
               selectedSortByItemIndex: extra[SELECTED_SORT_BY_ITEM_INDEX_KEY],
               selectedRatingIndex: extra[SELECT_RATING_INDEX_KEY],
               selectedCuisinesIndex: extra[SELECT_CUISINES_INDEX_KEY],
               selectDistantRangeValues: extra[SELECT_DISTANT_RANGE_VALUES_KEY],
+
             );
           }),
       GoRoute(
