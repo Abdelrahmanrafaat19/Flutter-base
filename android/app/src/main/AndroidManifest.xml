@@ -10,6 +10,8 @@
         android:label="flutter_base"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+                   android:value="AIzaSyAIhooYpv80pRyeAhyNzAyb4YGCmkTUlXA"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

@@ -161,7 +161,9 @@ class _SearchResultScreenState extends ConsumerState<SearchResultScreen> {
                     restaurantsResult.state == DataState.LOADING,
                     child: Column(
                       children: [
-                        VerticalRestaurantCard(restaurant: item),
+                        VerticalRestaurantCard(restaurant: item, onChangeFavoriteState: (restaurant) {
+
+                        },),
                         Container(
                           width: double.infinity,
                           height: 170,

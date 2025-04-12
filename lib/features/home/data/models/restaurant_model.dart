@@ -1,11 +1,12 @@
 import '../../domain/entities/restaurant_entity.dart';
+import 'location_model.dart';
 
 class RestaurantModel {
   final int? id;
   final String? name;
   final String? phone;
   final String? address;
-  final String? location;
+  // final LocationModel? location;
   final int? cuisineId;
   final List<int>? categoryIds;
   final List<String>? certifications;
@@ -21,7 +22,7 @@ class RestaurantModel {
       this.name,
       this.phone,
       this.address,
-      this.location,
+      // this.location,
       this.cuisineId,
       this.categoryIds,
       this.certifications,
@@ -37,7 +38,7 @@ class RestaurantModel {
       name: json['name'],
       phone: json['phone'],
       address: json['address'],
-      location: json['location'],
+      // location: json['location'],
       cuisineId: json['cuisineId'],
       categoryIds: List<int>.from(json['categoryIds']),
       certifications: List<String>.from(json['certifications']),
@@ -55,7 +56,7 @@ class RestaurantModel {
       'name': name,
       'phone': phone,
       'address': address,
-      'location': location,
+      // 'location': location,
       'cuisineId': cuisineId,
       'categoryIds': categoryIds,
       'I/certifications': certifications,
@@ -76,7 +77,7 @@ class RestaurantModel {
       id: entity.id,
       name: entity.name,
       address: entity.address,
-      location: entity.location,
+      // location: entity.location,
       cuisineId: entity.cuisineId,
       isOpen: entity.isOpen,
       distance: entity.distance,
@@ -90,7 +91,7 @@ Restaurant toRestaurantEntity(RestaurantModel restaurant) {
     id: restaurant.id,
     name: restaurant.name,
     address: restaurant.address,
-    location: restaurant.location,
+    // location: restaurant.location,
     cuisineId: restaurant.cuisineId,
     isOpen: restaurant.isOpen,
     distance: restaurant.distance,

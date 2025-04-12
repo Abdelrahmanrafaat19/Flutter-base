@@ -222,7 +222,7 @@ class _HorizontalRestaurantCardState extends ConsumerState<HorizontalRestaurantC
                       padding: const EdgeInsetsDirectional.symmetric(
                           horizontal: 6.0),
                       child: Text(
-                        widget.restaurant?.location ?? "",
+                        "widget.restaurant?.location" ?? "",
                         style: AppTheme.styleWithAppGrey7Fonts14w400,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
@@ -238,12 +238,6 @@ class _HorizontalRestaurantCardState extends ConsumerState<HorizontalRestaurantC
           )
         ],
       ),
-    );
-  }
-  void updateFavoriteRestaurantState(Restaurant restaurant) {
-    ref.read(updateFavoriteRestaurantStateProvider.notifier).call(
-        restaurantId: restaurant.id,
-        addFavorite: !(restaurant.isFavorite??false)
     );
   }
 }

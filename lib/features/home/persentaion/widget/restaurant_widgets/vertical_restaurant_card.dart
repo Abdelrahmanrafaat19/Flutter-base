@@ -182,43 +182,47 @@ class _VerticalRestaurantCardState extends ConsumerState<VerticalRestaurantCard>
                     const SizedBox(
                       height: 8,
                     ),
-                    Row(
-                      children: [
-                        Skeleton.replace(
-                            replacement: Container(
-                              width: 70,
-                              height: 20,
-                              color: Colors.white,
-                            ),
-                            child: SVGIcons.localSVG(gpsIconPath,
-                                width: 16, height: 16)),
-                        Padding(
-                          padding: const EdgeInsetsDirectional.symmetric(
-                              horizontal: 6.0),
-                          child: Text(
-                            widget.restaurant?.location ?? "",
-                            style: AppTheme.styleWithAppGrey7Fonts14w400,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ),
+                    Skeleton.replace(
+                        replacement: Container(
+                          width: 70,
+                          height: 20,
+                          color: Colors.white,
                         ),
-                        const Spacer(),
-                        Skeleton.ignore(
-                          child: InkWell(
-                            onTap: (){
-                              widget.onChangeFavoriteState.call(widget.restaurant);
-                            },
+                      child: Row(
+                        children: [
+                          Skeleton.ignore(
+                              child: SVGIcons.localSVG(gpsIconPath,
+                                  width: 16, height: 16)),
+                          Skeleton.ignore(
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: defaultPaddingHorizontal),
-                              child: SVGIcons.localSVG(
-                                  widget.restaurant?.isFavorite == true ?
-                                  favoriteIconWithBackgroundPath : unFavoriteIconPath,
-                                  width: 24, height: 24),
+                              padding: const EdgeInsetsDirectional.symmetric(
+                                  horizontal: 6.0),
+                              child: Text(
+                                "widget.restaurant?.location" ?? "",
+                                style: AppTheme.styleWithAppGrey7Fonts14w400,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                          const Spacer(),
+                          Skeleton.ignore(
+                            child: InkWell(
+                              onTap: (){
+                                widget.onChangeFavoriteState.call(widget.restaurant);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: defaultPaddingHorizontal),
+                                child: SVGIcons.localSVG(
+                                    widget.restaurant?.isFavorite == true ?
+                                    favoriteIconWithBackgroundPath : unFavoriteIconPath,
+                                    width: 24, height: 24),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(
                       height: 8,

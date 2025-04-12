@@ -1,8 +1,10 @@
+import '../../data/models/location_model.dart';
+
 class Restaurant {
   final int? id;
   final String? name;
   final String? address;
-  final String? location;
+  final LocationModel? location;
   final int? cuisineId;
   final bool? isOpen;
   final double? distance;
@@ -25,7 +27,7 @@ class Restaurant {
     int? id,
     String? name,
     String? address,
-    String? location,
+    LocationModel? location,
     int? cuisineId,
     bool? isOpen,
     double? distance,
