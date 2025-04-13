@@ -150,7 +150,7 @@ class MyApp extends ConsumerWidget {
       GoRoute(
         path: splashScreenRoute,
         builder: (BuildContext context, GoRouterState state) =>
-            GoogleMapScreen(),
+            LocationPermissionScreen(),
       ),
       GoRoute(
         path: mainScreenRoute,

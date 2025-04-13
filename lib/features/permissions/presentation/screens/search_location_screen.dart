@@ -8,8 +8,12 @@ import 'package:flutter_base/core/widgets/svg_icons.dart';
 import 'package:flutter_base/features/location/data/address_model.dart';
 import 'package:flutter_base/features/location/domain/address_storage.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../../core/localization/Keys.dart';
+import '../../../../core/utils/location_handler.dart';
+import '../../../../core/utils/permissions_handler.dart';
+import '../../data/data_source/address_services.dart';
 import '../../data/model/address_model.dart';
 import '../../widgets/address_item.dart';
 import '../../widgets/search_field_widget.dart';
@@ -29,7 +33,7 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
   List<Address> Localeaddresses=[];
   bool _loading = false;
 
-
+  LatLng? _currentLatLng;
 
 
   @override
@@ -126,29 +130,35 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
               child: Text('Save Address'),
             ), */
             const SizedBox(height: 20),
-            Container(
-              width: double.infinity,
-              margin: const EdgeInsets.only(top: 16),
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: SVGIcons.localSVG(
-                      "assets/images/sendlocation.svg",
+            GestureDetector(
+              onTap:() {
+
+                _getLocation();
+              },
+              child: Container(
+                width: double.infinity,
+                margin: const EdgeInsets.only(top: 16),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: SVGIcons.localSVG(
+                        "assets/images/sendlocation.svg",
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 12,
-                  ),
-                  Text(
-                    'Use my current Location',
-                    style: AppTheme.fontStyle24W70022252BColor.copyWith(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: "cairepro"),
-                  )
-                ],
+                    const SizedBox(
+                      width: 12,
+                    ),
+                    Text(
+                      'Use my current Location',
+                      style: AppTheme.fontStyle24W70022252BColor.copyWith(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: "cairepro"),
+                    )
+                  ],
+                ),
               ),
             ),
             Divider(),
@@ -189,6 +199,13 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
         ),
       ),
     );
+  }
+  void _getLocation() async {
+    if (await PermissionsHandler.checkLocationPermission()) {
+      var position = await LocationHandler.getCurrentLocation();
+      _currentLatLng = LatLng(position!.latitude, position.longitude);
+
+    }
   }
 }
 // void _onTextChanged(String input) async {
