@@ -162,8 +162,8 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
               ),
             ),
             Divider(),
-            const Text(
-              'Search Results',
+             Text(
+              _addresses.isEmpty?"Resent Search":'Search Results',
               style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontFamily: "cairepro",
