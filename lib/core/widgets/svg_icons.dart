@@ -18,6 +18,11 @@ class SVGIcons {
         width: 20, height: 20, fit: BoxFit.scaleDown);
   }
 
+  static Widget gpsIcon() {
+    return SvgPicture.asset(mapGpsIcon,
+        width: 24, height: 24, fit: BoxFit.scaleDown);
+  }
+
   static Widget localSVG(String assetPath, {double width = 50, double height = 50 , Color? color}) {
     return SvgPicture.asset(
       assetPath,

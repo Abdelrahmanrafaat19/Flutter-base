@@ -1,5 +1,6 @@
 const mainAppUrl = 'http://ec2-13-48-255-109.eu-north-1.compute.amazonaws.com/api/eatsnbeats/';
 const mainAppUrlDomain = 'http://ajazsademo-001-site1.atempurl.com/public/';
+const mainMapUrl = 'https://maps.googleapis.com/maps/api/';
 
 const userRegisterEndPoint = "users/createUser";
 const usersEndPoint = "users";
@@ -23,3 +24,5 @@ const getOtherUserContactInfoEndpoint = "userContactInfoProfile";
 const fetchAllRestaurantEndPoint="restaurant";
 const searchRestaurantNameEndPoint="restaurant/searchRestaurantNames";
 const favoriteRestaurantsEndPoint="users/favorite/restaurants";
+const placesDetailsEndPoint="place/details/json";
+const placesAutocompleteEndPoint="place/autocomplete/json";
