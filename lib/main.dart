@@ -12,6 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as ago;
+import 'google_map_screen.dart';
 import 'core/Constants/Constants.dart';
 import 'core/Theme/app_theme.dart';
 import 'core/constants/app_routes.dart';
@@ -149,7 +150,7 @@ class MyApp extends ConsumerWidget {
       GoRoute(
         path: splashScreenRoute,
         builder: (BuildContext context, GoRouterState state) =>
-             LoginScreen(),
+            GoogleMapScreen(),
       ),
       GoRoute(
         path: mainScreenRoute,
