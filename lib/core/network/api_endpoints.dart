@@ -23,3 +23,4 @@ const getOtherUserContactInfoEndpoint = "userContactInfoProfile";
 const fetchAllRestaurantEndPoint="restaurant";
 const searchRestaurantNameEndPoint="restaurant/searchRestaurantNames";
 const favoriteRestaurantsEndPoint="users/favorite/restaurants";
+

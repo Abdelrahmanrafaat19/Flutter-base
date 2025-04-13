@@ -2,6 +2,8 @@ import 'package:flutter_base/features/location/data/address_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
+import '../../permissions/data/model/address_model.dart';
+
 class AddressStorage {
   static const String _key = 'searched_addresses';
 
@@ -20,12 +22,12 @@ class AddressStorage {
     if (jsonList == null) return [];
 
     return jsonList
-        .map((jsonStr) => Address.fromJson(jsonDecode(jsonStr)))
+        .map((jsonStr) => Address.fromJsonWithLatLng(jsonDecode(jsonStr),0.0,0.0),)
         .toList();
   }
 
   // Add a new address (avoid duplicates)
-  static Future<void> addAddress(Address address) async {
+  static Future<void>addAddress(Address address) async {
     List<Address> addresses = await getAddresses();
     if (!addresses.any((a) => a.placeName == address.placeName)) {
       addresses.add(address);

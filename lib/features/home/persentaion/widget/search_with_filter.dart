@@ -22,6 +22,7 @@ class AppSearchBarWithFilter extends StatefulWidget {
   final Color? filterIconColor;
   final String? hintTxt;
   final Widget? postIcon;
+  final void Function(String)? onCahange;
 
   const AppSearchBarWithFilter(
       {super.key,
@@ -36,7 +37,7 @@ class AppSearchBarWithFilter extends StatefulWidget {
       this.postIcon,
       this.hasBorder = true,
       this.hasFilterData = false,
-       this.filterIconColor});
+       this.filterIconColor, this.onCahange});
 
   @override
   State<AppSearchBarWithFilter> createState() => _AppSearchBarWithFilterState();
@@ -117,7 +118,7 @@ class _AppSearchBarWithFilterState extends State<AppSearchBarWithFilter> {
                                   : Colors.white), // Disabled border color
                         ),
                         prefixIcon: SVGIcons.searchIcon()),
-                    onChanged: (value) {
+                    onChanged:widget.onCahange?? (value) {
                       executeAfterDelay(value);
                     },
                   ),
@@ -159,7 +160,7 @@ class _AppSearchBarWithFilterState extends State<AppSearchBarWithFilter> {
                                   ? AppTheme.appGrey8
                                   : Colors.white)),
                       prefixIcon: SVGIcons.searchIcon()),
-                  onChanged: (value) {
+                  onChanged:widget.onCahange?? (value) {
                     executeAfterDelay(value);
                   },
                 ),
