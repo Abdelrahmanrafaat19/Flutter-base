@@ -8,9 +8,9 @@ import 'package:flutter_base/features/location/data/address_model.dart';
 import 'package:flutter_base/features/location/domain/address_storage.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/localization/Keys.dart';
-import '../../widgets/address_item.dart';
-import '../../widgets/search_field_widget.dart';
+import '../../../core/localization/Keys.dart';
+import '../../permissions/widgets/address_item.dart';
+import '../../permissions/widgets/search_field_widget.dart';
 
 class SearchLocationScreen extends StatefulWidget {
   const SearchLocationScreen({super.key});

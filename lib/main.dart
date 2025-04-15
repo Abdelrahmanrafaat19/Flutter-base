@@ -5,14 +5,14 @@ import 'package:flutter_base/core/constants/eunms.dart';
 import 'package:flutter_base/features/auth/presentation/screens/change_password_screen.dart';
 import 'package:flutter_base/features/auth/presentation/screens/forget_password_screen.dart';
 import 'package:flutter_base/features/auth/presentation/screens/splash_screen.dart';
-import 'package:flutter_base/features/permissions/presentation/screens/search_location_screen.dart';
+import 'package:flutter_base/features/location/presentaion/search_location_screen.dart';
 import 'package:flutter_base/features/main/main_screen.dart';
 import 'package:flutter_base/features/search/presentation/screens/search_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as ago;
-import 'google_map_screen.dart';
+import 'features/location/presentaion/google_map_screen.dart';
 import 'core/Constants/Constants.dart';
 import 'core/Theme/app_theme.dart';
 import 'core/constants/app_routes.dart';
@@ -150,7 +150,7 @@ class MyApp extends ConsumerWidget {
       GoRoute(
         path: splashScreenRoute,
         builder: (BuildContext context, GoRouterState state) =>
-            GoogleMapScreen(),
+            const SplashScreen(),
       ),
       GoRoute(
         path: mainScreenRoute,

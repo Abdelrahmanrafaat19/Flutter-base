@@ -10,11 +10,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'core/utils/location_handler.dart';
-import 'core/utils/permissions_handler.dart';
-import 'core/widgets/svg_icons.dart';
-import 'features/common/presentation/providers/usecases_providers.dart';
-import 'features/home/persentaion/widget/search_with_filter.dart';
+import '../../../core/utils/location_handler.dart';
+import '../../../core/utils/permissions_handler.dart';
+import '../../../core/widgets/svg_icons.dart';
+import '../../common/presentation/providers/usecases_providers.dart';
+import '../../home/persentaion/widget/search_with_filter.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -58,7 +58,6 @@ class _GoogleMapScreenState extends ConsumerState<GoogleMapScreen> {
 
     handleState(getLatLngFromPlaceIdUseCaseProvider, onSuccess: (res) {
       if (res.data != null) {
-        print("sadafsdfas ${res.data?.latitude}");
         _currentLatLng = res.data;
         moveCamera(res.data ?? const LatLng(0.0, 0.0));
         clearSuggestion();

@@ -83,13 +83,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         children: [
                           SVGIcons.localSVG(homeGpsIconPath,
                               width: 24, height: 24),
-                          Padding(
-                            padding: EdgeInsetsDirectional.symmetric(
-                                horizontal: defaultButtonRadius),
-                            child: Text(
-                              "Madinty,Bulding 64",
-                              style: AppTheme
-                                  .styleWithTextWhiteAdelleSansExtendedFonts16w500,
+                          InkWell(
+                            onTap: (){
+
+                            },
+                            child: Padding(
+                              padding: EdgeInsetsDirectional.symmetric(
+                                  horizontal: defaultButtonRadius),
+                              child: Text(
+                                "Madinty,Bulding 64",
+                                style: AppTheme
+                                    .styleWithTextWhiteAdelleSansExtendedFonts16w500,
+                              ),
                             ),
                           ),
                           Spacer(),
