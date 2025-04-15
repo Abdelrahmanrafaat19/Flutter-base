@@ -37,5 +37,6 @@ const discountIcon="assets/images/discount_icon_search.svg";
 const ratingIcon="assets/images/best_rate_icon.svg";
 const reserveIcon="assets/images/reserve_icon.svg";
 const gpsIcon="assets/images/gps_icon.svg";
+const unFavouriteWithBackGroundIcon="assets/images/un_favorite_with_background_icon.svg";
 const mapGpsIcon="assets/images/map_gps_icon.svg";
 

@@ -7,8 +7,9 @@ import 'package:flutter_base/features/home/persentaion/widget/search_with_filter
 class SearchFieldWidget extends StatefulWidget {
   final TextEditingController controller;
   final void Function()? searchClick;
+  final void Function(String)? onChanged;
   const SearchFieldWidget(
-      {super.key, required this.controller, this.searchClick});
+      {super.key, required this.controller, this.searchClick, required this.onChanged});
 
   @override
   State<SearchFieldWidget> createState() => _SearchFieldWidgetState();
@@ -18,6 +19,7 @@ class _SearchFieldWidgetState extends State<SearchFieldWidget> {
   @override
   Widget build(BuildContext context) {
     return AppSearchBarWithFilter(
+      onCahange:widget.onChanged ,
       // filterIconColor: AppTheme.appGrey15,
       controller: widget.controller,
       hasFilter: false,
