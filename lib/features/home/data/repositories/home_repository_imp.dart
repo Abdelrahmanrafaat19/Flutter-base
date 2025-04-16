@@ -22,7 +22,7 @@ class HomeRepositoryImp extends HomeRepository {
       localeIsoCode: localeIsoCode,
       featured: featured,
       fetchRestaurants: fetchRestaurants,
-      categoryIds: categoryIds,userLocation: userLocation
+      categoryIds: categoryIds??[],userLocation: userLocation
     );
   }
 
@@ -40,7 +40,7 @@ class HomeRepositoryImp extends HomeRepository {
         localeIsoCode: localeIsoCode,
         featured: featured,
         fetchRestaurants: fetchRestaurants,
-        cuisineIds: cuisineIds
+        cuisineIds: cuisineIds 
     );
   }
 }

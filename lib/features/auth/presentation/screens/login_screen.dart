@@ -8,6 +8,7 @@ import '../../../../core/constants/app_routes.dart';
 import '../../../../core/constants/assets.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/custom_app_bar.dart';
+import '../../../../main.dart';
 import '../providers/auth_enable_btu_providers.dart';
 import '../providers/auth_validation_provider.dart';
 import '../providers/usecase_provider.dart';
@@ -49,14 +50,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     handleState(loginStateNotifierProvider, showLoading: true,
         onSuccess: (res) {
-      navigateToMainScreen();
+      print("dsfsfsdfsd ${prefs.getBool(REQUEST_PERMISSIS_KEY)}");
+      if (prefs.getBool(REQUEST_PERMISSIS_KEY) == false ||
+          prefs.getBool(REQUEST_PERMISSIS_KEY) == null) {
+        prefs.setBool(REQUEST_PERMISSIS_KEY, true);
+        context.go(locationPermissionScreenRoute);
+      } else {
+        navigateToMainScreen();
+      }
     }, onFail: (res) {
-      ref.read(validationLoginProvider.notifier)
-          .updateStatue(
-        {
-          "all" : res.message.toString()
-        }
-      );
+      ref
+          .read(validationLoginProvider.notifier)
+          .updateStatue({"all": res.message.toString()});
     });
 
     return Scaffold(
@@ -84,16 +89,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 PhoneNumberField(
                   isPhoneNumberIsValidate: validationLoginState.isEmpty,
                   controller: _phoneController,
-                  validator: (value){
-                    if(value?.isEmpty == true) {
+                  validator: (value) {
+                    if (value?.isEmpty == true) {
                       return "require field";
-                    }else if(validationLoginState.isNotEmpty){
+                    } else if (validationLoginState.isNotEmpty) {
                       return validationLoginState.values.first.toString();
-                    }else {
+                    } else {
                       return null;
                     }
                   },
-                  onChanged: (value){
+                  onChanged: (value) {
                     _phoneNumber = value;
                     print("onChanged phone : $value");
                   },
@@ -105,7 +110,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   isvisible: isPasswordVisible,
                   suffixIcon: IconButton(
                     icon: Icon(
-                      isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                      isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
                       color: AppTheme.gray,
                     ),
                     onPressed: () {
@@ -120,18 +127,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     "Password",
                     style: AppTheme.style14BoldBlack,
                   ),
-                  validator: (value){
-                    if(value?.isEmpty == true) {
+                  validator: (value) {
+                    if (value?.isEmpty == true) {
                       return "require field";
-                    }else if(validationLoginState.isNotEmpty){
+                    } else if (validationLoginState.isNotEmpty) {
                       return validationLoginState.values.first.toString();
-                    }else {
+                    } else {
                       return null;
                     }
                   },
-                  onChanged: (v){
-
-                  },
+                  onChanged: (v) {},
                 ),
                 SizedBox(
                   height: 8,
@@ -143,7 +148,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         onTap: _forgetPassword,
                         child: Text("Forget Password?",
                             style: AppTheme.styleWithAppGunmetalLinkFonts14w400
-                                .copyWith(decoration: TextDecoration.underline)))
+                                .copyWith(
+                                    decoration: TextDecoration.underline)))
                   ],
                 ),
                 const SizedBox(
@@ -156,33 +162,37 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           enabled: enableLogin,
                           height: defaultButtonHeight,
                           text: "Sign In",
-                          onPress: (){
-                            ref.read(validationLoginProvider.notifier).updateStatue({});
+                          onPress: () {
+                            ref
+                                .read(validationLoginProvider.notifier)
+                                .updateStatue({});
                             login();
                           }),
                     ),
                     SizedBox(
                       width: enableFaceId ? defaultPaddingHorizontal : 0,
                     ),
-                    enableFaceId ? InkWell(
-                      onTap: _signInWithFaceId,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: enableLogin
-                                ? AppTheme.mainAppColor
-                                : AppTheme.appGrey2,
-                            borderRadius: BorderRadius.circular(8)),
-                        width: 56,
-                        height: 56,
-                        child: Center(
-                            child: SVGIcons.localSVG(faceId,
-                                width: 32,
-                                height: 32,
-                                color: enableLogin
-                                    ? Colors.white
-                                    : Colors.black)),
-                      ),
-                    ) : SizedBox()
+                    enableFaceId
+                        ? InkWell(
+                            onTap: _signInWithFaceId,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: enableLogin
+                                      ? AppTheme.mainAppColor
+                                      : AppTheme.appGrey2,
+                                  borderRadius: BorderRadius.circular(8)),
+                              width: 56,
+                              height: 56,
+                              child: Center(
+                                  child: SVGIcons.localSVG(faceId,
+                                      width: 32,
+                                      height: 32,
+                                      color: enableLogin
+                                          ? Colors.white
+                                          : Colors.black)),
+                            ),
+                          )
+                        : SizedBox()
                   ],
                 ),
                 SizedBox(
@@ -206,7 +216,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             horizontal: 12.0),
                         child: Text(
                           "Or sign in with",
-                          style: AppTheme.styleWithTextAppGrey4RegularFonts14w400,
+                          style:
+                              AppTheme.styleWithTextAppGrey4RegularFonts14w400,
                         ),
                       ),
                       Expanded(
@@ -302,15 +313,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   void login() {
-    print("phone ${_phoneNumber?.completeNumberWithoutPlus} , password : ${_passwordController.text}");
+    print(
+        "phone ${_phoneNumber?.completeNumberWithoutPlus} , password : ${_passwordController.text}");
     ref.read(loginStateNotifierProvider.notifier).call(
-        phoneNumber: _phoneNumber?.completeNumberWithoutPlus, password: _passwordController.text);
-
+        phoneNumber: _phoneNumber?.completeNumberWithoutPlus,
+        password: _passwordController.text);
   }
 
   void navigateToMainScreen() {
     context.go(mainScreenRoute);
   }
-
-
 }

@@ -13,7 +13,7 @@ class AddressPermissionRepoImple implements AddressPermissionRepo {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Location permission granted")),
       );
-      context.go(mainScreenRoute);
+      context.go(notificationPermissionScreenRoute);
     } else if (status.isDenied) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Location permission denied")),

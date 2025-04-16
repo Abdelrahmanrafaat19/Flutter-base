@@ -6,6 +6,7 @@ import 'package:flutter_base/core/localization/Keys.dart';
 import 'package:flutter_base/core/utils/extensions/request_handle_extension.dart';
 import 'package:flutter_base/features/auth/presentation/providers/usecase_provider.dart';
 import 'package:flutter_base/features/auth/presentation/widgets/auth_header_widget.dart';
+import 'package:flutter_base/main.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/Constants/Constants.dart';
@@ -69,8 +70,14 @@ class _OtpScreenState extends ConsumerState<OTPScreen> {
     handleState(signUpStateNotifierProvider, showLoading: true, showToast: true,
         onSuccess: (res) {
       if (widget.otpType == OTPType.SignUp) {
-        context.go(notificationPermissionScreenRoute);
+        if(prefs.getBool(REQUEST_PERMISSIS_KEY) == false || prefs.getBool(REQUEST_PERMISSIS_KEY) == null) {
+          prefs.setBool(REQUEST_PERMISSIS_KEY, true);
+          context.go(locationPermissionScreenRoute);
+        }
       } else if (widget.otpType == OTPType.Update) {}
+      else{
+        navigateToHomeScreen();
+      }
     });
 
     return Scaffold(

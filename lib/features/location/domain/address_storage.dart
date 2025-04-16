@@ -58,6 +58,7 @@ class AddressStorage {
   static Future<LocationModel?> getUserLocation() async {
 
     final userAddress = AddressStorage.checkIfUserHasLocation();
+    print("aasdfasdfasd ${userAddress?.toJson()}");
     if (userAddress != null) {
       return LocationModel(lat: userAddress.latitude, lon: userAddress.longitude);
     }

@@ -71,7 +71,7 @@ class _NotificationPermissionScreenState
             ),
             TextButton(
               onPressed: () {
-                context.go(locationPermissionScreenRoute);
+                navigateToMainScreen();
               },
               child: Text(
                 "Maybe Later",
@@ -86,4 +86,8 @@ class _NotificationPermissionScreenState
       ),
     );
   }
+  void navigateToMainScreen() {
+    context.go(mainScreenRoute);
+  }
+
 }
