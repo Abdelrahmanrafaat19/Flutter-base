@@ -2,13 +2,16 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../../core/utils/typedefs.dart';
+import '../../../permissions/data/model/address_model.dart';
 
 abstract class CommonRepository{
 
 
   Future<List<dynamic>> getSuggestions(String input);
 
-  Future<LatLng?> getLatLngFromPlaceId(String placeId);
+  Future<Address?> getLatLngFromPlaceId(String placeId);
+
+  Future<Address?> getAddressFromLatLng(double lat, double lng);
 
   FutureResponseModel restaurantSearch({
     String? page,

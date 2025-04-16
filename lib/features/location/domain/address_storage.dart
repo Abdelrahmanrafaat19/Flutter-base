@@ -1,7 +1,10 @@
+import 'package:flutter_base/core/constants/constants.dart';
 import 'package:flutter_base/features/location/data/address_model.dart';
+import 'package:flutter_base/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
+import '../../home/data/models/location_model.dart';
 import '../../permissions/data/model/address_model.dart';
 
 class AddressStorage {
@@ -39,5 +42,25 @@ class AddressStorage {
   static Future<void> clearAddresses() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove(_key);
+  }
+
+  static void saveUserCurrentLocation(Address address){
+    prefs.setString(USER_LOCATION_KEY, json.encode(address.toJson()));
+    print("clint location model saved $address");
+  }
+
+  static Address? checkIfUserHasLocation(){
+    var addressJson = prefs.getString(USER_LOCATION_KEY);
+    Address? currentAddressLocation = addressJson != null ? Address.fromJson(jsonDecode(addressJson??"")) : null;
+    return currentAddressLocation;
+  }
+
+  static Future<LocationModel?> getUserLocation() async {
+
+    final userAddress = AddressStorage.checkIfUserHasLocation();
+    if (userAddress != null) {
+      return LocationModel(lat: userAddress.latitude, lon: userAddress.longitude);
+    }
+    return null;
   }
 }

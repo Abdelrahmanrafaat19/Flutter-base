@@ -20,6 +20,15 @@ class Address {
     );
   }
 
+  factory Address.fromJson(Map<String, dynamic> json) {
+    return Address(
+      placeName: json['placeName'] ?? '',
+      latitude: (json['latitude'] as num).toDouble(),
+      longitude: (json['longitude'] as num).toDouble(),
+      description: json['description'] ?? '',
+    );
+  }
+
   Map<String, dynamic> toJson() => {
     'placeName': placeName,
     'latitude': latitude,

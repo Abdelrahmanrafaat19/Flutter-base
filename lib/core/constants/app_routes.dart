@@ -15,5 +15,6 @@ const seeAllScreenForCategoryRoute = '/seeAllScreenForCategory';
 const searchScreenRoute="/searchScreenRoute";
 const searchScreenResultRoute="/searchScreenResultRoute";
 const allDataOfSearchCategoryRoute="/allDataOfSearchCategoryRoute";
+const googleMapScreenRoute="/googleMapScreen";
 
 const otpScreenRoute = '/otp';

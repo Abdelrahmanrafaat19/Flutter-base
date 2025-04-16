@@ -5,16 +5,16 @@ import '../../../../core/models/StateModel.dart';
 import '../../../permissions/data/model/address_model.dart';
 import '../repositories/common_repository.dart';
 
-class GetLatLngFromPlaceIdUseCase extends StateNotifier<StateModel<Address?>> {
+class GetLatLngFromLatLngUseCase extends StateNotifier<StateModel<Address?>> {
   final CommonRepository _commonRepository;
 
-  GetLatLngFromPlaceIdUseCase(this._commonRepository) : super(StateModel());
+  GetLatLngFromLatLngUseCase(this._commonRepository) : super(StateModel());
 
-  Future<void> call(String placeId) async {
+  Future<void> call(double lat, double lng) async {
     state = StateModel.loading();
 
     try {
-      final location = await _commonRepository.getLatLngFromPlaceId(placeId);
+      final location = await _commonRepository.getAddressFromLatLng(lat,lng);
       state = StateModel(
         state: DataState.SUCCESS,
         data: location,
