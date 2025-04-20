@@ -14,10 +14,13 @@ class LabeledTextField extends StatelessWidget {
   final bool isvalidate;
   final FocusNode? focusNode;
   final AutovalidateMode? mode;
+  final Color? textFieldColor;
+  final bool? enabled;
 
   const LabeledTextField({
     super.key,
     required this.controller,
+    this.enabled,
     required this.hint,
     required this.label,
     this.onChanged,
@@ -26,7 +29,7 @@ class LabeledTextField extends StatelessWidget {
     this.validator,
     this.errorMaxLine,
     required this.isvalidate,
-    this.focusNode, this.mode,
+    this.focusNode, this.mode,  this.textFieldColor,
   });
 
   @override
@@ -37,6 +40,7 @@ class LabeledTextField extends StatelessWidget {
         label,
         const SizedBox(height: 8),
         AppTextField(
+enabled: enabled,
           mode: mode,
           hintStyle: AppTheme.style14normalblack.copyWith(color: AppTheme.appGrey8),
           hint: hint,
@@ -44,7 +48,7 @@ class LabeledTextField extends StatelessWidget {
           borderRidus: BorderRadius.circular(8),
           secured: isvisible,
           textFieldColor:
-              isvalidate == false ? const Color(0xffFFE5E5) : Colors.white,
+            textFieldColor==null? ( isvalidate == false ? const Color(0xffFFE5E5) : Colors.white):textFieldColor,
           textFieldBorderColor: AppTheme.mainAppColor,
           textEditingController: controller,
           onChanged: onChanged,

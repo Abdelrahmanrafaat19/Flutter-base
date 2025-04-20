@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppTheme {
   static const Color mainAppColor = Color(0xFF3DB5D3);
@@ -14,11 +15,13 @@ class AppTheme {
   static const Color secondaryTempAppColorDark = Color(0xFFF04741);
   static const Color orangeAppColor = Color(0xFFFF7F50);
   static const Color gray = Color(0xFFD0D1D4);
+  static const Color colorCodeEAEAEA=Color(0xffEAEAEA);
   static const Color lightGreen = Color(0xFFE7F6E5);
+  static const Color lightBrown=Color(0xffF8F1E6);
   static const Color filterOptionBackground = Color(0xFFE6F2F2);
   static const Color filterOptionTextColor = Color(0xFF008080);
   static const Color appGreen = Color(0xFF0DA500);
-  static const Color codeA1A4AAColor=Color(0xffA1A4AA);
+  static const Color codeA1A4AAColor = Color(0xffA1A4AA);
   static const Color whiteColor = Colors.white;
   static const Color appGrey = Color(0xFFBEBEBE); //#E5E5E5
   static const Color appGrey2 = Color(0xFFECEDEE);
@@ -33,17 +36,21 @@ class AppTheme {
   static const Color appGrey11 = Color(0x839B9B9B);
   static const Color appGrey12 = Color(0xFFEBECEF);
   static const Color appGrey13 = Color(0xFF667085);
+  static const Color colorCodeF5F5F5=Color(0xffF5F5F5);
+  static const Color codeColor737373=Color(0xff737373);
   static const Color appGrey14 =
       Color(0x14000000); // box-shadow: 0px -6px 16px 0px #00000014;
   static const Color appGrey15 = Color(0xff444955);
+  static const Color codeColorA3A3A3=Color(0xffA3A3A3);
+  static const Color codeColor404040=Color(0xff404040);
   static const Color appHeaderOne = Color(0xFF225268);
   static const Color appHeaderTwo = Color(0xFF2298B8);
-
+  static const Color colorCode171717 = Color(0xff171717);
   static const Color appGunmetal = Color(0xFF333740);
   static const Color appLightGrey = Color(0xFFe5e5e5);
   static const Color appLightGreyV2 = Color(0xFFF0F0F0);
   static const Color appDarkerGrey = Color(0xFF898989);
-
+ static const Color codeColorB08A4E=Color(0xffB08A4E);
   static const Color failureColor = Color(0xFFc61313);
 
   static const Color successColor = Color(0xFF7cbf2b);
@@ -68,7 +75,7 @@ class AppTheme {
   static const Color darkDetailTextColor = Colors.black54;
   static const Color darkTextColor = Colors.black;
   static const Color code22252BColor = Color(0xff22252B);
-
+static const Color codeColor525252=Color(0xff525252);
   static const kPrimaryColor = Color(0xFF1ad3b0);
   static const kContentColorLightTheme = Color(0xFF1D1D35);
   static const kContentColorDarkTheme = Color(0xFFF5FCF9);
@@ -206,18 +213,19 @@ class AppTheme {
       TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w700);
   static const TextStyle style15W400appGrey7Color =
       TextStyle(color: appGrey7, fontSize: 16, fontWeight: FontWeight.w400);
-
+  static TextStyle style20BlackBold = TextStyle(
+    fontSize: 20.sp,
+    fontWeight: FontWeight.bold,
+    color: colorCode171717,
+  );
   static const TextStyle styleWithTextGray7AdelleSansExtendedFonts16w400 =
       TextStyle(color: appGrey7, fontSize: 16, fontWeight: FontWeight.w400);
   static const TextStyle style20SemiBoldcode333740 =
       TextStyle(color: appGunmetal, fontWeight: FontWeight.w500, fontSize: 20);
   static const TextStyle styleWithTextRedAdelleSansExtendedFonts16w400 =
       TextStyle(color: mainAppColor, fontSize: 16, fontWeight: FontWeight.w400);
-static const TextStyle fontStyleW700Size20ColorWhite=TextStyle(
-  color: whiteColor,
-  fontWeight: FontWeight.w700,
-  fontSize: 20
-);
+  static const TextStyle fontStyleW700Size20ColorWhite =
+      TextStyle(color: whiteColor, fontWeight: FontWeight.w700, fontSize: 20);
   static const TextStyle fontStyle16color333740 = TextStyle(
       color: Color(0xff333740), fontWeight: FontWeight.w400, fontSize: 16);
   static const TextStyle styleWithTextGray7AdelleSansExtendedFonts12w400 =
@@ -228,7 +236,12 @@ static const TextStyle fontStyleW700Size20ColorWhite=TextStyle(
     fontWeight: FontWeight.w700,
     color: code008080Color,
   );
+static TextStyle styleSize16Weidth700color525252=TextStyle(
+  fontWeight: FontWeight.w700,
+  fontSize: 16.sp,
+  color: codeColor525252,
 
+);
   static const TextStyle styleWithTextGreenAdelleSansExtendedFonts12w400 =
       TextStyle(color: appGreen, fontSize: 12, fontWeight: FontWeight.w400);
 
@@ -244,8 +257,8 @@ static const TextStyle fontStyleW700Size20ColorWhite=TextStyle(
   static const TextStyle styleWithTextBlackAdelleSansExtendedFonts16w400 =
       TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w400);
 
-  static const TextStyle styleWithTextBlackAdelleSansExtendedFonts16w500 =
-      TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500);
+  static  TextStyle styleWithTextBlackAdelleSansExtendedFonts16w500 =
+      TextStyle(color: Colors.black, fontSize: 16.sp, fontWeight: FontWeight.w500);
 
   static const TextStyle styleWithTextRedAdelleSansExtendedFonts16w500 =
       TextStyle(color: mainAppColor, fontSize: 16, fontWeight: FontWeight.w500);
@@ -282,6 +295,47 @@ static const TextStyle fontStyleW700Size20ColorWhite=TextStyle(
       TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500);
   static const TextStyle style14W400code8088A4 = TextStyle(
       fontSize: 14, fontWeight: FontWeight.w400, color: code8088A4Color);
+  static TextStyle style15W400codeColorA3A3A3=TextStyle(
+    fontSize: 15.sp,
+    fontWeight: FontWeight.w400,
+    color: codeColorA3A3A3
+  );
+  static TextStyle style20W700codeColor171717=TextStyle(
+      fontSize: 20.sp,
+      fontWeight: FontWeight.w700,
+      color: colorCode171717,
+      fontFamily: "cairepro"
+  );
+  static TextStyle style16W400codeColor737373=TextStyle(
+      fontSize: 16.sp,
+      fontWeight: FontWeight.w400,
+      color: codeColor737373,
+      fontFamily: "cairepro"
+  );
+  static TextStyle style16W500codeColor525252=TextStyle(
+      fontSize: 16.sp,
+      fontWeight: FontWeight.w500,
+      color: codeColor525252,
+      fontFamily: "cairepro"
+  );
+  static TextStyle style15W500codeColorB08A4E=TextStyle(
+      fontSize: 15.sp,
+      fontWeight: FontWeight.w500,
+      color: codeColorB08A4E,
+    fontFamily: "cairepro"
+  );
+  static TextStyle style14W400codeColor737373=TextStyle(
+      fontSize: 14.sp,
+      fontWeight: FontWeight.w400,
+      color: codeColor737373,
+      fontFamily: "cairepro"
+  );
+  static TextStyle style48W700codeColor171717=TextStyle(
+      fontSize: 48.sp,
+      fontWeight: FontWeight.w700,
+      color: colorCode171717,
+      fontFamily: "cairepro"
+  );
 
   static ThemeData darkTheme = ThemeData(
     primaryColor: secondaryAppColorDark,

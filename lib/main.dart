@@ -9,9 +9,15 @@ import 'package:flutter_base/features/permissions/presentation/screens/search_lo
 import 'package:flutter_base/features/main/main_screen.dart';
 import 'package:flutter_base/features/search/presentation/screens/search_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as ago;
+import 'features/reservation/presentation/screens/booking_table_screen.dart';
+import 'features/reservation/presentation/screens/reserved_table_success_code_screen.dart';
+import 'features/reservation/presentation/screens/reserved_table_success_screen.dart';
+import 'features/reservation/presentation/screens/review_summery_screen.dart';
+import 'features/reservation/presentation/screens/your_information_details_screen.dart';
 import 'google_map_screen.dart';
 import 'core/Constants/Constants.dart';
 import 'core/Theme/app_theme.dart';
@@ -111,7 +117,7 @@ void main() async {
 
   // Check if you received the link via `getInitialLink` first
 
-  ago.setLocaleMessages('ar', ago.ArMessages());
+  ago.setLocaleMessages('en', ago.ArMessages());
   //Main App
   runApp(ProviderScope(
       child: EasyLocalization(supportedLocales: const [
@@ -126,22 +132,29 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ThemeProvider(
-      initTheme: Theme.of(context),
-      duration: const Duration(milliseconds: 500),
-      child: MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        title: 'BaseFlutter',
-        themeMode: ThemeMode.light,
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        localizationsDelegates: context.localizationDelegates,
-        supportedLocales: context.supportedLocales,
-        locale: ref.watch(langProvider),
-        routerDelegate: _router.routerDelegate,
-        routeInformationProvider: _router.routeInformationProvider,
-        routeInformationParser: _router.routeInformationParser,
-      ),
+    return ScreenUtilInit(
+      designSize: const Size(390, 844), // adjust to your design's base size
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return ThemeProvider(
+          initTheme: Theme.of(context),
+          duration: const Duration(milliseconds: 500),
+          child: MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            title: 'BaseFlutter',
+            themeMode: ThemeMode.light,
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: ref.watch(langProvider),
+            routerDelegate: _router.routerDelegate,
+            routeInformationProvider: _router.routeInformationProvider,
+            routeInformationParser: _router.routeInformationParser,
+          ),
+        );
+      },
     );
   }
 
@@ -150,7 +163,7 @@ class MyApp extends ConsumerWidget {
       GoRoute(
         path: splashScreenRoute,
         builder: (BuildContext context, GoRouterState state) =>
-            LocationPermissionScreen(),
+            BookTableScreen(),
       ),
       GoRoute(
         path: mainScreenRoute,
@@ -163,6 +176,10 @@ class MyApp extends ConsumerWidget {
       GoRoute(
         path: signUpScreenRoute,
         builder: (BuildContext context, GoRouterState state) => SignUpScreen(),
+      ),
+      GoRoute(
+        path: reservedTableSuccessCodeRoute,
+        builder: (BuildContext context, GoRouterState state) => ReservedTableSuccessCodeScreen(),
       ),
       GoRoute(
         path: changePasswordScreenRoute,
@@ -192,6 +209,11 @@ class MyApp extends ConsumerWidget {
             ForgetPasswordScreen(),
       ),
       GoRoute(
+        path: reviewSummeryScreenRoute,
+        builder: (BuildContext context, GoRouterState state) =>
+            ReviewSummeryScreen(),
+      ),
+      GoRoute(
         path: locationPermissionScreenRoute,
         builder: (BuildContext context, GoRouterState state) =>
             LocationPermissionScreen(),
@@ -215,6 +237,21 @@ class MyApp extends ConsumerWidget {
         path: searchScreenRoute,
         builder: (BuildContext context, GoRouterState state) =>
             SearchScreen(),
+      ),
+      GoRoute(
+        path: bookingTableScreenRoute,
+        builder: (BuildContext context, GoRouterState state) =>
+            BookTableScreen(),
+      ),
+      GoRoute(
+        path: yourInformationDetailsRoute,
+        builder: (BuildContext context, GoRouterState state) =>
+            YourInformationDetailsScreen(),
+      ),
+      GoRoute(
+        path: reservedTableSuccessRoute,
+        builder: (BuildContext context, GoRouterState state) =>
+            ReservedTableSuccessScreen(),
       ),
       GoRoute(
         path: seeAllScreenForCategoryRoute,

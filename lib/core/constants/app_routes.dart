@@ -17,3 +17,8 @@ const searchScreenResultRoute="/searchScreenResultRoute";
 const allDataOfSearchCategoryRoute="/allDataOfSearchCategoryRoute";
 
 const otpScreenRoute = '/otp';
+const bookingTableScreenRoute='/bookingTableScreenRoute';
+const yourInformationDetailsRoute='/yourInformationDetailsRoute';
+ const reviewSummeryScreenRoute="/reviewSummeryScreenRoute";
+ const reservedTableSuccessRoute="/reservedTableSuccessRoute";
+ const reservedTableSuccessCodeRoute="/reservedTableSuccessCodeRoute";

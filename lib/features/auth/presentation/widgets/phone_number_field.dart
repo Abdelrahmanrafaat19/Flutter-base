@@ -12,12 +12,16 @@ class PhoneNumberField extends StatelessWidget {
   final void Function(PhoneNumber?)? onSave;
   final String? Function(String?)? validator;
   final bool isPhoneNumberIsValidate;
+  final Color? filledColor;
+
   const PhoneNumberField(
       {super.key,
       this.controller,
       this.onChanged,
       this.validator,
-      required this.isPhoneNumberIsValidate, this.onSave});
+      required this.isPhoneNumberIsValidate,
+      this.onSave,
+      this.filledColor});
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +42,11 @@ class PhoneNumberField extends StatelessWidget {
             height: 20,
           ),
           decoration: InputDecoration(
-            fillColor: isPhoneNumberIsValidate == false
-                ? const Color(0xffFFE5E5)
-                : Colors.white,
+            fillColor: filledColor != null
+                ? filledColor
+                : (isPhoneNumberIsValidate == false
+                    ? const Color(0xffFFE5E5)
+                    : Colors.white),
             filled: true,
             hintText: "Enter phone number",
             focusedBorder:
@@ -50,7 +56,8 @@ class PhoneNumberField extends StatelessWidget {
             enabledBorder: AppBorders.getEnableBorder(),
             disabledBorder: AppBorders.getBorder(),
           ),
-          initialCountryCode: 'US', // Set the default country
+          initialCountryCode: 'US',
+          // Set the default country
           onChanged: onChanged,
           controller: controller,
           validator: validator,

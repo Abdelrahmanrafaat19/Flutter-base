@@ -39,6 +39,7 @@ class AppTextField extends StatefulWidget {
   final Widget? endWidget;
   final Widget? startWidget;
   void Function(String)? onChanged;
+  bool? enabled;
   AppTextField({
     Key? key,
     required this.hint,
@@ -47,6 +48,7 @@ class AppTextField extends StatefulWidget {
     this.textInputType,
     this.onChanged,
     this.width,
+  this.enabled ,
     this.label,
     this.value,
     this.style,
@@ -88,6 +90,7 @@ class _AppTextFieldState extends State<AppTextField> {
       child: Container(
         width: widget.width,
         child: TextFormField(
+          enabled: widget.enabled,
             focusNode: widget.focusNode,
             readOnly: widget.readOnly ?? false,
             autovalidateMode: widget.mode,

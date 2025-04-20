@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../Theme/app_theme.dart';
 import '../constants/constants.dart';
 
@@ -50,7 +51,7 @@ class AppButton extends StatelessWidget {
                     Text(text!,
                         style: TextStyle(
                             color: outlined == true ? backColor : Colors.white,
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontFamily: "cairepro")),
               )
             : ElevatedButton(
