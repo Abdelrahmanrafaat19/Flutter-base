@@ -1,6 +1,7 @@
 import 'package:flutter_base/features/home/domain/repositories/home_repository.dart';
 import '../../../../core/utils/typedefs.dart';
 import '../../data/data_sources/data_sources.dart';
+import '../models/location_model.dart';
 
 class HomeRepositoryImp extends HomeRepository {
   final HomeRemoteDataSource _dataSource;
@@ -14,14 +15,14 @@ class HomeRepositoryImp extends HomeRepository {
       String? localeIsoCode,
       bool? fetchRestaurants,
       bool? featured,
-      List<int>? categoryIds}) {
+      List<int>? categoryIds, LocationModel? userLocation}) {
     return _dataSource.fetchCategories(
       page: page,
       size: size,
       localeIsoCode: localeIsoCode,
       featured: featured,
       fetchRestaurants: fetchRestaurants,
-      categoryIds: categoryIds
+      categoryIds: categoryIds??[],userLocation: userLocation
     );
   }
 
@@ -39,7 +40,7 @@ class HomeRepositoryImp extends HomeRepository {
         localeIsoCode: localeIsoCode,
         featured: featured,
         fetchRestaurants: fetchRestaurants,
-        cuisineIds: cuisineIds
+        cuisineIds: cuisineIds 
     );
   }
 }

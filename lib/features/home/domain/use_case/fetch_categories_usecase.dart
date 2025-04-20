@@ -3,11 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_base/features/home/domain/entities/category_entity.dart';
 import 'package:flutter_base/features/home/domain/entities/restaurant_entity.dart';
 import 'package:flutter_base/features/home/domain/repositories/home_repository.dart';
+import 'package:flutter_base/features/location/domain/address_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/models/ResponseModel.dart';
 import '../../../../core/models/StateModel.dart';
 import '../../data/models/category_model.dart';
+import '../../data/models/location_model.dart';
 
 class FetchCategoriesUseCase extends StateNotifier<StateModel<List<CategoryEntity>>> {
   final Ref ref;
@@ -20,17 +22,20 @@ class FetchCategoriesUseCase extends StateNotifier<StateModel<List<CategoryEntit
     String? localeIsoCode = "en",
     bool? fetchRestaurants = true,
     bool? featured = true,
-    List<int>? categoryIds,
+    List<int>? categoryIds
   })
   async {
     state = StateModel.loading();
+
+    final userLocation = await AddressStorage.getUserLocation();
+
 
     ResponseModel responseModel = await _homeRepository.fetchCategories(
       page: page,
       size: size,
       localeIsoCode: localeIsoCode,
       fetchRestaurants: fetchRestaurants,
-      featured: featured,
+      featured: featured,userLocation: userLocation
     );
 
     if (responseModel.code == 200) {

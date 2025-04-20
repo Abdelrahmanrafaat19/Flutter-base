@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_base/features/home/persentaion/Providers/usecase_provider.dart';
+import 'package:flutter_base/features/location/domain/address_storage.dart';
+import 'package:flutter_base/features/location/presentaion/providers/use_cases_provider.dart';
+import '../../../../core/Constants/Constants.dart';
 import '../../../../core/Utils/Extintions.dart';
 import '../../../../core/localization/LanguageProvider.dart';
 import '../../../../core/utils/extensions/request_handle_extension.dart';
@@ -12,6 +15,7 @@ import '../../../../core/constants/app_routes.dart';
 import '../../../../core/providers/http_provider.dart';
 import '../../../../core/utils/Extensions/utils_exts.dart';
 import '../../../../core/widgets/svg_icons.dart';
+import '../../../../main.dart';
 import '../../domain/providers/user_provider.dart';
 import '../providers/usecase_provider.dart';
 
@@ -32,16 +36,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       UtilsExts.handleStatusBarColorWithIcon(
           statusBarColor: AppTheme.mainAppColor);
 
-
       final client = ref.read(userProvider.notifier).checkIfUserExist();
 
-      print("client MMM: ${client?.token}");
-      print("client MMM: ${client != null}");
+      checkAndUpdateUserLocationIfExist();
+
       if (client != null) {
         ref.read(userProvider.notifier).setUser(client);
       }
       commonCalls();
-
 
       if (client != null) {
         // initFcmToken();
@@ -55,10 +57,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
         context.push(loginScreenRoute);
         // }
       }
-
-
-
     });
+    print("dsfsfsdfsd ${prefs.getBool(REQUEST_PERMISSIS_KEY)}");
 
     super.initState();
   }
@@ -103,8 +103,15 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     ref.read(fetchAllCuisinesStateNotifierProvider.notifier).call(
         page: "0",
         size: "1000",
-        localeIsoCode: /*ref.watch(langProvider).toString()*/"en",
+        localeIsoCode: /*ref.watch(langProvider).toString()*/ "en",
         featured: true,
-        fetchRestaurants: false,cuisineIds: []);
+        fetchRestaurants: false,
+        cuisineIds: []);
+  }
+
+  void checkAndUpdateUserLocationIfExist() {
+    ref
+        .read(updateUserLocationStateNotifierProvider.notifier)
+        .updateUserLocation(AddressStorage.checkIfUserHasLocation());
   }
 }

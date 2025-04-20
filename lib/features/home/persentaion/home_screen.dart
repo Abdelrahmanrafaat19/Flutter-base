@@ -16,6 +16,7 @@ import 'package:flutter_base/features/home/persentaion/bottom_sheets/filter_bott
 import 'package:flutter_base/features/home/persentaion/widget/restaurant_widgets/home_restaurant_listview.dart';
 import 'package:flutter_base/features/home/persentaion/widget/search_with_filter.dart';
 import 'package:flutter_base/features/home/persentaion/widget/service_options.dart';
+import 'package:flutter_base/features/location/presentaion/providers/use_cases_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -40,10 +41,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((callback) {
-      ref
-          .read(fetchCuisinesStateNotifierProvider.notifier)
-          .call(featured: true);
-      ref.read(fetchCategoriesStateNotifierProvider.notifier).call();
+      getCuisines();
+      getCategories();
     });
     super.initState();
   }
@@ -83,13 +82,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         children: [
                           SVGIcons.localSVG(homeGpsIconPath,
                               width: 24, height: 24),
-                          Padding(
-                            padding: EdgeInsetsDirectional.symmetric(
-                                horizontal: defaultButtonRadius),
-                            child: Text(
-                              "Madinty,Bulding 64",
-                              style: AppTheme
-                                  .styleWithTextWhiteAdelleSansExtendedFonts16w500,
+                          InkWell(
+                            onTap: (){
+                              _onSelectLocationTab();
+                            },
+                            child: Padding(
+                              padding: EdgeInsetsDirectional.symmetric(
+                                  horizontal: defaultButtonRadius),
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width * .7,
+                                child: Text(
+                                  ref.watch(updateUserLocationStateNotifierProvider)?.description ?? "Enter your current location",
+                                  style: AppTheme
+                                      .styleWithTextWhiteAdelleSansExtendedFonts16w500.copyWith(),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
                             ),
                           ),
                           Spacer(),
@@ -124,7 +133,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           // ref.read(searchOnRestaurantDataStateNotifierProvider.notifier).call(
                           //     page:0, size: 10,localeIsoCode: "en");
                           context.push(searchScreenRoute);
-
+        
                         },
                         child: AppSearchBarWithFilter(
                           hasBorder: false,
@@ -257,5 +266,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         restaurantId: restaurant.id,
         addFavorite: !(restaurant.isFavorite??false)
     );
+  }
+
+  void _onSelectLocationTab() async{
+    var refreshHome = await context.push(searchLocationScreenRoute) as bool;
+    if(refreshHome){
+      getCategories();
+    }
+  }
+
+  void getCategories() {
+    ref.read(fetchCategoriesStateNotifierProvider.notifier).call();
+  }
+
+  void getCuisines() {
+    ref
+        .read(fetchCuisinesStateNotifierProvider.notifier)
+        .call(featured: true);
   }
 }

@@ -4,7 +4,9 @@ import 'package:flutter_base/features/home/domain/entities/restaurant_entity.dar
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../permissions/data/model/address_model.dart';
 import '../../domain/providers/common_repository_providers.dart';
+import '../../domain/usecases/get_place_details_from_latlng_usecase.dart';
 import '../../domain/usecases/get_place_details_usecase.dart';
 import '../../domain/usecases/get_suggestions_usecase.dart';
 import '../../domain/usecases/update_favorite_resturant_state_usecase.dart';
@@ -27,6 +29,11 @@ final getSuggestionsUseCaseProvider = StateNotifierProvider.autoDispose<
 });
 
 final getLatLngFromPlaceIdUseCaseProvider = StateNotifierProvider.autoDispose<
-    GetLatLngFromPlaceIdUseCase, StateModel<LatLng?>>((ref) {
+    GetLatLngFromPlaceIdUseCase, StateModel<Address?>>((ref) {
   return GetLatLngFromPlaceIdUseCase(ref.read(commonRepoProvider));
+});
+
+final getLatLngFromLatLngUseCaseProvider = StateNotifierProvider.autoDispose<
+    GetLatLngFromLatLngUseCase, StateModel<Address?>>((ref) {
+  return GetLatLngFromLatLngUseCase(ref.read(commonRepoProvider));
 });

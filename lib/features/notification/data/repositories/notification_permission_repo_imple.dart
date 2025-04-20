@@ -14,7 +14,7 @@ class NotificationPermissionRepoImple implements NotificationPermissionRepo {
     if (status.isGranted) {
       print("✅ Notification Permission Granted");
       if (context.mounted) {
-        context.go(locationPermissionScreenRoute);
+        context.go(mainScreenRoute);
       }
       return true;
     } else if (status.isDenied) {
@@ -24,10 +24,11 @@ class NotificationPermissionRepoImple implements NotificationPermissionRepo {
       print("⚠️ Notification Permission Permanently Denied, Open Settings");
       await openAppSettings();
       if (context.mounted) {
-        context.go(locationPermissionScreenRoute);
+        context.go(mainScreenRoute);
       }
       return false;
     }
     return false;
   }
+
 }

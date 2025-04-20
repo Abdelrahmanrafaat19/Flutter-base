@@ -10,6 +10,8 @@ import 'package:flutter_svg/svg.dart';
 import '../../features/home/data/models/item_selector.dart';
 
 const USER_KEY = 'user_key';
+const REQUEST_PERMISSIS_KEY = 'request_permissions_key';
+const USER_LOCATION_KEY = 'user_location_key';
 const PHONE_KEY = 'phone';
 const EMAIL_KEY = 'email';
 const FIRST_NAME_KEY = 'firstName';

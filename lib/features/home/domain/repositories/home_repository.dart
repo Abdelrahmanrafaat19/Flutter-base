@@ -1,4 +1,5 @@
 import '../../../../core/utils/typedefs.dart';
+import '../../data/models/location_model.dart';
 
 abstract class HomeRepository {
   FutureResponseModel fetchCuisines({
@@ -16,6 +17,6 @@ abstract class HomeRepository {
     String? localeIsoCode,
     bool? fetchRestaurants,
     bool? featured,
-    List<int>? categoryIds,
+    List<int>? categoryIds, LocationModel? userLocation
   });
 }

@@ -3,44 +3,51 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/core/Theme/app_theme.dart';
 import 'package:flutter_base/core/constants/app_routes.dart';
+import 'package:flutter_base/core/utils/extensions/request_handle_extension.dart';
 import 'package:flutter_base/core/widgets/custom_app_bar.dart';
 import 'package:flutter_base/core/widgets/svg_icons.dart';
 import 'package:flutter_base/features/location/data/address_model.dart';
 import 'package:flutter_base/features/location/domain/address_storage.dart';
+import 'package:flutter_base/features/location/presentaion/providers/use_cases_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../../core/localization/Keys.dart';
 import '../../../../core/utils/location_handler.dart';
 import '../../../../core/utils/permissions_handler.dart';
-import '../../data/data_source/address_services.dart';
-import '../../data/model/address_model.dart';
-import '../../widgets/address_item.dart';
-import '../../widgets/search_field_widget.dart';
+import '../../../common/presentation/providers/usecases_providers.dart';
+import '../../../permissions/data/data_source/address_services.dart';
+import '../../../permissions/data/model/address_model.dart';
+import '../../../permissions/widgets/address_item.dart';
+import '../../../permissions/widgets/search_field_widget.dart';
 
-class SearchLocationScreen extends StatefulWidget {
+class SearchLocationScreen extends ConsumerStatefulWidget {
   const SearchLocationScreen({super.key});
 
   @override
-  State<SearchLocationScreen> createState() => _SearchLocationScreenState();
+  ConsumerState<SearchLocationScreen> createState() =>
+      _SearchLocationScreenState();
 }
 
-class _SearchLocationScreenState extends State<SearchLocationScreen> {
+class _SearchLocationScreenState extends ConsumerState<SearchLocationScreen> {
   List<String> searchResults = ['Madint Nasr', 'EL-10 mn ramadan'];
   final TextEditingController _addressController = TextEditingController();
   final AddressService _service = AddressService();
   List<Address> _addresses = [];
-  List<Address> Localeaddresses=[];
+  List<Address> Localeaddresses = [];
   bool _loading = false;
 
   LatLng? _currentLatLng;
-
 
   @override
   void initState() {
     super.initState();
     _loadAddresses();
   }
+
   void _onTextChanged(String value) async {
     if (value.isEmpty) {
       setState(() => _addresses = []);
@@ -55,34 +62,19 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
     });
   }
 
-  void _onTapAddress(Address addr) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(
-        '${addr.placeName} selected\nLat: ${addr.latitude}, Lng: ${addr.longitude}',
-      ),
-    ));
-    setState(() {
-      _addressController.text = addr.placeName;
-      _addresses = [];
-    });
+  void _onSelectAddress(Address address) {
+    AddressStorage.saveUserCurrentLocation(address);
+    updateUserLocation(address);
+    context.pop(true);
   }
 
   void _loadAddresses() async {
-      Localeaddresses = await AddressStorage.getAddresses();
-    setState(() {
-
-    });
+    Localeaddresses = await AddressStorage.getAddresses();
+    setState(() {});
   }
 
   void _saveAddress(Address address) async {
     if (_addressController.text.isEmpty) return;
-
-    Address newAddress = Address(
-      placeName: _addressController.text,
-      latitude: 0.0,
-      longitude: 0.0,
-      description:""
-    );
 
     await AddressStorage.addAddress(address);
     _addressController.clear();
@@ -99,6 +91,15 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+
+    handleState(getLatLngFromLatLngUseCaseProvider,showLoading: true, onSuccess: (res) {
+      if (res.data != null) {
+        AddressStorage.addAddress(res.data!);
+        _onSelectAddress(res.data!);
+      }
+    });
+
     return Scaffold(
       appBar: CustomAppBar(
         navigated: true,
@@ -114,7 +115,6 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
               controller: _addressController,
               onChanged: _onTextChanged,
               searchClick: () {
-
                 // context.go(mainScreenRoute);
               },
             ),
@@ -131,8 +131,7 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
             ), */
             const SizedBox(height: 20),
             GestureDetector(
-              onTap:() {
-
+              onTap: () {
                 _getLocation();
               },
               child: Container(
@@ -171,40 +170,72 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
               ),
             ),
             Expanded(
-            child: /*_addresses.isEmpty*/
-              //     ? Center(child: Text('No addresses saved.'))
-              //     :
-              ListView.builder(
-                      itemCount:_addresses.isEmpty?Localeaddresses.length: _addresses.length,
-                      itemBuilder: (context, index) {
-                        // Address address = _addresses[index];
-                        return AddressItem(
-                          onTap: () {
-                            if(_addresses.isEmpty){
-                              _saveAddress(Localeaddresses[index]);
-                              _onTapAddress(Localeaddresses[index]);
-                            }else{
-                              _saveAddress(_addresses[index]);
-                              _onTapAddress(_addresses[index]);
-                            }
-
-                          },
-                          addressName:_addresses.isEmpty?Localeaddresses[index].placeName:_addresses[index].placeName,
-                          addressDiscribtion: _addresses.isEmpty?Localeaddresses[index].description:_addresses[index].description,
-                        );
-                      },
-                    ),
+              child: /*_addresses.isEmpty*/
+                  //     ? Center(child: Text('No addresses saved.'))
+                  //     :
+                  ListView.builder(
+                itemCount: _addresses.isEmpty
+                    ? Localeaddresses.length
+                    : _addresses.length,
+                itemBuilder: (context, index) {
+                  // Address address = _addresses[index];
+                  return AddressItem(
+                    onTap: () {
+                      if (_addresses.isEmpty) {
+                        _saveAddress(Localeaddresses[index]);
+                        _onSelectAddress(Localeaddresses[index]);
+                      } else {
+                        _saveAddress(_addresses[index]);
+                        _onSelectAddress(_addresses[index]);
+                      }
+                    },
+                    addressName: _addresses.isEmpty
+                        ? Localeaddresses[index].placeName
+                        : _addresses[index].placeName,
+                    addressDiscribtion: _addresses.isEmpty
+                        ? Localeaddresses[index].description
+                        : _addresses[index].description,
+                  );
+                },
+              ),
             ),
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed:(){
+          _openMap();
+        },
+        materialTapTargetSize: MaterialTapTargetSize.padded,
+        backgroundColor: Colors.green,
+        child: const Icon(Icons.map, size: 36.0),
+      ),
     );
   }
+
   void _getLocation() async {
     if (await PermissionsHandler.checkLocationPermission()) {
       var position = await LocationHandler.getCurrentLocation();
       _currentLatLng = LatLng(position!.latitude, position.longitude);
+      if (_currentLatLng != null) {
+        ref.read(getLatLngFromLatLngUseCaseProvider.notifier).call(
+            _currentLatLng?.latitude ?? 0.0,
+            _currentLatLng?.longitude ?? 0.0);
+      }
+    }
+  }
 
+  void updateUserLocation(Address address) {
+    ref
+        .read(updateUserLocationStateNotifierProvider.notifier)
+        .updateUserLocation(address);
+  }
+
+  _openMap() async{
+    var location = await context.push(googleMapScreenRoute) as Address?;
+    if(location != null){
+      await AddressStorage.addAddress(location);
+      _onSelectAddress(location);
     }
   }
 }
@@ -245,8 +276,6 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
 //     _suggestions = [];
 //   });
 // }
-
-
 
 // Future<List<String>> getPlaceSuggestionsWithDio(String input) async {
 //   const apiKey = 'AIzaSyAIhooYpv80pRyeAhyNzAyb4YGCmkTUlXA';
