@@ -6,6 +6,7 @@ import 'package:flutter_base/features/auth/presentation/screens/change_password_
 import 'package:flutter_base/features/auth/presentation/screens/forget_password_screen.dart';
 import 'package:flutter_base/features/auth/presentation/screens/splash_screen.dart';
 import 'package:flutter_base/features/main/main_screen.dart';
+import 'package:flutter_base/features/restaurant_details/presentation/screens/restaurant_details_screen.dart';
 import 'package:flutter_base/features/search/presentation/screens/search_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -111,7 +112,7 @@ void main() async {
 
   // Check if you received the link via `getInitialLink` first
 
-  ago.setLocaleMessages('ar', ago.ArMessages());
+  ago.setLocaleMessages('en', ago.ArMessages());
   //Main App
   runApp(ProviderScope(
       child: EasyLocalization(supportedLocales: const [
@@ -123,6 +124,7 @@ void main() async {
 class MyApp extends ConsumerWidget {
   final appLang;
   MyApp({Key? key, this.appLang}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -150,7 +152,7 @@ class MyApp extends ConsumerWidget {
       GoRoute(
         path: splashScreenRoute,
         builder: (BuildContext context, GoRouterState state) =>
-            const SplashScreen(),
+            RestaurantDetailsScreen(),
       ),
       GoRoute(
         path: mainScreenRoute,

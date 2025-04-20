@@ -39,4 +39,14 @@ const reserveIcon="assets/images/reserve_icon.svg";
 const gpsIcon="assets/images/gps_icon.svg";
 const unFavouriteWithBackGroundIcon="assets/images/un_favorite_with_background_icon.svg";
 const mapGpsIcon="assets/images/map_gps_icon.svg";
+const shareWithGrayBackgroundIcon="assets/images/share_with_gray_background_icon.svg";
+const unFavoriteWithGrayBackgroundIcon="assets/images/un_favorite_wih_gray_background.svg";
+const backWithGrayBackgroundIcon="assets/images/back_with_gray_background.svg";
+const grayCalendarIcon="assets/images/gray_calendar_icon.svg";
+const cashIcon="assets/images/cash_Icons.svg";
+const markerWithMapIcon="assets/images/marker_with_map_icon.svg";
+const linkIcon="assets/images/link_icon.svg";
+const callIcon="assets/images/call_icon.svg";
+const mapImage="assets/images/map_image.png";
+
 
