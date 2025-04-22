@@ -1,78 +1,132 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_base/core/Constants/Constants.dart';
 import 'package:flutter_base/core/Theme/app_theme.dart';
 import 'package:flutter_base/core/widgets/circle_image.dart';
+import 'package:flutter_base/features/restaurant_details/domain/entities/menu_item_entity.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class MealItem extends StatelessWidget {
-  const MealItem({super.key});
+  final MenuItemEntity? meal;
+  const MealItem({super.key, this.meal});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 108,
       width: double.infinity,
-      decoration: BoxDecoration(
-        color: CupertinoColors.white,
+      decoration: const BoxDecoration(
+        color: Colors.white,
       ),
-      padding: const EdgeInsetsDirectional.symmetric(
-          horizontal: defaultPaddingHorizontal),
-      child: Row(
+      child: Column(
         children: [
-          Container(
-            clipBehavior: Clip.antiAlias,
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(defaultButtonRadius))
-            ),
-            width: 68,
-            height: 68,
-            child: ImageView(
-              width: 68,
-              height: 68,
-              initialImg:
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa9Qq1rV_svdydH5u3O8r5ZmT8udMBnSuKeA&s",
-            ),
-          ),
-          SizedBox(
-            width: 8,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width -110,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+          Padding(
+            padding: const EdgeInsetsDirectional.all(
+                 defaultPaddingHorizontal),
+            child: Row(
+              children: [
+                Skeleton.replace(
+                  replacement: Container(
+                    clipBehavior: Clip.antiAlias,
+                    decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(defaultButtonRadius))),
+                    child: Container(
+                      width: 68,
+                      height: 68,
+                      color: Colors.white,
+                    ),
+                  ),
+                  child: Container(
+                    clipBehavior: Clip.antiAlias,
+                    decoration: const BoxDecoration(
+                        borderRadius:
+                            BorderRadius.all(Radius.circular(defaultButtonRadius))),
+                    width: 68,
+                    height: 68,
+                    child: ImageView(
+                      width: 68,
+                      height: 68,
+                      initialImg: /*meal?.image ??*/ "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZDW-eUQzyd6cb21IAWwZUsmV0XK3BALY13Q&s",
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text("Original Mushroom Burger",
-                        style: AppTheme
-                            .styleWithTextAppGreen17AdelleSansExtendedFonts14w400),
-                    Spacer(),
-                    Text(
-                      "45.99",
-                      style: AppTheme
-                          .styleWithTextMainAppColorAdelleSansExtendedFonts18w700,
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width - 110,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Skeleton.replace(
+                            replacement: Container(
+                              width: 120,
+                              height: 20,
+                              color: Colors.white,
+                            ),
+                            child: Text(meal?.name ?? "",
+                                style: AppTheme
+                                    .styleWithTextAppBlackColor3AdelleSansExtendedFonts14w700),
+                          ),
+
+                          Skeleton.replace(
+                            replacement: Container(
+                              width: 30,
+                              height: 20,
+                              color: Colors.white,
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  meal?.price.toString() ?? "",
+                                  style: AppTheme
+                                      .styleWithTextMainAppColorAdelleSansExtendedFonts18w700,
+                                ),
+                                SizedBox(
+                                  width: 6,
+                                ),
+                                Text(
+                                  "LE",
+                                  style: AppTheme
+                                      .styleWithTextMainAppColorAdelleSansExtendedFonts12w500,
+                                )
+                              ],
+                            ),
+                          )
+
+                        ],
+                      ),
                     ),
                     SizedBox(
-                      width: 6,
+                      height: 8,
                     ),
-                    Text(
-                      "LE",
-                      style: AppTheme
-                          .styleWithTextMainAppColorAdelleSansExtendedFonts12w500,
+                    Skeleton.replace(
+                      replacement: Container(
+                        width: 150,
+                        height: 20,
+                        color: Colors.white,
+                      ),
+                      child: SizedBox(
+                          width: MediaQuery.of(context).size.width - 110,
+                          height: 46,
+                          child: Text(/*meal?.description??*/"A premium burger made with 100% smashed beef, toopped with fresh sliced mushroom and a savory sauce.",
+                            style: AppTheme.styleWithTextAppAppGrey20CeraProFonts12w400
+                                .copyWith(overflow: TextOverflow.ellipsis,height: 1.3),
+                            maxLines: 3,
+                          )),
                     )
                   ],
-                ),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              SizedBox(
-                  width: MediaQuery.of(context).size.width -110,
-                  child: Text("A premium burger made with 100% smashed beef, toopped with fresh sliced mushroom and a savory sauce.",style: AppTheme.styleWithTextAppAppGrey20CeraProFonts12w400.copyWith(overflow: TextOverflow.ellipsis),maxLines: 3,))
-            ],
-          )
-     ],
+                )
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

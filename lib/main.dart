@@ -6,6 +6,7 @@ import 'package:flutter_base/features/auth/presentation/screens/change_password_
 import 'package:flutter_base/features/auth/presentation/screens/forget_password_screen.dart';
 import 'package:flutter_base/features/auth/presentation/screens/splash_screen.dart';
 import 'package:flutter_base/features/main/main_screen.dart';
+import 'package:flutter_base/features/restaurant_details/presentation/screens/menu_screen.dart';
 import 'package:flutter_base/features/restaurant_details/presentation/screens/restaurant_details_screen.dart';
 import 'package:flutter_base/features/search/presentation/screens/search_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -152,11 +153,11 @@ class MyApp extends ConsumerWidget {
       GoRoute(
         path: splashScreenRoute,
         builder: (BuildContext context, GoRouterState state) =>
-            RestaurantDetailsScreen(),
+            SplashScreen(),
       ),
       GoRoute(
         path: mainScreenRoute,
-        builder: (BuildContext context, GoRouterState state) => const MainScreen(),
+        builder: (BuildContext context, GoRouterState state) => MenuScreen(),
       ),
       GoRoute(
         path: loginScreenRoute,

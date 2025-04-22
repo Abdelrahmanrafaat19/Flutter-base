@@ -48,5 +48,6 @@ const markerWithMapIcon="assets/images/marker_with_map_icon.svg";
 const linkIcon="assets/images/link_icon.svg";
 const callIcon="assets/images/call_icon.svg";
 const mapImage="assets/images/map_image.png";
+const burgerIcon="assets/images/burger_icon.svg";
 
 

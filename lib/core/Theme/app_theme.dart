@@ -177,6 +177,10 @@ class AppTheme {
   // Text style
   static const TextStyle styleWithTextBlackAdelleSansExtendedFonts20w700 =
       TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w700);
+
+  static const TextStyle styleWithTextAppBlackColor3AdelleSansExtendedFonts20w500 =
+      TextStyle(color: appBlackColor3, fontSize: 20, fontWeight: FontWeight.w500);
+
   static const TextStyle styleblack16normal = TextStyle(
       color: Colors.black, fontSize: 16, fontWeight: FontWeight.normal);
   static const TextStyle styleColorAppGunmetal40FontSize20W700 =
@@ -249,11 +253,14 @@ static const TextStyle fontStyleW700Size20ColorWhite=TextStyle(
   static const TextStyle styleWithTextGreenAdelleSansExtendedFonts12w400 =
       TextStyle(color: appGreen, fontSize: 12, fontWeight: FontWeight.w400);
 
-  static const TextStyle styleWithTextAppBlackColor3CeraProFonts12w400 =
+  static const TextStyle styleWithTextAppBlackColor3CeraProFonts12w500 =
       TextStyle(color: appBlackColor3, fontSize: 12, fontWeight: FontWeight.w500);
 
   static const TextStyle styleWithTextAppAppGrey16CeraProFonts12w400 =
       TextStyle(color: appGrey16, fontSize: 12, fontWeight: FontWeight.w400);
+
+  static const TextStyle styleWithTextAppAppGrey16CeraProFonts12w500 =
+      TextStyle(color: appGrey16, fontSize: 12, fontWeight: FontWeight.w500);
 
   static const TextStyle styleWithTextAppAppGrey20CeraProFonts12w400 =
       TextStyle(color: appGrey20, fontSize: 12, fontWeight: FontWeight.w400);
@@ -263,6 +270,9 @@ static const TextStyle fontStyleW700Size20ColorWhite=TextStyle(
 
   static const TextStyle styleWithTextAppGreen17AdelleSansExtendedFonts14w400 =
       TextStyle(color: appGrey17, fontSize: 14, fontWeight: FontWeight.w400);
+
+  static const TextStyle styleWithTextAppBlackColor3AdelleSansExtendedFonts14w700 =
+      TextStyle(color: appBlackColor3, fontSize: 14, fontWeight: FontWeight.w700);
 
   static const TextStyle styleWithTextAppGreen20AdelleSansExtendedFonts14w400 =
       TextStyle(color: appGrey20, fontSize: 14, fontWeight: FontWeight.w400);
