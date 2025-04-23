@@ -1,6 +1,11 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/core/constants/assets.dart';
+import 'package:flutter_base/core/models/StateModel.dart';
+import 'package:flutter_base/core/utils/extensions/request_handle_extension.dart';
+import 'package:flutter_base/core/utils/map_utils.dart';
+import 'package:flutter_base/core/utils/time_utils.dart';
 import 'package:flutter_base/core/widgets/svg_icons.dart';
 import 'package:flutter_base/features/home/data/models/category_model.dart';
 import 'package:flutter_base/features/restaurant_details/data/models/restaurant_info_model.dart';
@@ -11,7 +16,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/Constants/Constants.dart';
 import '../../../../core/Theme/app_theme.dart';
+import '../../../../core/localization/LanguageProvider.dart';
 import '../../../../core/widgets/app_button.dart';
+import '../providers/use_case_provider.dart';
 import '../widgets/banner_card_items.dart';
 
 class RestaurantDetailsScreen extends ConsumerStatefulWidget {
@@ -28,65 +35,31 @@ class _RestaurantDetailsScreenState
   late TabController tabController;
   late TabController categoryTabController;
   int activePageIndex = 0;
-  int activeCategoryPageIndex = 0;
-
-  final tags = [
-    "🍽️ Dine-in Available",
-    "🚀 Fast Service",
-    "💳 Online Payment",
-    "🎵 Live Music Nights"
-  ];
-
-  final times = [
-    "03 : 04 pm",
-    "03 : 04 pm",
-    "03 : 04 pm",
-    "03 : 04 pm",
-    "03 : 04 pm",
-    "03 : 04 pm",
-    "03 : 04 pm",
-    "03 : 04 pm",
-    "03 : 04 pm",
-  ];
-  final restaurantInfo = [
-    RestaurantInfoModel(
-      icon: gpsIconPath,
-      description: "Madinty, South Park",
-    ),
-    RestaurantInfoModel(
-      icon: grayCalendarIcon,
-      description: "Open Now, Closed at 2am",
-    )
-  ];
-
-  final categorise = [
-    CategoryModel(description: "Burger", id: 0),
-    CategoryModel(description: "Pizza", id: 1),
-    CategoryModel(description: "Pasta", id: 2),
-    CategoryModel(description: "Pies", id: 3),
-  ];
+  ValueNotifier<int> activeCategoryPageIndex = ValueNotifier(0);
 
   @override
   void initState() {
     tabController = TabController(length: 2, vsync: this);
-    categoryTabController =
-        TabController(length: categorise.length, vsync: this);
+
     tabController.addListener(() {
       setState(() {
         activePageIndex = tabController.index;
       });
     });
-    categoryTabController.addListener(() {
-      setState(() {
-        activeCategoryPageIndex = categoryTabController.index;
-      });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(langProvider.notifier).fetchLocale("en");
+      getRestaurantMenus("136");
+      ref.read(fetchRestaurantDetailsStateProvider.notifier).call("136", "en");
     });
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final restaurantState = ref.watch(fetchRestaurantDetailsStateProvider);
+
+    handleState(fetchRestaurantDetailsStateProvider, showLoading: true);
+
     return Scaffold(
       body: Stack(
         children: [
@@ -130,7 +103,8 @@ class _RestaurantDetailsScreenState
                     background: Stack(
                       children: [
                         BannerCardItems(
-                          list: ["", "", "", "", ""],
+                          list: restaurantState.data?.imageUrls ?? [],
+                          mainImage: restaurantState.data?.mainImage,
                           height: MediaQuery.of(context).size.height * 0.5,
                           radius: const BorderRadiusDirectional.only(
                             bottomEnd: Radius.circular(defaultButtonRadius),
@@ -149,9 +123,10 @@ class _RestaurantDetailsScreenState
                                 child: Wrap(
                                   spacing: 100,
                                   runSpacing: 15,
-                                  children: tags.map((tag) {
+                                  children: (restaurantState.data?.tags ?? [])
+                                      .map((tag) {
                                     return TagItem(
-                                      tagName: tag,
+                                      tagName: tag.text ?? "",
                                     );
                                   }).toList(),
                                 ),
@@ -197,13 +172,13 @@ class _RestaurantDetailsScreenState
                               width: 16, height: 16),
                           const SizedBox(width: 4),
                           Text(
-                            "4.5",
+                            restaurantState.data?.rating.toString() ?? "0",
                             style: AppTheme
                                 .styleWithTextBlackAdelleSansExtendedFonts16w500,
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            "(1097 Reviews)",
+                            "(${restaurantState.data?.reviewsCount ?? 0} Reviews)",
                             style: AppTheme
                                 .styleWithTextAppGrey7AdelleSansExtendedFonts14w400
                                 .copyWith(decoration: TextDecoration.underline),
@@ -215,7 +190,7 @@ class _RestaurantDetailsScreenState
                       ),
                       Row(
                         children: [
-                          Text("Tako Mexico",
+                          Text("${restaurantState.data?.name ?? ""}",
                               style: AppTheme
                                   .styleWithTextBlackCeraProFonts22w700),
                           Spacer(),
@@ -225,7 +200,7 @@ class _RestaurantDetailsScreenState
                             width: 4,
                           ),
                           Text(
-                            "Mexican",
+                            "${restaurantState.data?.cuisineName ?? ""}",
                             style: AppTheme.styleWithAppGrey7Fonts14w400,
                           )
                         ],
@@ -233,7 +208,16 @@ class _RestaurantDetailsScreenState
                       SizedBox(
                         height: 16,
                       ),
-                      ...restaurantInfo.map((infoItem) => SizedBox(
+                      ...[
+                        RestaurantInfoModel(
+                            icon: gpsIconPath,
+                            description: restaurantState.data?.address),
+                        RestaurantInfoModel(
+                            icon: grayCalendarIcon,
+                            description: getOpenStatus(
+                                restaurantState.data?.openTime ?? "",
+                                restaurantState.data?.closeTime ?? ""))
+                      ].map((infoItem) => SizedBox(
                             height: 32,
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -257,7 +241,7 @@ class _RestaurantDetailsScreenState
                             SVGIcons.localSVG(cashIcon, width: 20, height: 24),
                             SizedBox(width: 4),
                             Text(
-                              "The cost for a table reservation is 500.",
+                              "The cost for a table reservation is \$${restaurantState.data?.singleReservationCost}.",
                               style: AppTheme
                                   .styleWithTextAppGrey16CeraProFonts14w500,
                             )
@@ -357,62 +341,82 @@ class _RestaurantDetailsScreenState
                       ),
                       LayoutBuilder(
                         builder: (context, constraints) {
-                          int crossAxisCount = 3;
-                          double crossAxisSpacing = 12;
-                          double mainAxisSpacing = 12;
-                          double aspectRatio = 2.5;
+                          if (restaurantState.state == DataState.SUCCESS) {
+                            var timeSlots = restaurantState
+                                    .data?.quickReservationTimeSlots ??
+                                [];
+                            int crossAxisCount = 3;
+                            double crossAxisSpacing = 12;
+                            double mainAxisSpacing = 12;
+                            double aspectRatio = 2.5;
 
-                          // حساب العرض المتاح للكاردز
-                          double totalWidth = constraints.maxWidth;
-                          double totalSpacing =
-                              (crossAxisCount - 1) * crossAxisSpacing;
-                          double itemWidth =
-                              (totalWidth - totalSpacing) / crossAxisCount;
+                            double totalWidth = constraints.maxWidth;
+                            double totalSpacing =
+                                (crossAxisCount - 1) * crossAxisSpacing;
+                            double itemWidth =
+                                (totalWidth - totalSpacing) / crossAxisCount;
 
-                          // نحسب الطول من الـ aspect ratio
-                          double itemHeight = itemWidth / aspectRatio;
+                            // نحسب الطول من الـ aspect ratio
+                            double itemHeight = itemWidth / aspectRatio;
 
-                          // عدد الصفوف
-                          int rowCount = (times.length / crossAxisCount).ceil();
+                            // عدد الصفوف
+                            int rowCount =
+                                (timeSlots.length / crossAxisCount).ceil();
 
-                          // الطول الكلي
-                          double totalHeight = (rowCount * itemHeight) +
-                              ((rowCount - 1) * mainAxisSpacing);
+                            // الطول الكلي
+                            double totalHeight = (rowCount * itemHeight) +
+                                ((rowCount - 1) * mainAxisSpacing);
 
-                          return SizedBox(
-                            height: totalHeight,
-                            child: GridView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              padding: EdgeInsets.zero,
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: crossAxisCount,
-                                crossAxisSpacing: crossAxisSpacing,
-                                mainAxisSpacing: mainAxisSpacing,
-                                childAspectRatio: aspectRatio,
-                              ),
-                              itemCount: times.length,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(
-                                        defaultButtonRadius),
-                                    border: Border.all(
-                                        width: 1, color: AppTheme.appGrey18),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      times[index],
-                                      style: AppTheme
-                                          .styleWithTextAppGrey16AdelleSansExtendedFonts16w500,
+                            return Column(
+                              children: [
+                                SizedBox(
+                                  height: totalHeight,
+                                  child: GridView.builder(
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    padding: EdgeInsets.zero,
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: crossAxisCount,
+                                      crossAxisSpacing: crossAxisSpacing,
+                                      mainAxisSpacing: mainAxisSpacing,
+                                      childAspectRatio: aspectRatio,
                                     ),
+                                    itemCount: timeSlots.length,
+                                    itemBuilder: (context, index) {
+                                      return Container(
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(
+                                              defaultButtonRadius),
+                                          border: Border.all(
+                                              width: 1, color: AppTheme.appGrey18),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            formatTo12Hour(
+                                                timeSlots[index].reservationTime ??
+                                                    ""),
+                                            style: AppTheme
+                                                .styleWithTextAppGrey16AdelleSansExtendedFonts16w500
+                                                .copyWith(
+                                                    decoration: timeSlots[index]
+                                                                .availability ==
+                                                            true
+                                                        ? TextDecoration.none
+                                                        : TextDecoration
+                                                            .lineThrough),
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
-                                );
-                              },
-                            ),
-                          );
+                                ),
+                              ],
+                            );
+                          } else {
+                            return const SizedBox();
+                          }
                         },
                       ),
                       SizedBox(
@@ -425,36 +429,82 @@ class _RestaurantDetailsScreenState
                       SizedBox(
                         width: 16,
                       ),
-                      TabBar(
-                        isScrollable: true,
-                        labelPadding: EdgeInsets.zero,
-                        indicatorColor: Colors.transparent,
-                          controller: categoryTabController,
-                          tabs:
-                        categorise
-                            .map((item) => CategoryTabItem(
-                                isSelected:
-                                    categorise[activeCategoryPageIndex].id ==
-                                        item.id,
-                                icon:
-                                    "https://s7d1.scene7.com/is/image/mcdonalds/mcdonalds-cheeseburger-april-promo:nutrition-calculator-tile?wid=822&hei=822&dpr=off",
-                                categoryName: item.description ?? ""))
-                            .toList()
-                      ),
-
+                      Consumer(builder: (context, ref, child) {
+                        var restaurantMenu =
+                            ref.watch(fetchRestaurantMenuStateProvider);
+                        if (restaurantMenu.state == DataState.SUCCESS) {
+                          var categories =
+                              restaurantMenu.data?.categoryItems ?? [];
+                          categoryTabController = TabController(
+                              length: categories.length ?? 0, vsync: this);
+                          categoryTabController.addListener(() {
+                            activeCategoryPageIndex.value =
+                                categoryTabController.index;
+                          });
+                          return ValueListenableBuilder(
+                            valueListenable: activeCategoryPageIndex,
+                            builder: (context, value, _) {
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: 16,
+                                  ),
+                                  Text(
+                                    "Menu Highlights",
+                                    style: AppTheme
+                                        .styleWithTextAppBlueColor3SansExtendedFonts16w700,
+                                  ),
+                                  SizedBox(
+                                    height: 16,
+                                  ),
+                                  TabBar(
+                                      isScrollable: true,
+                                      labelPadding: EdgeInsets.zero,
+                                      indicatorColor: Colors.transparent,
+                                      controller: categoryTabController,
+                                      tabs: categories
+                                          .map((item) => CategoryTabItem(
+                                              isSelected:
+                                                  categories[value].categoryId ==
+                                                      item.categoryId,
+                                              icon: burgerIcon,
+                                              categoryName:
+                                                  item.categoryName ?? ""))
+                                          .toList()),
+                                ],
+                              );
+                            },
+                          );
+                        }
+                        return const SizedBox();
+                      }),
                     ],
                   ),
                 ),
               ),
+              ValueListenableBuilder(
+                  valueListenable: activeCategoryPageIndex,
+                  builder: (context, value, _) {
+                    return SliverToBoxAdapter(
+                      child: CategoryTabContent(index: value),
+                    );
+                  }),
               SliverToBoxAdapter(
-                child: CategoryTabContent(index:categoryTabController.index),
-              ),
-              SliverToBoxAdapter(
-                child:Column(
+                child: Column(
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      child: Center(child: Text("Show all Menu",style: AppTheme.styleWithTextMainAppColorCeraProFonts14w500.copyWith(decoration: TextDecoration.underline),)),
+                      child: Center(
+                          child: InkWell(
+                        onTap: () {},
+                        child: Text(
+                          "Show all Menu",
+                          style: AppTheme
+                              .styleWithTextMainAppColorCeraProFonts14w500
+                              .copyWith(decoration: TextDecoration.underline),
+                        ),
+                      )),
                     ),
                     const Padding(
                       padding: EdgeInsets.all(16.0),
@@ -464,39 +514,93 @@ class _RestaurantDetailsScreenState
                       ),
                     )
                   ],
-                ) ,
+                ),
               ),
               SliverToBoxAdapter(
-                child:Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: defaultPaddingHorizontal),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: defaultPaddingHorizontal),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Details",style: AppTheme.styleWithTextAppBlueColor3SansExtendedFonts16w700,),
+                      Text(
+                        "Details",
+                        style: AppTheme
+                            .styleWithTextAppBlueColor3SansExtendedFonts16w700,
+                      ),
                       SizedBox(
                         height: 16,
                       ),
                       Row(
                         children: [
-                          SVGIcons.localSVG(markerWithMapIcon,width: 24,height: 24),
+                          SVGIcons.localSVG(markerWithMapIcon,
+                              width: 24, height: 24),
                           SizedBox(
                             width: 12,
                           ),
-                          Text("Madinty, South Park B28",style: AppTheme.styleWithTextAppGrey16CeraProFonts14w500,)
+                          Text(
+                            restaurantState.data?.address ?? "",
+                            style: AppTheme
+                                .styleWithTextAppGrey16CeraProFonts14w500,
+                          )
                         ],
                       ),
                       SizedBox(
                         height: 16,
                       ),
-                      Image.asset(mapImage,width: double.infinity,),
+                      InkWell(
+                        onTap: () {
+                          if (restaurantState.data?.location != null) {
+                            var location = restaurantState.data?.location;
+                            openMap(location?.lat ?? "", location?.lon ?? "");
+                          }
+                        },
+                        child: Image.asset(
+                          mapImage,
+                          width: double.infinity,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          if (restaurantState.data?.location != null) {
+                            var location = restaurantState.data?.location;
+                            openMap(location?.lat ?? "", location?.lon ?? "");
+                          }
+                        },
+                        child: Row(
+                          children: [
+                            SVGIcons.localSVG(linkIcon, width: 24, height: 24),
+                            SizedBox(
+                              width: 12,
+                            ),
+                            Text(
+                              restaurantState.data?.address ?? "",
+                              style: AppTheme
+                                  .styleWithTextAppBlueColor4SmRegularFonts14w500
+                                  .copyWith(
+                                      decoration: TextDecoration.underline),
+                            )
+                          ],
+                        ),
+                      ),
                       SizedBox(
                         height: 16,
                       ),
                       Row(
                         children: [
-                          SVGIcons.localSVG(linkIcon,width: 24,height: 24),
-                          SizedBox(width: 12,),
-                          Text("Tako Mexico.com",style: AppTheme.styleWithTextAppBlueColor4SmRegularFonts14w500.copyWith(decoration: TextDecoration.underline),)
+                          SVGIcons.localSVG(markerWithMapIcon,
+                              width: 24, height: 24),
+                          SizedBox(
+                            width: 12,
+                          ),
+                          Text(
+                            "Madinty, South Park B28",
+                            style: AppTheme
+                                .styleWithTextAppGrey16CeraProFonts14w500,
+                          )
                         ],
                       ),
                       SizedBox(
@@ -504,31 +608,28 @@ class _RestaurantDetailsScreenState
                       ),
                       Row(
                         children: [
-                          SVGIcons.localSVG(markerWithMapIcon,width: 24,height: 24),
+                          SVGIcons.localSVG(callIcon, width: 24, height: 24),
                           SizedBox(
                             width: 12,
                           ),
-                          Text("Madinty, South Park B28",style: AppTheme.styleWithTextAppGrey16CeraProFonts14w500,)
-                        ],
-                      ),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Row(
-                        children: [
-                          SVGIcons.localSVG(callIcon,width: 24,height: 24),
-                          SizedBox(
-                            width: 12,
-                          ),
-                          Text("+201090880259",style: AppTheme.styleWithTextAppGrey16CeraProFonts14w500,)
+                          Text(
+                            restaurantState.data?.phone ?? "",
+                            style: AppTheme
+                                .styleWithTextAppGrey16CeraProFonts14w500,
+                          )
                         ],
                       )
                     ],
                   ),
                 ),
               ),
+              Consumer(builder: (_, ref, child) {
+                return const SliverToBoxAdapter(
+                  child: SizedBox(),
+                );
+              }),
               SliverToBoxAdapter(
-                child:  SizedBox(
+                child: SizedBox(
                   height: 100,
                 ),
               )
@@ -558,7 +659,7 @@ class _RestaurantDetailsScreenState
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SVGIcons.localSVG(calendarIconPath,
-                          width: 24, height: 24,color: Colors.white),
+                          width: 24, height: 24, color: Colors.white),
                       SizedBox(
                         width: 8,
                       ),
@@ -576,5 +677,11 @@ class _RestaurantDetailsScreenState
         ],
       ),
     );
+  }
+
+  void getRestaurantMenus(String restaurantId) {
+    ref
+        .read(fetchRestaurantMenuStateProvider.notifier)
+        .call(restaurantId: restaurantId, itemsCountLimit: 5);
   }
 }

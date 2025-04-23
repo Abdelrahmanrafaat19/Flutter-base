@@ -139,14 +139,14 @@ class _SearchResultScreenState extends ConsumerState<SearchResultScreen> {
             Expanded(
               child: !(restaurantsResult.data?.isEmpty == true &&
                   restaurantsResult.state == DataState.SUCCESS)
-                  ? PaginatedListView<Restaurant>(
+                  ? PaginatedListView<RestaurantSummaryEntity>(
                   dataList: restaurantsResult.data ??
                       [
-                        Restaurant(),
-                        Restaurant(),
-                        Restaurant(),
-                        Restaurant(),
-                        Restaurant(),
+                        RestaurantSummaryEntity(),
+                        RestaurantSummaryEntity(),
+                        RestaurantSummaryEntity(),
+                        RestaurantSummaryEntity(),
+                        RestaurantSummaryEntity(),
                       ],
                   scrollPhysics: const AlwaysScrollableScrollPhysics(
                       parent: BouncingScrollPhysics()),

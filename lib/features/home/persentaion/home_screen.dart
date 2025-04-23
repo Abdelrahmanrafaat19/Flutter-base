@@ -261,7 +261,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     });
   }
 
-  void updateFavoriteRestaurantState(Restaurant restaurant) {
+  void updateFavoriteRestaurantState(RestaurantSummaryEntity restaurant) {
     ref.read(updateFavoriteRestaurantStateProvider.notifier).call(
         restaurantId: restaurant.id,
         addFavorite: !(restaurant.isFavorite??false)

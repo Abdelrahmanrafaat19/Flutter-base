@@ -157,7 +157,7 @@ class MyApp extends ConsumerWidget {
       ),
       GoRoute(
         path: mainScreenRoute,
-        builder: (BuildContext context, GoRouterState state) => MenuScreen(),
+        builder: (BuildContext context, GoRouterState state) => const RestaurantDetailsScreen(),
       ),
       GoRoute(
         path: loginScreenRoute,

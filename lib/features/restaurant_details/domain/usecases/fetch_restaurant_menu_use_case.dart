@@ -10,10 +10,18 @@ class FetchRestaurantMenuUseCase
   final RestaurantRepository restaurantRepository;
   FetchRestaurantMenuUseCase(this.restaurantRepository) : super(StateModel());
 
-  void call(String restaurantId) async {
+  void call(
+      {String? restaurantId,
+      List<int>? menuIds,
+      int? itemsCountLimit,
+      bool? fetchItems,
+      String? localeIsoCode,int? size}) async {
     state = StateModel.loading();
     ResponseModel responseModel =
-        await restaurantRepository.fetchRestaurantMenu(restaurantId, "en");
+        await restaurantRepository.fetchRestaurantMenu(
+            restaurantId: restaurantId,
+            itemsCountLimit: itemsCountLimit,
+            localeIsoCode: "en");
 
     if (responseModel.code == 200) {
       var restaurantMenuModel =

@@ -9,6 +9,7 @@ import 'Image_slider_preview.dart';
 
 class BannerCardItems extends StatefulWidget {
   final List<String> list;
+  final String? mainImage;
   final bool showIndicator;
   final double height;
   final double width;
@@ -19,7 +20,7 @@ class BannerCardItems extends StatefulWidget {
       required this.list,
       this.showIndicator = true,
       required this.height,
-      required this.width, required this.showLoading, this.radius});
+      required this.width, required this.showLoading, this.radius, this.mainImage});
 
   @override
   State<BannerCardItems> createState() => _BannerCardItemsState();
@@ -35,7 +36,7 @@ class _BannerCardItemsState extends State<BannerCardItems> {
         children: [
           PageView(
             controller: pageController,
-            children: widget.list.map((imagePath) {
+            children: [widget.mainImage].map((imagePath) {
               return Skeletonizer(
                 enabled: widget.showLoading,
                 child: Container(
@@ -52,8 +53,7 @@ class _BannerCardItemsState extends State<BannerCardItems> {
                       color: Colors.white,
                     ),
                     child: ImageView(
-                      initialImg: "https://www.wondergifts.ae/cdn/shop/files/3_-_Copy_135c0b16-27fa-47cd-87fa-7f52d16586dc_980x640.jpg?v=1730360580",
-                      placeHolder: "placeHolderForCardsSvg",
+                      initialImg: imagePath,
                     ),
                   ),
                 ),
@@ -64,7 +64,9 @@ class _BannerCardItemsState extends State<BannerCardItems> {
             alignment: Alignment.bottomCenter,
             child: Padding(
               padding: const EdgeInsets.only(bottom: 12.0),
-              child: ImageSliderPreview(),
+              child: ImageSliderPreview(
+                imageUrls: widget.list,
+              ),
             ),
           ) : const SizedBox()
         ],

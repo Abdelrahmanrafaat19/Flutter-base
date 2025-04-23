@@ -1,5 +1,5 @@
 import '../../../../core/utils/typedefs.dart';
-import '../../data/models/location_model.dart';
+import '../../../restaurant_details/data/models/location_model.dart';
 
 abstract class HomeRepository {
   FutureResponseModel fetchCuisines({

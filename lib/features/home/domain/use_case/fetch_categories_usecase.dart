@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/models/ResponseModel.dart';
 import '../../../../core/models/StateModel.dart';
 import '../../data/models/category_model.dart';
-import '../../data/models/location_model.dart';
+import '../../../restaurant_details/data/models/location_model.dart';
 
 class FetchCategoriesUseCase extends StateNotifier<StateModel<List<CategoryEntity>>> {
   final Ref ref;

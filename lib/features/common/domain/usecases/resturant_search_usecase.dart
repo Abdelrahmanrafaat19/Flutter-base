@@ -1,12 +1,13 @@
 import 'package:flutter_base/features/common/domain/repositories/common_repository.dart';
-import 'package:flutter_base/features/home/data/models/restaurant_model.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/models/ResponseModel.dart';
 import '../../../../core/models/StateModel.dart';
 import '../../../home/domain/entities/restaurant_entity.dart';
+import '../../../restaurant_details/data/models/restaurant_model.dart';
 
 class RestaurantSearchUseCase
-    extends StateNotifier<StateModel<List<Restaurant>>> {
+    extends StateNotifier<StateModel<List<RestaurantSummaryEntity>>> {
   final Ref ref;
   final CommonRepository _repository;
   RestaurantSearchUseCase(this.ref, this._repository) : super(StateModel());
@@ -50,12 +51,12 @@ class RestaurantSearchUseCase
         requestBody: requestBody);
 
     if (responseModel.code == 200) {
-      List<Restaurant> restaurants = (responseModel.data as List)
-          .map((item) => toRestaurantEntity(RestaurantModel.fromJson(item)))
+      List<RestaurantSummaryEntity> restaurants = (responseModel.data as List)
+          .map((item) => RestaurantModel.fromJson(item).toRestaurantSummaryEntity())
           .toList();
 
       if ((page??0) > 0) {
-        List<Restaurant> list = state.data ??[];
+        List<RestaurantSummaryEntity> list = state.data ??[];
         list = [...list,...restaurants];
 
         state = StateModel.success(list,paginationModel: responseModel.pagination);

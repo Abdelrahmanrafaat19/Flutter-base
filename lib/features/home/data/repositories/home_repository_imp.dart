@@ -1,7 +1,7 @@
 import 'package:flutter_base/features/home/domain/repositories/home_repository.dart';
 import '../../../../core/utils/typedefs.dart';
 import '../../data/data_sources/data_sources.dart';
-import '../models/location_model.dart';
+import '../../../restaurant_details/data/models/location_model.dart';
 
 class HomeRepositoryImp extends HomeRepository {
   final HomeRemoteDataSource _dataSource;

@@ -19,7 +19,7 @@ typedef FilterResult = Function(int?, int?,int?,RangeValues?,RangeValues?);
 typedef FilterDistantResult = Function(int?, int?,int?,RangeValues?,RangeValues?);
 typedef OnNotificationClick = Function(NotificationEntity);
 typedef OnSeeAllCategoryClick = Function(CategoryEntity);
-typedef OnRestaurantClick = Function(Restaurant?);
+typedef OnRestaurantClick = Function(RestaurantSummaryEntity?);
 typedef OnCuisineItemClick = Function(Cuisine);
 
 // paginatedListView

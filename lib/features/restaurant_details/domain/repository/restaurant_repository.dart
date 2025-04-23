@@ -1,9 +1,14 @@
 import '../../../../core/utils/typedefs.dart';
 
 abstract class RestaurantRepository {
+  FutureResponseModel fetchRestaurantDetails(
+      String restaurantId, String localeIsoCode);
 
-  // FutureResponseModel fetchRestaurantDetails(String restaurantId);
+  FutureResponseModel fetchRestaurantMenu(
+      {String? restaurantId,
+      int? itemsCountLimit,
+      String? localeIsoCode});
 
-  FutureResponseModel fetchRestaurantMenu(String restaurantId,String localeIsoCode);
-
+  FutureResponseModel fetchRestaurantReviews(
+      String restaurantId, String localeIsoCode);
 }

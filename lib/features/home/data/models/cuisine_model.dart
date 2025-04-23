@@ -1,4 +1,4 @@
-import 'package:flutter_base/features/home/data/models/restaurant_model.dart';
+
 import 'package:flutter_base/features/home/domain/entities/cuisine_entity.dart';
 
 class CuisineModel {

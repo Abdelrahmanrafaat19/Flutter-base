@@ -41,7 +41,7 @@ class _HomeRestaurantListviewState extends State<HomeRestaurantListview> {
     );
   }
 
-  void onItemClick(Restaurant? restaurant) {}
+  void onItemClick(RestaurantSummaryEntity? restaurant) {}
 
   void onSeeAllClickListener(CategoryEntity category) {
     context.push(seeAllScreenForCategoryRoute, extra: {

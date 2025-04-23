@@ -196,7 +196,7 @@ class _MenuScreenState extends ConsumerState<MenuScreen>
                       isScrollable: true,
                       labelPadding: EdgeInsets.zero,
                       indicatorColor: Colors.transparent,
-                      controller: TabController(length: 10,vsync: this),
+                      controller: TabController(length: 8,vsync: this),
                       onTap: (index) {
                         scrollToCategory(index);
                       },
@@ -240,6 +240,6 @@ class _MenuScreenState extends ConsumerState<MenuScreen>
   }
 
   void getRestaurantMenus(String restaurantId) {
-    ref.read(fetchRestaurantMenuStateProvider.notifier).call(restaurantId);
+    ref.read(fetchRestaurantMenuStateProvider.notifier).call(restaurantId: restaurantId);
   }
 }

@@ -2,29 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ImageSliderPreview extends StatelessWidget {
-  ImageSliderPreview({super.key});
+  List<String>? imageUrls;
+  ImageSliderPreview({super.key,this.imageUrls});
 
-  final List<String> imageUrls = [
-    'https://www.wondergifts.ae/cdn/shop/files/3_-_Copy_135c0b16-27fa-47cd-87fa-7f52d16586dc_980x640.jpg?v=1730360580',
-    'https://www.wondergifts.ae/cdn/shop/files/3_-_Copy_135c0b16-27fa-47cd-87fa-7f52d16586dc_980x640.jpg?v=1730360580',
-    'https://www.wondergifts.ae/cdn/shop/files/3_-_Copy_135c0b16-27fa-47cd-87fa-7f52d16586dc_980x640.jpg?v=1730360580',
-    'https://www.wondergifts.ae/cdn/shop/files/3_-_Copy_135c0b16-27fa-47cd-87fa-7f52d16586dc_980x640.jpg?v=1730360580',
-    'https://www.wondergifts.ae/cdn/shop/files/3_-_Copy_135c0b16-27fa-47cd-87fa-7f52d16586dc_980x640.jpg?v=1730360580',
-    'https://www.wondergifts.ae/cdn/shop/files/3_-_Copy_135c0b16-27fa-47cd-87fa-7f52d16586dc_980x640.jpg?v=1730360580',
-    'https://www.wondergifts.ae/cdn/shop/files/3_-_Copy_135c0b16-27fa-47cd-87fa-7f52d16586dc_980x640.jpg?v=1730360580',
-    'https://www.wondergifts.ae/cdn/shop/files/3_-_Copy_135c0b16-27fa-47cd-87fa-7f52d16586dc_980x640.jpg?v=1730360580',
-    // زوّد الصور حسب الحاجة
-  ];
+
 
   final int maxVisibleImages = 5;
 
   @override
   Widget build(BuildContext context) {
-    int extraCount = imageUrls.length - maxVisibleImages;
+    int extraCount = (imageUrls?.length??0) - maxVisibleImages;
     double screenWidth = MediaQuery.of(context).size.width;
     double spacing = 6;
     double totalSpacing = spacing * (maxVisibleImages - 1);
-    double imageSize = (screenWidth - totalSpacing - 32) / maxVisibleImages; // 32 = 16 left + 16 right padding
+    double imageSize = (screenWidth - totalSpacing - 32) / maxVisibleImages;
 
 
     return Container(
@@ -36,12 +27,12 @@ class ImageSliderPreview extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: List.generate(
-          imageUrls.length > maxVisibleImages
+          (imageUrls?.length??0) > maxVisibleImages
               ? maxVisibleImages
-              : imageUrls.length,
+              : (imageUrls?.length??0),
               (index) {
             bool isLastVisible = index == maxVisibleImages - 1 &&
-                imageUrls.length > maxVisibleImages;
+                (imageUrls?.length??0) > maxVisibleImages;
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 3.0),
               child: Stack(
@@ -50,7 +41,7 @@ class ImageSliderPreview extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: Image.network(
-                      imageUrls[index],
+                      imageUrls?[index]??"",
                       width: imageSize,
                       height: imageSize,
                       fit: BoxFit.cover,
