@@ -12,14 +12,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as ago;
+import 'core/Constants/Constants.dart';
+import 'features/location/presentaion/screens/search_location_screen.dart';
+import 'features/reservation/presentation/screens/booking_details.dart';
 import 'features/reservation/presentation/screens/booking_table_screen.dart';
+import 'features/reservation/presentation/screens/my_booking_screen.dart';
 import 'features/reservation/presentation/screens/reserved_table_success_code_screen.dart';
 import 'features/reservation/presentation/screens/reserved_table_success_screen.dart';
 import 'features/reservation/presentation/screens/review_summery_screen.dart';
 import 'features/reservation/presentation/screens/your_information_details_screen.dart';
-import 'google_map_screen.dart';
 import 'features/location/presentaion/screens/google_map_screen.dart';
-import 'core/Constants/Constants.dart';
 import 'core/Theme/app_theme.dart';
 import 'core/constants/app_routes.dart';
 import 'core/localization/LanguageProvider.dart';
@@ -101,6 +103,8 @@ void _handleMessage(RemoteMessage message,BuildContext context) {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+  await ScreenUtil.ensureScreenSize();
+
 
   // await Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.currentPlatform,
@@ -135,18 +139,25 @@ class MyApp extends ConsumerWidget {
     return ThemeProvider(
       initTheme: Theme.of(context),
       duration: const Duration(milliseconds: 500),
-      child: MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        title: 'BaseFlutter',
-        themeMode: ThemeMode.light,
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        localizationsDelegates: context.localizationDelegates,
-        supportedLocales: context.supportedLocales,
-        locale: ref.watch(langProvider),
-        routerDelegate: _router.routerDelegate,
-        routeInformationProvider: _router.routeInformationProvider,
-        routeInformationParser: _router.routeInformationParser,
+      child: ScreenUtilInit(
+        designSize: Size(390, 844), // or your base design size
+        minTextAdapt: true,
+        splitScreenMode: true,
+        builder: (context, child) {
+          return MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            title: 'BaseFlutter',
+            themeMode: ThemeMode.light,
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: ref.watch(langProvider),
+            routerDelegate: _router.routerDelegate,
+            routeInformationProvider: _router.routeInformationProvider,
+            routeInformationParser: _router.routeInformationParser,
+          );
+        },
       ),
     );
   }
@@ -156,7 +167,7 @@ class MyApp extends ConsumerWidget {
       GoRoute(
         path: splashScreenRoute,
         builder: (BuildContext context, GoRouterState state) =>
-            LocationPermissionScreen(),
+            LoginScreen(),
       ),
       GoRoute(
         path: mainScreenRoute,
@@ -169,6 +180,15 @@ class MyApp extends ConsumerWidget {
       GoRoute(
         path: signUpScreenRoute,
         builder: (BuildContext context, GoRouterState state) => SignUpScreen(),
+      ),
+      GoRoute(
+        path: bookingDetailsRoute,
+          builder: (BuildContext context, GoRouterState state) {
+            var extra = state.extra as Map;
+            return BookingDetails(
+               extra[BOOKING_ID],
+            );
+          },
       ),
       GoRoute(
         path: changePasswordScreenRoute,
@@ -216,6 +236,11 @@ class MyApp extends ConsumerWidget {
         path: cuisinesScreenRoute,
         builder: (BuildContext context, GoRouterState state) =>
             CuisinesScreen(),
+      ),
+      GoRoute(
+        path: myBookingScreenRoute,
+        builder: (BuildContext context, GoRouterState state) =>
+            MyBookingScreen(),
       ),
       GoRoute(
         path: searchScreenRoute,

@@ -2,10 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_base/core/constants/Assets.dart';
 import 'package:flutter_base/core/constants/eunms.dart';
-import 'package:flutter_base/core/constants/eunms.dart';
-import 'package:flutter_base/core/constants/eunms.dart';
-import 'package:flutter_base/core/widgets/svg_icons.dart';
-import 'package:flutter_svg/svg.dart';
+
 
 import '../../features/home/data/models/item_selector.dart';
 
@@ -13,6 +10,7 @@ const USER_KEY = 'user_key';
 const REQUEST_PERMISSIS_KEY = 'request_permissions_key';
 const USER_LOCATION_KEY = 'user_location_key';
 const PHONE_KEY = 'phone';
+const BOOKING_ID="bookingID";
 const EMAIL_KEY = 'email';
 const FIRST_NAME_KEY = 'firstName';
 const LAST_NAME_KEY = 'lastName';

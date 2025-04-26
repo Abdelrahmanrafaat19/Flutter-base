@@ -2,28 +2,32 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/core/constants/assets.dart';
 import 'package:flutter_base/core/widgets/svg_icons.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/Constants/Constants.dart';
 import '../../../../core/Theme/app_theme.dart';
 import '../../../../core/widgets/app_button.dart';
+import '../../data/models/meal_time_slot.dart';
+import '../providers/use_case_providers.dart';
 import '../widgets/date_container.dart';
 import '../widgets/guest_container.dart';
 
-class BookTableScreen extends StatefulWidget {
+class BookTableScreen extends ConsumerStatefulWidget {
   const BookTableScreen({super.key});
 
   @override
-  State<BookTableScreen> createState() => _BookTableScreenState();
+  ConsumerState<BookTableScreen> createState() => _BookTableScreenState();
 }
 
-class _BookTableScreenState extends State<BookTableScreen> {
+class _BookTableScreenState extends ConsumerState<BookTableScreen> {
   int numberOfGuest = 0;
-  int isSelected=1;
+  int isSelected = 1;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
-  final List <DateTime> days=[];
+  final List<DateTime> days = [];
   final dates = ["1", "2", "3", "4", "5"];
+
   List<DateTime> generateInitialDays() {
     DateTime now = DateTime.now();
     return List.generate(5, (index) {
@@ -31,22 +35,29 @@ class _BookTableScreenState extends State<BookTableScreen> {
       return now.subtract(Duration(days: 1 - index));
     });
   }
+
   List<DateTime> generateDaysAroundSelected(DateTime selectedDate) {
     days.clear();
     return List.generate(5, (index) {
-
-      days.add( selectedDate.subtract(Duration(days: 1 - index)));
-      return  selectedDate.subtract(Duration(days: 1 - index));
+      days.add(selectedDate.subtract(Duration(days: 1 - index)));
+      return selectedDate.subtract(Duration(days: 1 - index));
     });
   }
+
   @override
   void initState() {
-    generateInitialDays();
+    generateDaysAroundSelected(DateTime.now());
+    WidgetsBinding.instance.addPostFrameCallback((callback) {
+      ref
+          .read(availableMealTimeUseCaseProvider.notifier)
+          .call(restaurantID: "4109");
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    var availblTimeMeleTimeResult = ref.watch(availableMealTimeUseCaseProvider);
     return Scaffold(
       backgroundColor: AppTheme.mainAppBackgroundColor,
       appBar: AppBar(
@@ -96,36 +107,37 @@ class _BookTableScreenState extends State<BookTableScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    GuestContainer(
+                    GuestContainer(),
+                    SizedBox(height: 24.h),
+                    DateContainer(
+                      isSelected: isSelected,
+                      dates: dates,
+                      days: days,
+                      selectedDay: _selectedDay,
+                      focusedDay: _focusedDay,
+                      onDaySelected: (selectedDay, focusedDay) {
+                        setState(() {
+                          _selectedDay = selectedDay;
+                          _focusedDay = focusedDay;
+                        });
+                        Navigator.of(context).pop();
+                        // for(int i=-1;i<4;i++){
+                        //   // days[++i]=DateFormat('E').format(_selectedDay!.add(Duration(days: i)));
+                        //   dates[++i]=DateFormat('dd').format(_selectedDay!.add(Duration(days: i)));
+                        // }
+                        generateDaysAroundSelected(selectedDay);
 
+                        setState(() {});
+                      },
                     ),
                     SizedBox(height: 24.h),
-                     DateContainer(
-                       isSelected: isSelected,
-                       dates: dates,
-                       days: days,
-                       selectedDay: _selectedDay,
-                       focusedDay: _focusedDay,
-                       onDaySelected:   (selectedDay, focusedDay) {
-
-                         setState(() {
-                           _selectedDay = selectedDay;
-                           _focusedDay = focusedDay;
-                         });
-                         Navigator.of(context).pop();
-                         // for(int i=-1;i<4;i++){
-                         //   // days[++i]=DateFormat('E').format(_selectedDay!.add(Duration(days: i)));
-                         //   dates[++i]=DateFormat('dd').format(_selectedDay!.add(Duration(days: i)));
-                         // }
-                         generateDaysAroundSelected(selectedDay);
-
-                         setState(() {
-
-                         });
-                       },
-                     ),
-                    SizedBox(height: 24.h),
-                    _buildTimeSection(),
+                    _buildTimeSection(
+                        mealTimeBreakFast:
+                            availblTimeMeleTimeResult.data!.breakfastTimeSlots??[],
+                        mealTimeDinner:
+                            availblTimeMeleTimeResult.data!.dinnerTimeslots??[],
+                        mealTimeLunch:
+                            availblTimeMeleTimeResult.data!.lunchTimeslots??[]),
                   ],
                 ),
               ),
@@ -153,9 +165,7 @@ class _BookTableScreenState extends State<BookTableScreen> {
                         enabled: true,
                         height: defaultButtonHeight,
                         text: "Book a Table",
-                        onPress: () {
-
-                        }),
+                        onPress: () {}),
                   ),
                 ],
               ),
@@ -166,7 +176,10 @@ class _BookTableScreenState extends State<BookTableScreen> {
     );
   }
 
-  Widget _buildTimeSection() {
+  Widget _buildTimeSection(
+      {required List<MealTimeSlots> mealTimeBreakFast,
+      required List<MealTimeSlots> mealTimeLunch,
+      required List<MealTimeSlots> mealTimeDinner}) {
     return Container(
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
@@ -185,22 +198,22 @@ class _BookTableScreenState extends State<BookTableScreen> {
           SizedBox(height: 16.h),
 
           /// Breakfast Section
-          _buildTimeSection1('Breakfast'),
+          _buildTimeSection1('Breakfast', mealTime: mealTimeBreakFast),
 
           SizedBox(height: 24.h),
 
           /// Lunch Section
-          _buildTimeSection1('Lunch'),
+          _buildTimeSection1('Lunch', mealTime: mealTimeLunch),
           SizedBox(height: 24.h),
 
           /// Lunch Section
-
         ],
       ),
     );
   }
 
-  Widget _buildTimeSection1(String label) {
+  Widget _buildTimeSection1(String label,
+      {required List<MealTimeSlots> mealTime}) {
     return SizedBox(
       width: double.infinity,
       child: Column(
@@ -217,8 +230,8 @@ class _BookTableScreenState extends State<BookTableScreen> {
           Wrap(
             spacing: 44.w,
             runSpacing: 12.h,
-            children: List.generate(6, (index) {
-              final isDisabled = index % 2 == 1;
+            children: List.generate(mealTime.length, (index) {
+              final isDisabled = mealTime[index].availability == false;
 
               return Container(
                 padding: EdgeInsets.symmetric(
@@ -238,7 +251,7 @@ class _BookTableScreenState extends State<BookTableScreen> {
                       : null,
                 ),
                 child: Text(
-                  "19:30",
+                  getTime(mealTime[index].reservationTime ?? ""),
                   style: AppTheme.styleSize16Weidth700color525252.copyWith(
                     decoration: !isDisabled
                         ? TextDecoration.none
@@ -251,5 +264,25 @@ class _BookTableScreenState extends State<BookTableScreen> {
         ],
       ),
     );
+  }
+
+  String getDate(String date) {
+    try {
+
+      DateTime parsedDate = DateTime.parse(date);
+      return DateFormat('MMM dd, yyyy').format(parsedDate);
+    } catch (e) {
+      return "Invalid Date";
+    }
+  }
+
+  String getTime(String date) {
+    try {
+      final timePart = date.split('.')[0]; // "19:22:09"
+      final dateTime = DateFormat.Hms().parse(timePart);
+      return DateFormat('h:mm a').format(dateTime);
+    } catch (e) {
+      return "Invalid Time";
+    }
   }
 }

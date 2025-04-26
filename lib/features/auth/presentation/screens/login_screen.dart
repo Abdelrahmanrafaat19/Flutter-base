@@ -6,6 +6,7 @@ import 'package:flutter_base/features/auth/presentation/widgets/phone_number_fie
 import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_routes.dart';
 import '../../../../core/constants/assets.dart';
+import '../../../../core/constants/constants.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/custom_app_bar.dart';
 import '../../../../main.dart';
@@ -16,7 +17,7 @@ import '../widgets/auth_header_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/Constants/Constants.dart';
+
 import '../../../../core/Theme/app_theme.dart';
 import '../../../../core/localization/Keys.dart';
 import '../widgets/labeled_text_field.dart';
@@ -50,8 +51,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     handleState(loginStateNotifierProvider, showLoading: true,
         onSuccess: (res) {
-      print("dsfsfsdfsd ${prefs.getBool(REQUEST_PERMISSIS_KEY)}");
-      if (prefs.getBool(REQUEST_PERMISSIS_KEY) == false ||
+       if (prefs.getBool(REQUEST_PERMISSIS_KEY) == false ||
           prefs.getBool(REQUEST_PERMISSIS_KEY) == null) {
         prefs.setBool(REQUEST_PERMISSIS_KEY, true);
         context.go(locationPermissionScreenRoute);
@@ -69,15 +69,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         navigated: true,
         appContext: context,
         title: context.tr(signInKey),
-        trailingWidget: const Padding(
+        trailingWidget: Padding(
           padding: EdgeInsets.symmetric(horizontal: defaultPaddingHorizontal),
-          child: LanguageText(),
+          child: const LanguageText(),
         ),
       ),
       body: SingleChildScrollView(
         child: Padding(
           padding:
-              const EdgeInsets.symmetric(horizontal: defaultPaddingHorizontal),
+              EdgeInsets.symmetric(horizontal: defaultPaddingHorizontal),
           child: Form(
             key: _formKey,
             child: Column(

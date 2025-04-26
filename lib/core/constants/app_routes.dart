@@ -23,3 +23,5 @@ const yourInformationDetailsRoute='/yourInformationDetailsRoute';
  const reviewSummeryScreenRoute="/reviewSummeryScreenRoute";
  const reservedTableSuccessRoute="/reservedTableSuccessRoute";
  const reservedTableSuccessCodeRoute="/reservedTableSuccessCodeRoute";
+ const myBookingScreenRoute="/myBookingScreenRoute";
+ const bookingDetailsRoute="/bookingDetailsRoute";

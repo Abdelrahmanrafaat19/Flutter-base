@@ -26,3 +26,6 @@ const searchRestaurantNameEndPoint="restaurant/searchRestaurantNames";
 const favoriteRestaurantsEndPoint="users/favorite/restaurants";
 const placesDetailsEndPoint="place/details/json";
 const placesAutocompleteEndPoint="place/autocomplete/json";
+const fetchUserReserved="reservation";
+const createReservationEndPoint="reservation/restaurant/";
+const remiderTriggerEndPoint="reservation/reminder/";

@@ -94,7 +94,7 @@ class HttpOperations {
   }) async {
     try {
       final response = await httpLog.put(
-        Uri.parse("$mainAppUrl$endPoint/$params"), // Adding path param
+        Uri.parse("$mainAppUrl$endPoint$params"), // Adding path param
         headers: authorized
             ? <String, String>{
           'Authorization': 'Bearer $userToken',

@@ -9,7 +9,8 @@
     <application
         android:label="flutter_base"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:enableOnBackInvokedCallback="true">
         <meta-data android:name="com.google.android.geo.API_KEY"
                    android:value="AIzaSyAIhooYpv80pRyeAhyNzAyb4YGCmkTUlXA"/>
         <activity
