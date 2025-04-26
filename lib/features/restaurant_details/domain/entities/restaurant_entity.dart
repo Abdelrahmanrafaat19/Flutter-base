@@ -55,4 +55,36 @@ class RestaurantDetailsEntity {
     this.tags,
     this.quickReservationTimeSlots,
   });
+
+  RestaurantDetailsEntity copyWith({
+    bool? isFavorite,
+  }) {
+    return RestaurantDetailsEntity(
+      id: id,
+      name: name,
+      phone: phone,
+      address: address,
+      location: location,
+      cuisineId: cuisineId,
+      cuisineName: cuisineName,
+      rating: rating,
+      capacity: capacity,
+      cancellationFee: cancellationFee,
+      categoryIds: categoryIds,
+      certifications: certifications,
+      singleReservationCost: singleReservationCost,
+      openTime: openTime,
+      closeTime: closeTime,
+      imageUrls: imageUrls,
+      mainImage: mainImage,
+      isFavorite: isFavorite ?? this.isFavorite,
+      distance: distance,
+      reservationsCount: reservationsCount,
+      reviewsCount: reviewsCount,
+      maxDiscount: maxDiscount,
+      tags: tags,
+      quickReservationTimeSlots: quickReservationTimeSlots,
+    );
+  }
+
 }

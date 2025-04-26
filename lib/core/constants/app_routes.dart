@@ -19,5 +19,6 @@ const googleMapScreenRoute="/googleMapScreen";
 const restaurantDetailsRoute="/restaurantDetailsScreen";
 const menuScreenRoute="/menuScreen";
 const restaurantReviewsRoute="/restaurantReviewsScreen";
+const showRestaurantGalleryRoute="/showRestaurantGalleryScreen";
 
 const otpScreenRoute = '/otp';

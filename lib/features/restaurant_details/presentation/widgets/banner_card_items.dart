@@ -15,12 +15,17 @@ class BannerCardItems extends StatefulWidget {
   final double width;
   final BorderRadiusDirectional? radius;
   final bool showLoading;
-  const BannerCardItems(
-      {super.key,
-      required this.list,
-      this.showIndicator = true,
-      required this.height,
-      required this.width, required this.showLoading, this.radius, this.mainImage});
+  final bool? showShadow;
+  const BannerCardItems({
+    super.key,
+    required this.list,
+    this.showIndicator = true,
+    required this.height,
+    required this.width,
+    required this.showLoading,
+    this.radius,
+    this.mainImage, this.showShadow,
+  });
 
   @override
   State<BannerCardItems> createState() => _BannerCardItemsState();
@@ -36,7 +41,9 @@ class _BannerCardItemsState extends State<BannerCardItems> {
         children: [
           PageView(
             controller: pageController,
-            children: [widget.mainImage].map((imagePath) {
+            children:
+                (widget.mainImage != null ? [widget.mainImage] : widget.list)
+                    .map((imagePath) {
               return Skeletonizer(
                 enabled: widget.showLoading,
                 child: Container(
@@ -60,20 +67,22 @@ class _BannerCardItemsState extends State<BannerCardItems> {
               );
             }).toList(),
           ),
-          Container(
+          widget.showShadow == true ? Container(
             width: double.infinity,
             height: widget.height,
             color: Colors.black.withOpacity(.5),
-          ),
-          widget.showIndicator ? Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 12.0),
-              child: ImageSliderPreview(
-                imageUrls: widget.list,
-              ),
-            ),
-          ) : const SizedBox()
+          ) : const SizedBox(),
+          widget.showIndicator
+              ? Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 12.0),
+                    child: ImageSliderPreview(
+                      imageUrls: widget.list,
+                    ),
+                  ),
+                )
+              : const SizedBox()
         ],
       ),
     );

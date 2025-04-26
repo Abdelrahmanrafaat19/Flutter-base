@@ -29,4 +29,7 @@ class FetchRestaurantDetailsUseCase extends StateNotifier<StateModel<RestaurantD
     }
 
   }
+  void updateRestaurantFavoriteState(RestaurantDetailsEntity? restaurant){
+    state = StateModel.success(restaurant?.copyWith(isFavorite: !(restaurant.isFavorite ?? false)));
+  }
 }

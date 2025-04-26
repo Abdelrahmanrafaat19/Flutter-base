@@ -10,6 +10,7 @@ import 'package:flutter_base/core/utils/time_utils.dart';
 import 'package:flutter_base/core/widgets/svg_icons.dart';
 import 'package:flutter_base/features/home/data/models/category_model.dart';
 import 'package:flutter_base/features/restaurant_details/data/models/restaurant_info_model.dart';
+import 'package:flutter_base/features/restaurant_details/domain/entities/restaurant_entity.dart';
 import 'package:flutter_base/features/restaurant_details/presentation/widgets/category_tab_content.dart';
 import 'package:flutter_base/features/restaurant_details/presentation/widgets/category_tab_item.dart';
 import 'package:flutter_base/features/restaurant_details/presentation/widgets/reviews_content.dart';
@@ -20,6 +21,7 @@ import '../../../../core/Constants/Constants.dart';
 import '../../../../core/Theme/app_theme.dart';
 import '../../../../core/localization/LanguageProvider.dart';
 import '../../../../core/widgets/app_button.dart';
+import '../../../common/presentation/providers/usecases_providers.dart';
 import '../providers/use_case_provider.dart';
 import '../widgets/banner_card_items.dart';
 
@@ -71,12 +73,17 @@ class _RestaurantDetailsScreenState
     'https://www.wondergifts.ae/cdn/shop/files/3_-_Copy_135c0b16-27fa-47cd-87fa-7f52d16586dc_980x640.jpg?v=1730360580',
     'https://www.wondergifts.ae/cdn/shop/files/3_-_Copy_135c0b16-27fa-47cd-87fa-7f52d16586dc_980x640.jpg?v=1730360580',
     'https://www.wondergifts.ae/cdn/shop/files/3_-_Copy_135c0b16-27fa-47cd-87fa-7f52d16586dc_980x640.jpg?v=1730360580',
-    // زوّد الصور حسب الحاجة
   ];
 
   @override
   Widget build(BuildContext context) {
     final restaurantState = ref.watch(fetchRestaurantDetailsStateProvider);
+
+    handleState(updateFavoriteRestaurantStateProvider,showLoading: true,onSuccess: (res){
+      ref.read(fetchRestaurantDetailsStateProvider.notifier).updateRestaurantFavoriteState(
+          restaurantState.data
+      );
+    });
 
     handleState(fetchRestaurantDetailsStateProvider, showLoading: true);
 
@@ -109,9 +116,11 @@ class _RestaurantDetailsScreenState
                           width: 8,
                         ),
                         InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              updateFavoriteRestaurantState(restaurantState.data);
+                            },
                             child: SVGIcons.localSVG(
-                                false
+                                restaurantState.data?.isFavorite == true
                                     ? favoriteIconWithBackgroundPath
                                     : unFavoriteWithGrayBackgroundIcon,
                                 width: 32,
@@ -122,20 +131,29 @@ class _RestaurantDetailsScreenState
                   flexibleSpace: FlexibleSpaceBar(
                     background: Stack(
                       children: [
-                        BannerCardItems(
-                          list: imageUrls ?? [],
-                          mainImage: restaurantState.data?.mainImage,
-                          height: MediaQuery.of(context).size.height * 0.5,
-                          radius: const BorderRadiusDirectional.only(
-                            bottomEnd: Radius.circular(defaultButtonRadius),
-                            bottomStart: Radius.circular(defaultButtonRadius),
+                        InkWell(
+                          onTap: (){
+                            if(restaurantState.data?.imageUrls?.isNotEmpty == true) {
+                              navigateToRestaurantGallery(
+                                  restaurantState.data?.imageUrls ?? []);
+                            }
+                          },
+                          child: BannerCardItems(
+                            list: restaurantState.data?.imageUrls ?? [],
+                            mainImage: restaurantState.data?.mainImage,
+                            height: MediaQuery.of(context).size.height * 0.5,
+                            radius: const BorderRadiusDirectional.only(
+                              bottomEnd: Radius.circular(defaultButtonRadius),
+                              bottomStart: Radius.circular(defaultButtonRadius),
+                            ),
+                            width: MediaQuery.of(context).size.width,
+                            showLoading: false,
+                            showIndicator: restaurantState.data?.imageUrls?.isNotEmpty == true,
+                            showShadow: true,
                           ),
-                          width: MediaQuery.of(context).size.width,
-                          showLoading: false,
-                          showIndicator:  true,
                         ),
                         Positioned(
-                            bottom: imageUrls.isNotEmpty == true ? MediaQuery.of(context).size.height * .12 : MediaQuery.of(context).size.height * .03,
+                            bottom:  restaurantState.data?.imageUrls?.isNotEmpty == true ? MediaQuery.of(context).size.height * .12 : MediaQuery.of(context).size.height * .03,
                             left: 0,
                             right: 0,
                             child: SizedBox(
@@ -152,10 +170,6 @@ class _RestaurantDetailsScreenState
                                 ),
                               ),
                             )),
-                        // Container(
-                        //   height: MediaQuery.of(context).size.height * 0.5,
-                        //   color: Colors.black.withOpacity(.5),
-                        // ),
                       ],
                     ),
                   )),
@@ -513,39 +527,9 @@ class _RestaurantDetailsScreenState
                   valueListenable: activeCategoryPageIndex,
                   builder: (context, value, _) {
                     return SliverToBoxAdapter(
-                      child: CategoryTabContent(index: value),
+                      child: CategoryTabContent(index: value,restaurantId: widget.restaurantId,),
                     );
                   }),
-              SliverToBoxAdapter(
-                child:
-                restaurantState.state == DataState.SUCCESS && restaurantState.data?.categoryIds?.isNotEmpty == true ?
-                Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      child: Center(
-                          child: InkWell(
-                        onTap: () {
-                          navigateToMenuScreen();
-                        },
-                        child: Text(
-                          "Show all Menu",
-                          style: AppTheme
-                              .styleWithTextMainAppColorCeraProFonts14w500
-                              .copyWith(decoration: TextDecoration.underline),
-                        ),
-                      )),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: Divider(
-                        thickness: 1,
-                        color: AppTheme.appGrey2,
-                      ),
-                    )
-                  ],
-                ) : const SizedBox(),
-              ),
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -657,55 +641,12 @@ class _RestaurantDetailsScreenState
               Consumer(builder: (_, ref, child) {
                 return const SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
+                    padding: EdgeInsets.symmetric(
                         horizontal: defaultPaddingHorizontal),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 16,
-                        ),
-                        Divider(
-                          thickness: 1,
-                          color: AppTheme.appGrey2,
-                        ),
-                        SizedBox(
-                          height: 16,
-                        ),
-                        Text(
-                          "Reviews",
-                          style: AppTheme
-                              .styleWithTextAppBlueColor3SansExtendedFonts16w700,
-                        ),
-                        ReviewsContent(),
-                      ],
-                    ),
+                    child: ReviewsContent(),
                   ),
                 );
               }),
-              SliverToBoxAdapter(
-                child:
-                restaurantState.state == DataState.SUCCESS && restaurantState.data?.reviewsCount != 0 ?
-                Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      child: Center(
-                          child: InkWell(
-                            onTap: () {
-                              navigateToReviewsScreen();
-                            },
-                            child: Text(
-                              "Show all Menu",
-                              style: AppTheme
-                                  .styleWithTextMainAppColorCeraProFonts14w500
-                                  .copyWith(decoration: TextDecoration.underline),
-                            ),
-                          )),
-                    ),
-                  ],
-                ) : const SizedBox(),
-              ),
               SliverToBoxAdapter(
                 child: SizedBox(
                   height: 100,
@@ -760,28 +701,29 @@ class _RestaurantDetailsScreenState
   void fetchRestaurantMenus(String restaurantId) {
     ref
         .read(fetchLimitRestaurantMenuItemsStateProvider.notifier)
-        .call(restaurantId: /*restaurantId*/"136", itemsCountLimit: 5);
+        .call(restaurantId: restaurantId, itemsCountLimit: 5);
   }
 
   void fetchRestaurantDetails(String restaurantId) {
     ref
         .read(fetchRestaurantDetailsStateProvider.notifier)
-        .call(/*restaurantId*/"136", "en");
+        .call(restaurantId, "en");
   }
 
   void fetchRestaurantReviews(String restaurantId) {
     ref
         .read(fetchRestaurantLimitReviewsUseCaseStateProvider.notifier)
-        .call(restaurantId:/*restaurantId*/ "136", localeIsoCode: "en");
+        .call(restaurantId: restaurantId, localeIsoCode: "en");
   }
 
-  void navigateToMenuScreen() {
-    context.push(menuScreenRoute,
-        extra: {RESTAURANT_ID_KEY: widget.restaurantId.toString()});
+  void updateFavoriteRestaurantState(RestaurantDetailsEntity? restaurant) {
+    ref.read(updateFavoriteRestaurantStateProvider.notifier).call(
+        restaurantId: restaurant?.id,
+        addFavorite: !(restaurant?.isFavorite??false)
+    );
   }
 
-  void navigateToReviewsScreen() {
-    context.push(restaurantReviewsRoute,
-        extra: {RESTAURANT_ID_KEY: widget.restaurantId.toString()});
+  void navigateToRestaurantGallery(List<String> list) {
+    context.push(showRestaurantGalleryRoute,extra: {RESTAURANT_GALLERY_KEY:list});
   }
 }
