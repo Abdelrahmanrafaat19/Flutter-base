@@ -6,7 +6,6 @@ import 'package:flutter_base/core/constants/Assets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import '../home/persentaion/home_screen.dart';
-import '../reservation/presentation/screens/booking_table_screen.dart';
 import '../reservation/presentation/screens/my_booking_screen.dart';
 
 class MainScreenNavHost extends ConsumerStatefulWidget {
@@ -31,7 +30,7 @@ class MainScreenNavHostState extends ConsumerState<MainScreenNavHost> with Ticke
 
   List<Widget> screens = [
     HomeScreen(),
-    BookTableScreen(),
+    MyBookingScreen(),
     HomeScreen(),
     HomeScreen(),
   ];

@@ -4,9 +4,11 @@ import 'package:flutter_base/core/constants/assets.dart';
 import 'package:flutter_base/core/widgets/svg_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../core/Constants/Constants.dart';
 import '../../../../core/Theme/app_theme.dart';
+import '../../../../core/models/StateModel.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../data/models/meal_time_slot.dart';
 import '../providers/use_case_providers.dart';
@@ -58,6 +60,7 @@ class _BookTableScreenState extends ConsumerState<BookTableScreen> {
   @override
   Widget build(BuildContext context) {
     var availblTimeMeleTimeResult = ref.watch(availableMealTimeUseCaseProvider);
+
     return Scaffold(
       backgroundColor: AppTheme.mainAppBackgroundColor,
       appBar: AppBar(
@@ -132,12 +135,16 @@ class _BookTableScreenState extends ConsumerState<BookTableScreen> {
                     ),
                     SizedBox(height: 24.h),
                     _buildTimeSection(
-                        mealTimeBreakFast:
-                            availblTimeMeleTimeResult.data!.breakfastTimeSlots??[],
+                        mealTimeBreakFast: availblTimeMeleTimeResult
+                                .data?.breakfastTimeSlots ??
+                            [],
                         mealTimeDinner:
-                            availblTimeMeleTimeResult.data!.dinnerTimeslots??[],
+                            availblTimeMeleTimeResult.data?.dinnerTimeslots ??
+                                [],
                         mealTimeLunch:
-                            availblTimeMeleTimeResult.data!.lunchTimeslots??[]),
+                            availblTimeMeleTimeResult.data?.lunchTimeslots ??
+                                [],
+                        dataState: availblTimeMeleTimeResult),
                   ],
                 ),
               ),
@@ -179,7 +186,8 @@ class _BookTableScreenState extends ConsumerState<BookTableScreen> {
   Widget _buildTimeSection(
       {required List<MealTimeSlots> mealTimeBreakFast,
       required List<MealTimeSlots> mealTimeLunch,
-      required List<MealTimeSlots> mealTimeDinner}) {
+      required List<MealTimeSlots> mealTimeDinner,
+      required dynamic dataState}) {
     return Container(
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
@@ -198,12 +206,14 @@ class _BookTableScreenState extends ConsumerState<BookTableScreen> {
           SizedBox(height: 16.h),
 
           /// Breakfast Section
-          _buildTimeSection1('Breakfast', mealTime: mealTimeBreakFast),
+          _buildTimeSection1('Breakfast',
+              mealTime: mealTimeBreakFast, dataState: dataState),
 
           SizedBox(height: 24.h),
 
           /// Lunch Section
-          _buildTimeSection1('Lunch', mealTime: mealTimeLunch),
+          _buildTimeSection1('Lunch',
+              mealTime: mealTimeLunch, dataState: dataState),
           SizedBox(height: 24.h),
 
           /// Lunch Section
@@ -213,7 +223,7 @@ class _BookTableScreenState extends ConsumerState<BookTableScreen> {
   }
 
   Widget _buildTimeSection1(String label,
-      {required List<MealTimeSlots> mealTime}) {
+      {required List<MealTimeSlots> mealTime, required dynamic dataState}) {
     return SizedBox(
       width: double.infinity,
       child: Column(
@@ -233,32 +243,36 @@ class _BookTableScreenState extends ConsumerState<BookTableScreen> {
             children: List.generate(mealTime.length, (index) {
               final isDisabled = mealTime[index].availability == false;
 
-              return Container(
-                padding: EdgeInsets.symmetric(
-                  vertical: 9.h,
-                  horizontal: 15.w,
-                ),
-                decoration: BoxDecoration(
-                  color: !isDisabled
-                      ? Colors.transparent
-                      : AppTheme.colorCodeF5F5F5,
-                  borderRadius: BorderRadius.circular(8.r),
-                  border: !isDisabled
-                      ? Border.all(
-                          color: AppTheme.colorCodeEAEAEA,
-                          width: 1.w,
-                        )
-                      : null,
-                ),
-                child: Text(
-                  getTime(mealTime[index].reservationTime ?? ""),
-                  style: AppTheme.styleSize16Weidth700color525252.copyWith(
-                    decoration: !isDisabled
-                        ? TextDecoration.none
-                        : TextDecoration.lineThrough,
-                  ),
-                ),
-              );
+              return dataState.state == DataState.LOADING
+                  ? Text("Loading.......")
+                  : Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 9.h,
+                        horizontal: 15.w,
+                      ),
+                      decoration: BoxDecoration(
+                        color: !isDisabled
+                            ? Colors.transparent
+                            : AppTheme.colorCodeF5F5F5,
+                        borderRadius: BorderRadius.circular(8.r),
+                        border: !isDisabled
+                            ? Border.all(
+                                color: AppTheme.colorCodeEAEAEA,
+                                width: 1.w,
+                              )
+                            : null,
+                      ),
+                      child: Text(
+                        getTime(mealTime[index].reservationTime ?? ""),
+                        style:
+                            AppTheme.styleSize16Weidth700color525252.copyWith(
+                          fontSize: 16.sp,
+                          decoration: !isDisabled
+                              ? TextDecoration.none
+                              : TextDecoration.lineThrough,
+                        ),
+                      ),
+                    );
             }),
           ),
         ],
@@ -268,7 +282,6 @@ class _BookTableScreenState extends ConsumerState<BookTableScreen> {
 
   String getDate(String date) {
     try {
-
       DateTime parsedDate = DateTime.parse(date);
       return DateFormat('MMM dd, yyyy').format(parsedDate);
     } catch (e) {
@@ -280,7 +293,7 @@ class _BookTableScreenState extends ConsumerState<BookTableScreen> {
     try {
       final timePart = date.split('.')[0]; // "19:22:09"
       final dateTime = DateFormat.Hms().parse(timePart);
-      return DateFormat('h:mm a').format(dateTime);
+      return DateFormat('h:mm').format(dateTime);
     } catch (e) {
       return "Invalid Time";
     }
