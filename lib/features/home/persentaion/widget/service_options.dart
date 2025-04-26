@@ -23,7 +23,7 @@ class ServiceOptions extends StatelessWidget {
             width: 45,
             height: 45,
             decoration: const BoxDecoration(
-              color: AppTheme.mainAppColor,
+              color: AppTheme.appGrey19,
               borderRadius: BorderRadius.all(Radius.circular(defaultButtonRadius))
             ),
             child: Center(

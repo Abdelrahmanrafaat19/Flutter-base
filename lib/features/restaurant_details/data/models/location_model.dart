@@ -1,6 +1,8 @@
+import '../../domain/entities/location_entity.dart';
+
 class LocationModel {
-  final double? lat;
-  final double? lon;
+  final String? lat;
+  final String? lon;
 
   LocationModel({this.lat, this.lon});
 
@@ -17,4 +19,5 @@ class LocationModel {
       'lon': lon,
     };
   }
+  LocationEntity toEntity() => LocationEntity(lat: lat, lon: lon);
 }

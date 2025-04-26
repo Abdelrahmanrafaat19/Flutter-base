@@ -4,7 +4,7 @@ import 'package:flutter_base/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
-import '../../home/data/models/location_model.dart';
+import '../../restaurant_details/data/models/location_model.dart';
 import '../../permissions/data/model/address_model.dart';
 
 class AddressStorage {
@@ -60,7 +60,7 @@ class AddressStorage {
     final userAddress = AddressStorage.checkIfUserHasLocation();
     print("aasdfasdfasd ${userAddress?.toJson()}");
     if (userAddress != null) {
-      return LocationModel(lat: userAddress.latitude, lon: userAddress.longitude);
+      return LocationModel(lat: userAddress.latitude.toString(), lon: userAddress.longitude.toString());
     }
     return null;
   }

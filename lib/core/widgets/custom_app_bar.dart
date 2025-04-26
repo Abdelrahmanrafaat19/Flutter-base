@@ -8,7 +8,7 @@ import 'package:go_router/go_router.dart';
 import '../Theme/app_theme.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final double appBarHeight = 90.0;
+  final double appBarHeight;
   final String? title;
   final bool navigated;
   final Widget? trailingWidget;
@@ -28,7 +28,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       this.isCenter = false,
       this.appBarColor,
       this.leadingWidget,
-      this.isHomeScreen = false})
+      this.isHomeScreen = false, this.appBarHeight = 80})
       : super(key: key);
 
   @override
@@ -83,5 +83,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(80);
+  Size get preferredSize => Size.fromHeight(appBarHeight);
 }

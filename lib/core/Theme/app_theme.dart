@@ -2,7 +2,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppTheme {
   static const Color mainAppColor = Color(0xFF3DB5D3);
@@ -45,12 +44,22 @@ class AppTheme {
   static const Color codeColor737373 = Color(0xff737373);
   static const Color appGrey14 =
       Color(0x14000000); // box-shadow: 0px -6px 16px 0px #00000014;
+  static const Color appGrey14 = Color(0x14000000); // box-shadow: 0px -6px 16px 0px #00000014;
   static const Color appGrey15 = Color(0xff444955);
   static const Color codeColorA3A3A3 = Color(0xffA3A3A3);
   static const Color codeColor404040 = Color(0xff404040);
   static const Color appHeaderOne = Color(0xFF225268);
   static const Color appHeaderTwo = Color(0xFF2298B8);
   static const Color colorCode171717 = Color(0xff171717);
+  static const Color appGrey16 = Color(0xff525252);
+  static const Color appGrey17 = Color(0xffA3A3A3);
+  static const Color appGrey18 = Color(0xffEAEAEA);
+  static const Color appGrey19 = Color(0xffF5F5F5);
+  static const Color appGrey20 = Color(0xff737373);
+  static const Color appHeaderOne = Color(0xFFD9BA8C);
+  static const Color appHeaderTwo = Color(0xFFCAA062);
+  static const Color appHeaderThree = Color(0xFF947340);
+
   static const Color appGunmetal = Color(0xFF333740);
   static const Color appLightGrey = Color(0xFFe5e5e5);
   static const Color appLightGreyV2 = Color(0xFFF0F0F0);
@@ -132,11 +141,18 @@ class AppTheme {
         color: Colors.black, fontSize: 16, fontWeight: FontWeight.normal),
   );
 
+
+  static const appBlackColor2 = Color(0xFF262626);
+  static const appBlackColor3 = Color(0xFF171717);
+
   static final mediumBodyBlue =
       appTextTheme.bodyMedium?.copyWith(color: AppTheme.mainAppColor);
 
   static final mediumBodyBlue2 = appTextTheme.bodyMedium
       ?.copyWith(color: AppTheme.mainAppColor, fontSize: 14);
+
+  static const appBlueColor3 = Color(0xFF0E1427);
+  static const appBlueColor4 = Color(0xFF3B82F6);
 
   static ThemeData lightTheme = ThemeData(
       useMaterial3: false,
@@ -178,6 +194,10 @@ class AppTheme {
   // Text style
   static const TextStyle styleWithTextBlackAdelleSansExtendedFonts20w700 =
       TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w700);
+
+  static const TextStyle styleWithTextAppBlackColor3AdelleSansExtendedFonts20w500 =
+      TextStyle(color: appBlackColor3, fontSize: 20, fontWeight: FontWeight.w500);
+
   static const TextStyle styleblack16normal = TextStyle(
       color: Colors.black, fontSize: 16, fontWeight: FontWeight.normal);
   static const TextStyle styleColorAppGunmetal40FontSize20W700 =
@@ -207,6 +227,9 @@ class AppTheme {
 
   static const TextStyle styleWithTextBlackAdelleSansExtendedFonts18w700 =
       TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w700);
+
+  static const TextStyle styleWithTextMainAppColorAdelleSansExtendedFonts18w700 =
+      TextStyle(color: mainAppColor, fontSize: 18, fontWeight: FontWeight.w700);
 
   static const TextStyle styleWithTextBlackAdelleSansExtendedFonts18w400 =
       TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w400);
@@ -259,8 +282,36 @@ class AppTheme {
       color: redColor,
       fontFamily: "cairepro"
   );
+
+  static const TextStyle styleWithTextMainAppColorAdelleSansExtendedFonts12w500 =
+      TextStyle(color: mainAppColor, fontSize: 12, fontWeight: FontWeight.w500);
+
   static const TextStyle styleWithTextGreenAdelleSansExtendedFonts12w400 =
       TextStyle(color: appGreen, fontSize: 12, fontWeight: FontWeight.w400);
+
+  static const TextStyle styleWithTextAppBlackColor3CeraProFonts12w500 =
+      TextStyle(color: appBlackColor3, fontSize: 12, fontWeight: FontWeight.w500);
+
+  static const TextStyle styleWithTextAppAppGrey16CeraProFonts12w400 =
+      TextStyle(color: appGrey16, fontSize: 12, fontWeight: FontWeight.w400);
+
+  static const TextStyle styleWithTextAppAppGrey16CeraProFonts12w500 =
+      TextStyle(color: appGrey16, fontSize: 12, fontWeight: FontWeight.w500);
+
+  static const TextStyle styleWithTextAppAppGrey20CeraProFonts12w400 =
+      TextStyle(color: appGrey20, fontSize: 12, fontWeight: FontWeight.w400);
+
+  static const TextStyle styleWithTextAppGreen17AdelleSansExtendedFonts113w400 =
+      TextStyle(color: appGrey17, fontSize: 13, fontWeight: FontWeight.w400);
+
+  static const TextStyle styleWithTextAppGreen17AdelleSansExtendedFonts14w400 =
+      TextStyle(color: appGrey17, fontSize: 14, fontWeight: FontWeight.w400);
+
+  static const TextStyle styleWithTextAppBlackColor3AdelleSansExtendedFonts14w700 =
+      TextStyle(color: appBlackColor3, fontSize: 14, fontWeight: FontWeight.w700);
+
+  static const TextStyle styleWithTextAppGreen20AdelleSansExtendedFonts14w400 =
+      TextStyle(color: appGrey20, fontSize: 14, fontWeight: FontWeight.w400);
 
   static const TextStyle styleWithTextGray13AdelleSansExtendedFonts11w400 =
       TextStyle(color: appGrey13, fontSize: 11, fontWeight: FontWeight.w400);
@@ -277,20 +328,41 @@ class AppTheme {
   static TextStyle styleWithTextBlackAdelleSansExtendedFonts16w500 = TextStyle(
       color: Colors.black, fontSize: 16.sp, fontWeight: FontWeight.w500);
 
+  static const TextStyle styleWithTextAppBlueColor3SansExtendedFonts16w700 =
+      TextStyle(color: appBlueColor3, fontSize: 20, fontWeight: FontWeight.w700);
+
   static const TextStyle styleWithTextRedAdelleSansExtendedFonts16w500 =
       TextStyle(color: mainAppColor, fontSize: 16, fontWeight: FontWeight.w500);
 
   static const TextStyle styleWithTextWhiteAdelleSansExtendedFonts16w500 =
       TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500);
 
-  // static const TextStyle styleWithTextRedAdelleSansExtendedFonts16w400 = TextStyle(
-  //     color: mainAppColor , fontSize: 16, fontWeight: FontWeight.w400);
+  static const TextStyle styleWithTextAppBlackColor3AdelleSansExtendedFonts16w500 =
+      TextStyle(color: appBlackColor3, fontSize: 16, fontWeight: FontWeight.w500);
+
+  static const TextStyle styleWithTextAppBlueColor3AdelleSansExtendedFonts16w500 =
+      TextStyle(color: appBlueColor3, fontSize: 16, fontWeight: FontWeight.w500);
+
+  static const TextStyle styleWithTextAppGrey16AdelleSansExtendedFonts16w500 =
+      TextStyle(color: appGrey16, fontSize: 16, fontWeight: FontWeight.w500);
+
+  static const TextStyle styleWithTextBlackCeraProFonts22w700 = TextStyle(
+      color: Colors.black , fontSize: 22, fontWeight: FontWeight.w400);
 
   static const TextStyle styleWithTextBlackAdelleSansExtendedFonts14w400 =
       TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w400);
 
   static const TextStyle styleWithTextBlackSmRegularFonts14w400 =
       TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w400);
+
+  static const TextStyle styleWithTextAppBlueColor4SmRegularFonts14w500 =
+      TextStyle(color: appBlueColor4, fontSize: 14, fontWeight: FontWeight.w500);
+
+  static const TextStyle styleWithTextAppGrey16CeraProFonts14w500 =
+      TextStyle(color: appGrey16, fontSize: 14, fontWeight: FontWeight.w500);
+
+    static const TextStyle styleWithTextMainAppColorCeraProFonts14w500 =
+      TextStyle(color: mainAppColor, fontSize: 14, fontWeight: FontWeight.w500);
 
   static const TextStyle styleWithTextWhiteAdelleSansExtendedFonts14w400 =
       TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400);
@@ -305,6 +377,9 @@ class AppTheme {
 
   static const TextStyle styleWithTextBlackAdelleSansExtendedFonts14w500 =
       TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500);
+
+  static const TextStyle styleWithTextWhiteAdelleSansExtendedFonts14w500 =
+      TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500);
 
   static const TextStyle styleWithTextAppGrey7AdelleSansExtendedFonts14w400 =
       TextStyle(color: appGrey7, fontSize: 14, fontWeight: FontWeight.w400);

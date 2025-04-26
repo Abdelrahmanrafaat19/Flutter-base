@@ -15,7 +15,7 @@ import '../../../../common/presentation/providers/usecases_providers.dart';
 import '../../../domain/entities/restaurant_entity.dart';
 
 class VerticalRestaurantCard extends ConsumerStatefulWidget {
-  final Restaurant? restaurant;
+  final RestaurantSummaryEntity? restaurant;
   final OnRestaurantClick onChangeFavoriteState;
   const VerticalRestaurantCard( {super.key, this.restaurant,required this.onChangeFavoriteState,});
 

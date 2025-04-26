@@ -12,7 +12,7 @@ import '../../domain/usecases/get_suggestions_usecase.dart';
 import '../../domain/usecases/update_favorite_resturant_state_usecase.dart';
 
 final restaurantSearchProvider = StateNotifierProvider.autoDispose<
-    RestaurantSearchUseCase, StateModel<List<Restaurant>>>((ref) {
+    RestaurantSearchUseCase, StateModel<List<RestaurantSummaryEntity>>>((ref) {
   return RestaurantSearchUseCase(ref, ref.read(commonRepoProvider));
 });
 

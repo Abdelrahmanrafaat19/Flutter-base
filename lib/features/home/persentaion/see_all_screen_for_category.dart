@@ -123,14 +123,14 @@ class _SeeAllScreenForCategoryState
             Expanded(
               child: !(restaurantsResult.data?.isEmpty == true &&
                       restaurantsResult.state == DataState.SUCCESS)
-                  ? PaginatedListView<Restaurant>(
+                  ? PaginatedListView<RestaurantSummaryEntity>(
                       dataList: restaurantsResult.data ??
                           [
-                            Restaurant(),
-                            Restaurant(),
-                            Restaurant(),
-                            Restaurant(),
-                            Restaurant(),
+                            RestaurantSummaryEntity(),
+                            RestaurantSummaryEntity(),
+                            RestaurantSummaryEntity(),
+                            RestaurantSummaryEntity(),
+                            RestaurantSummaryEntity(),
                           ],
                       scrollPhysics: const AlwaysScrollableScrollPhysics(
                           parent: BouncingScrollPhysics()),
@@ -224,7 +224,7 @@ class _SeeAllScreenForCategoryState
             : null);
   }
 
-  void updateFavoriteRestaurantState(Restaurant restaurant) {
+  void updateFavoriteRestaurantState(RestaurantSummaryEntity restaurant) {
     ref.read(updateFavoriteRestaurantStateProvider.notifier).call(
         restaurantId: restaurant.id,
         addFavorite: !(restaurant.isFavorite??false)

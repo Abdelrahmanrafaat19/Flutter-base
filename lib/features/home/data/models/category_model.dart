@@ -1,4 +1,5 @@
-import 'package:flutter_base/features/home/data/models/restaurant_model.dart';
+
+import '../../../restaurant_details/data/models/restaurant_model.dart';
 import '../../domain/entities/category_entity.dart';
 
 class CategoryModel {
@@ -51,7 +52,7 @@ CategoryEntity toCategoryEntity(CategoryModel model) {
     description: model.description,
     parentId: model.parentId,
     fetchRestaurants: model.fetchRestaurants,
-    rsRestaurants: model.rsRestaurants?.map((r) => toRestaurantEntity(r)).toList(),
+    rsRestaurants: model.rsRestaurants?.map((r) => r.toRestaurantSummaryEntity()).toList(),
     featured: model.featured,
   );
 }

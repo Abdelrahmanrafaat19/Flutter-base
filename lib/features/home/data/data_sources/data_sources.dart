@@ -2,7 +2,7 @@ import '../../../../core/models/ResponseModel.dart';
 import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/network/http_operation.dart';
 import '../../../../core/utils/typedefs.dart';
-import '../models/location_model.dart';
+import '../../../restaurant_details/data/models/location_model.dart';
 
 class HomeRemoteDataSource {
   final HttpOperations _httpOps;

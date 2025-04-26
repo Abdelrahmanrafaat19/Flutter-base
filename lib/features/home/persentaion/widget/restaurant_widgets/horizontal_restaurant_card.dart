@@ -17,7 +17,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 import '../../Providers/usecase_provider.dart';
 
 class HorizontalRestaurantCard extends ConsumerStatefulWidget {
-  final Restaurant? restaurant;
+  final RestaurantSummaryEntity? restaurant;
   final OnRestaurantClick onChangeFavoriteState;
   const HorizontalRestaurantCard(  {
     super.key,

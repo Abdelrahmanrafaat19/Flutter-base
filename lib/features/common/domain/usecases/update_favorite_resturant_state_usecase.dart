@@ -1,5 +1,5 @@
 import 'package:flutter_base/features/common/domain/repositories/common_repository.dart';
-import 'package:flutter_base/features/home/data/models/restaurant_model.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/models/ResponseModel.dart';
 import '../../../../core/models/StateModel.dart';

@@ -5,7 +5,7 @@ class CategoryEntity {
   final String? description;
   final int? parentId;
   final bool? fetchRestaurants;
-  final List<Restaurant>? rsRestaurants;
+  final List<RestaurantSummaryEntity>? rsRestaurants;
   final bool? featured;
 
   CategoryEntity({
@@ -21,7 +21,7 @@ class CategoryEntity {
     String? description,
     int? parentId,
     bool? fetchRestaurants,
-    List<Restaurant>? rsRestaurants,
+    List<RestaurantSummaryEntity>? rsRestaurants,
     bool? featured,
   }) {
     return CategoryEntity(

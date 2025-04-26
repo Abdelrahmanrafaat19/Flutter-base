@@ -6,6 +6,10 @@ import 'package:flutter_base/features/auth/presentation/screens/change_password_
 import 'package:flutter_base/features/auth/presentation/screens/forget_password_screen.dart';
 import 'package:flutter_base/features/auth/presentation/screens/splash_screen.dart';
 import 'package:flutter_base/features/main/main_screen.dart';
+import 'package:flutter_base/features/restaurant_details/presentation/screens/menu_screen.dart';
+import 'package:flutter_base/features/restaurant_details/presentation/screens/restaurant_details_screen.dart';
+import 'package:flutter_base/features/restaurant_details/presentation/screens/restaurant_reviews_screen.dart';
+import 'package:flutter_base/features/restaurant_details/presentation/screens/show_restaurant_gallery.dart';
 import 'package:flutter_base/features/search/presentation/screens/search_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -121,7 +125,7 @@ void main() async {
 
   // Check if you received the link via `getInitialLink` first
 
-  ago.setLocaleMessages('ar', ago.ArMessages());
+  ago.setLocaleMessages('en', ago.ArMessages());
   //Main App
   runApp(ProviderScope(
       child: EasyLocalization(supportedLocales: const [
@@ -167,7 +171,7 @@ class MyApp extends ConsumerWidget {
       GoRoute(
         path: splashScreenRoute,
         builder: (BuildContext context, GoRouterState state) =>
-            LoginScreen(),
+            const SplashScreen(),
       ),
       GoRoute(
         path: mainScreenRoute,
@@ -230,7 +234,7 @@ class MyApp extends ConsumerWidget {
       GoRoute(
         path: searchLocationScreenRoute,
         builder: (BuildContext context, GoRouterState state) =>
-            SearchLocationScreen(),
+            const SearchLocationScreen(),
       ),
       GoRoute(
         path: cuisinesScreenRoute,
@@ -282,6 +286,46 @@ class MyApp extends ConsumerWidget {
           );
         },
 
+      ),
+      GoRoute(
+        path: googleMapScreenRoute,
+        builder: (BuildContext context, GoRouterState state) => const GoogleMapScreen(),
+      ),
+      GoRoute(
+        path: restaurantDetailsRoute,
+        builder: (BuildContext context, GoRouterState state) {
+          var extra = state.extra as Map;
+          return RestaurantDetailsScreen(
+            restaurantId: extra[RESTAURANT_ID_KEY],
+          );
+        },
+      ),
+     GoRoute(
+        path: menuScreenRoute,
+       builder: (BuildContext context, GoRouterState state) {
+         var extra = state.extra as Map;
+         return MenuScreen(
+           restaurantId: extra[RESTAURANT_ID_KEY],
+         );
+       },
+      ),
+      GoRoute(
+        path: restaurantReviewsRoute,
+       builder: (BuildContext context, GoRouterState state) {
+         var extra = state.extra as Map;
+         return RestaurantReviewsScreen(
+           restaurantId: extra[RESTAURANT_ID_KEY],
+         );
+       },
+      ),
+      GoRoute(
+        path: showRestaurantGalleryRoute,
+       builder: (BuildContext context, GoRouterState state) {
+         var extra = state.extra as Map;
+         return ShowRestaurantGallery(
+           imagesList: extra[RESTAURANT_GALLERY_KEY],
+         );
+       },
       ),
     ],
   );
