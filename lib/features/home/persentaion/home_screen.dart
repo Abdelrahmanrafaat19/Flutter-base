@@ -58,182 +58,180 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final categoriesState = ref.watch(fetchCategoriesStateNotifierProvider);
     handleChangeHomeStatueBarColor();
     return Scaffold(
-      body: SafeArea(
-        child: Container(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  padding: EdgeInsetsDirectional.symmetric(
-                      horizontal: defaultPaddingHorizontal, vertical: 24),
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [AppTheme.appHeaderOne, AppTheme.appHeaderTwo],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      color: Colors.black,
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(16),
-                          bottomRight: Radius.circular(16))),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          SVGIcons.localSVG(homeGpsIconPath,
-                              width: 24, height: 24),
-                          InkWell(
-                            onTap: (){
-                              _onSelectLocationTab();
-                            },
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.symmetric(
-                                  horizontal: defaultButtonRadius),
-                              child: SizedBox(
-                                width: MediaQuery.of(context).size.width * .7,
-                                child: Text(
-                                  ref.watch(updateUserLocationStateNotifierProvider)?.description ?? "Enter your current location",
-                                  style: AppTheme
-                                      .styleWithTextWhiteAdelleSansExtendedFonts16w500.copyWith(),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
+      body: Container(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsetsDirectional.only(
+                    start: defaultPaddingHorizontal, end: 24, top: 53,bottom: 24),
+                decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [AppTheme.appHeaderOne, AppTheme.appHeaderTwo,AppTheme.appHeaderThree],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    color: Colors.black,
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(16),
+                        bottomRight: Radius.circular(16))),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        SVGIcons.localSVG(homeGpsIconPath,
+                            width: 24, height: 24),
+                        InkWell(
+                          onTap: (){
+                            _onSelectLocationTab();
+                          },
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.symmetric(
+                                horizontal: defaultButtonRadius),
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width * .7,
+                              child: Text(
+                                ref.watch(updateUserLocationStateNotifierProvider)?.description ?? "Enter your current location",
+                                style: AppTheme
+                                    .styleWithTextWhiteAdelleSansExtendedFonts16w500.copyWith(),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ),
-                          Spacer(),
-                          Stack(children: [
-                            Align(
-                                alignment: AlignmentDirectional.center,
-                                child: InkWell(
-                                    onTap: () {},
-                                    child: SVGIcons.localSVG(
-                                        notificationIconPath,
-                                        width: 24,
-                                        height: 24))),
-                            Positioned(
-                              right: 4,
-                              top: 1,
-                              child: Container(
-                                height: 6,
-                                width: 6,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: AppTheme.appRed),
-                              ),
-                            )
-                          ])
-                        ],
-                      ),
-                    const SizedBox(
-                        height: 24,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          // ref.read(searchOnRestaurantDataStateNotifierProvider.notifier).call(
-                          //     page:0, size: 10,localeIsoCode: "en");
-                          context.push(searchScreenRoute);
-        
-                        },
-                        child: AppSearchBarWithFilter(
-                          hasBorder: false,
-                          hasFilter: false,
-                          enableSearch: false,
-                          // filterIconColor: AppTheme.appBlue,
-                          onSearchClick: () {
-                          },
-                          hintTxt: "Type of food, restaurants name",
                         ),
-                      ),
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      Row(
-                        children: [
-                          ServiceOptions(
-                            icon: SVGIcons.localSVG(calendarIconPath,
-                                width: 24, height: 24),
-                            title: "Reserve a table",
-                            onClick: () {
-                              ref
-                                  .read(fetchCategoriesStateNotifierProvider
-                                      .notifier)
-                                  .call();
-                            },
-                          ),
-                          const Spacer(),
-                          ServiceOptions(
-                            icon: SVGIcons.localSVG(shopIconPath,
-                                width: 24, height: 24),
-                            title: "Pick-Up",
-                            onClick: () {},
-                          ),
-                          const Spacer(),
-                          ServiceOptions(
-                            icon: SVGIcons.localSVG(starIconPath,
-                                width: 24, height: 24),
-                            title: "In Restaurant?",
-                            onClick: () {},
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 24,
-                ),
-                Column(
-                  children: [
-                    (cuisinesState.state == DataState.SUCCESS &&
-                                cuisinesState.data?.isNotEmpty == true) ||
-                            cuisinesState.state == DataState.LOADING
-                        ? HorizontalCuisinesListWithTitle(
-                            list: cuisinesState.data ??
-                                [
-                                  Cuisine(),
-                                  Cuisine(),
-                                  Cuisine(),
-                                  Cuisine(),
-                                  Cuisine(),
-                                ],
-                            showLoading:
-                                cuisinesState.state == DataState.LOADING,
-                            itemClick: (cuisine) {
-                              navigateToCuisineRestaurants(cuisine);
-                            },
-                            onSeeAllClickListener: () {
-                              navigateToShowAllCategories();
-                            })
-                        : const SizedBox(),
-                    SizedBox(
+                        Spacer(),
+                        Stack(children: [
+                          Align(
+                              alignment: AlignmentDirectional.center,
+                              child: InkWell(
+                                  onTap: () {},
+                                  child: SVGIcons.localSVG(
+                                      notificationIconPath,
+                                      width: 24,
+                                      height: 24))),
+                          Positioned(
+                            right: 4,
+                            top: 1,
+                            child: Container(
+                              height: 6,
+                              width: 6,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppTheme.appRed),
+                            ),
+                          )
+                        ])
+                      ],
+                    ),
+                  const SizedBox(
                       height: 24,
                     ),
-                    (categoriesState.state == DataState.SUCCESS &&
-                        categoriesState.data?.isNotEmpty == true) ||
-                        categoriesState.state == DataState.LOADING
-                        ? HomeRestaurantListview(
-                            restaurants: categoriesState.data ??
-                                [
-                                  CategoryEntity(),
-                                  CategoryEntity(),
-                                  CategoryEntity(),
-                                ],
-                            showLoading:
-                                categoriesState.state == DataState.LOADING, onChangeRestaurantState: (restaurant) {
-                              if(restaurant != null) {
-                                updateFavoriteRestaurantState(restaurant);
-                              }
+                    GestureDetector(
+                      onTap: () {
+                        // ref.read(searchOnRestaurantDataStateNotifierProvider.notifier).call(
+                        //     page:0, size: 10,localeIsoCode: "en");
+                        context.push(searchScreenRoute);
+
                       },
-                          )
-                        : SizedBox(),
-                    SizedBox(
-                      height: 60,
-                    )
+                      child: AppSearchBarWithFilter(
+                        hasBorder: false,
+                        hasFilter: false,
+                        enableSearch: false,
+                        // filterIconColor: AppTheme.appBlue,
+                        onSearchClick: () {
+                        },
+                        hintTxt: "Type of food, restaurants name",
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    Row(
+                      children: [
+                        ServiceOptions(
+                          icon: SVGIcons.localSVG(calendarIconPath,
+                              width: 24, height: 24),
+                          title: "Reserve a table",
+                          onClick: () {
+                            ref
+                                .read(fetchCategoriesStateNotifierProvider
+                                    .notifier)
+                                .call();
+                          },
+                        ),
+                        const Spacer(),
+                        ServiceOptions(
+                          icon: SVGIcons.localSVG(shopIconPath,
+                              width: 24, height: 24),
+                          title: "Pick-Up",
+                          onClick: () {},
+                        ),
+                        const Spacer(),
+                        ServiceOptions(
+                          icon: SVGIcons.localSVG(starIconPath,
+                              width: 24, height: 24),
+                          title: "In Restaurant?",
+                          onClick: () {},
+                        ),
+                      ],
+                    ),
                   ],
                 ),
-              ],
-            ),
+              ),
+              SizedBox(
+                height: 24,
+              ),
+              Column(
+                children: [
+                  (cuisinesState.state == DataState.SUCCESS &&
+                              cuisinesState.data?.isNotEmpty == true) ||
+                          cuisinesState.state == DataState.LOADING
+                      ? HorizontalCuisinesListWithTitle(
+                          list: cuisinesState.data ??
+                              [
+                                Cuisine(),
+                                Cuisine(),
+                                Cuisine(),
+                                Cuisine(),
+                                Cuisine(),
+                              ],
+                          showLoading:
+                              cuisinesState.state == DataState.LOADING,
+                          itemClick: (cuisine) {
+                            navigateToCuisineRestaurants(cuisine);
+                          },
+                          onSeeAllClickListener: () {
+                            navigateToShowAllCategories();
+                          })
+                      : const SizedBox(),
+                  SizedBox(
+                    height: 24,
+                  ),
+                  (categoriesState.state == DataState.SUCCESS &&
+                      categoriesState.data?.isNotEmpty == true) ||
+                      categoriesState.state == DataState.LOADING
+                      ? HomeRestaurantListview(
+                          restaurants: categoriesState.data ??
+                              [
+                                CategoryEntity(),
+                                CategoryEntity(),
+                                CategoryEntity(),
+                              ],
+                          showLoading:
+                              categoriesState.state == DataState.LOADING, onChangeRestaurantState: (restaurant) {
+                            if(restaurant != null) {
+                              updateFavoriteRestaurantState(restaurant);
+                            }
+                    },
+                        )
+                      : SizedBox(),
+                  SizedBox(
+                    height: 60,
+                  )
+                ],
+              ),
+            ],
           ),
         ),
       ),

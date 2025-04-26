@@ -15,6 +15,8 @@ import '../../data/models/menu_model.dart';
 import '../widgets/category_tab_item.dart';
 
 class MenuScreen extends ConsumerStatefulWidget {
+  final String restaurantId;
+  const MenuScreen({super.key,required this.restaurantId});
   @override
   _MenuScreenState createState() => _MenuScreenState();
 }
@@ -36,7 +38,7 @@ class _MenuScreenState extends ConsumerState<MenuScreen>
 
     WidgetsBinding.instance.addPostFrameCallback((callback) {
       ref.read(langProvider.notifier).fetchLocale("en");
-      getRestaurantMenus("136");
+      getRestaurantMenus(widget.restaurantId);
     });
   }
 
@@ -240,6 +242,6 @@ class _MenuScreenState extends ConsumerState<MenuScreen>
   }
 
   void getRestaurantMenus(String restaurantId) {
-    ref.read(fetchRestaurantMenuStateProvider.notifier).call(restaurantId: restaurantId);
+    ref.read(fetchRestaurantMenuStateProvider.notifier).call(restaurantId: "136");
   }
 }

@@ -4,11 +4,7 @@ import 'package:flutter/material.dart';
 class ImageSliderPreview extends StatelessWidget {
   List<String>? imageUrls;
   ImageSliderPreview({super.key,this.imageUrls});
-
-
-
   final int maxVisibleImages = 5;
-
   @override
   Widget build(BuildContext context) {
     int extraCount = (imageUrls?.length??0) - maxVisibleImages;

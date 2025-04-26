@@ -8,6 +8,7 @@ import 'package:flutter_base/features/auth/presentation/screens/splash_screen.da
 import 'package:flutter_base/features/main/main_screen.dart';
 import 'package:flutter_base/features/restaurant_details/presentation/screens/menu_screen.dart';
 import 'package:flutter_base/features/restaurant_details/presentation/screens/restaurant_details_screen.dart';
+import 'package:flutter_base/features/restaurant_details/presentation/screens/restaurant_reviews_screen.dart';
 import 'package:flutter_base/features/search/presentation/screens/search_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -157,7 +158,7 @@ class MyApp extends ConsumerWidget {
       ),
       GoRoute(
         path: mainScreenRoute,
-        builder: (BuildContext context, GoRouterState state) => const RestaurantDetailsScreen(),
+        builder: (BuildContext context, GoRouterState state) => const MainScreen(),
       ),
       GoRoute(
         path: loginScreenRoute,
@@ -257,9 +258,34 @@ class MyApp extends ConsumerWidget {
       GoRoute(
         path: googleMapScreenRoute,
         builder: (BuildContext context, GoRouterState state) => const GoogleMapScreen(),
-
       ),
-
+      GoRoute(
+        path: restaurantDetailsRoute,
+        builder: (BuildContext context, GoRouterState state) {
+          var extra = state.extra as Map;
+          return RestaurantDetailsScreen(
+            restaurantId: extra[RESTAURANT_ID_KEY],
+          );
+        },
+      ),
+     GoRoute(
+        path: menuScreenRoute,
+       builder: (BuildContext context, GoRouterState state) {
+         var extra = state.extra as Map;
+         return MenuScreen(
+           restaurantId: extra[RESTAURANT_ID_KEY],
+         );
+       },
+      ),
+      GoRoute(
+        path: restaurantReviewsRoute,
+       builder: (BuildContext context, GoRouterState state) {
+         var extra = state.extra as Map;
+         return RestaurantReviewsScreen(
+           restaurantId: extra[RESTAURANT_ID_KEY],
+         );
+       },
+      ),
     ],
   );
 }

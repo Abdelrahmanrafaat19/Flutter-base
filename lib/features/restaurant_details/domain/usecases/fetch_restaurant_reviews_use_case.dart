@@ -1,33 +1,36 @@
 import 'package:flutter_base/core/models/ResponseModel.dart';
 import 'package:flutter_base/core/models/StateModel.dart';
-import 'package:flutter_base/features/restaurant_details/data/models/menu_model.dart';
-import 'package:flutter_base/features/restaurant_details/domain/entities/menu_entity.dart';
+import 'package:flutter_base/features/restaurant_details/data/models/ReviewModel.dart';
+import 'package:flutter_base/features/restaurant_details/domain/entities/ReviewEntity.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../repository/restaurant_repository.dart';
 
-class FetchRestaurantMenuUseCase
-    extends StateNotifier<StateModel<RestaurantMenuEntity>> {
+class FetchRestaurantReviewsUseCase
+    extends StateNotifier<StateModel<List<ReviewEntity>>> {
   final RestaurantRepository restaurantRepository;
-  FetchRestaurantMenuUseCase(this.restaurantRepository) : super(StateModel());
+  FetchRestaurantReviewsUseCase(this.restaurantRepository)
+      : super(StateModel());
 
   void call(
       {String? restaurantId,
-      int? itemsCountLimit,
-      String? localeIsoCode}) async {
+      String? localeIsoCode,
+      String? page = "0",
+      String? size = "5"}) async {
     state = StateModel.loading();
     ResponseModel responseModel =
-        await restaurantRepository.fetchRestaurantMenu(
+        await restaurantRepository.fetchRestaurantReviews(
             restaurantId: restaurantId,
-            itemsCountLimit: itemsCountLimit,
-            localeIsoCode: "en");
+            localeIsoCode: "en",
+            page: page,
+            size: size);
 
     if (responseModel.code == 200) {
-      var restaurantMenuModel =
-          RestaurantMenuModel.fromJson(responseModel.data);
+      List<ReviewEntity> reviews = (responseModel.data as List)
+      .map((item) => ReviewModel.fromJson(item).toEntity()).toList() ?? [];
 
       state = StateModel(
           state: DataState.SUCCESS,
-          data: restaurantMenuModel.toEntity(),
+          data: reviews,
           message: responseModel.message);
     } else {
       state = StateModel(

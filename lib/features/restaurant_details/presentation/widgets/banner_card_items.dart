@@ -60,6 +60,11 @@ class _BannerCardItemsState extends State<BannerCardItems> {
               );
             }).toList(),
           ),
+          Container(
+            width: double.infinity,
+            height: widget.height,
+            color: Colors.black.withOpacity(.5),
+          ),
           widget.showIndicator ? Align(
             alignment: Alignment.bottomCenter,
             child: Padding(

@@ -14,7 +14,7 @@ class CategoryTabContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, _) {
-      var restaurantMenu = ref.watch(fetchRestaurantMenuStateProvider);
+      var restaurantMenu = ref.watch(fetchLimitRestaurantMenuItemsStateProvider);
       if(restaurantMenu.state == DataState.SUCCESS) {
         var categories = restaurantMenu.data?.categoryItems ?? [];
         var meals = categories[index].rsItemList;

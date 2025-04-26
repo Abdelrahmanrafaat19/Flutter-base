@@ -41,7 +41,11 @@ class _HomeRestaurantListviewState extends State<HomeRestaurantListview> {
     );
   }
 
-  void onItemClick(RestaurantSummaryEntity? restaurant) {}
+  void onItemClick(RestaurantSummaryEntity? restaurant) {
+    if(restaurant != null){
+      context.push(restaurantDetailsRoute,extra: {RESTAURANT_ID_KEY : restaurant.id.toString()});
+    }
+  }
 
   void onSeeAllClickListener(CategoryEntity category) {
     context.push(seeAllScreenForCategoryRoute, extra: {

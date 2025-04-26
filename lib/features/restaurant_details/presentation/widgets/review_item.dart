@@ -1,13 +1,17 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_base/core/Constants/Constants.dart';
 import 'package:flutter_base/core/Theme/app_theme.dart';
 import 'package:flutter_base/core/constants/Assets.dart';
 import 'package:flutter_base/core/utils/extensions/string_ex.dart';
 import 'package:flutter_base/core/widgets/circle_image.dart';
 import 'package:flutter_base/core/widgets/svg_icons.dart';
+import 'package:flutter_base/features/restaurant_details/domain/entities/ReviewEntity.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class ReviewItem extends StatelessWidget {
-  const ReviewItem({super.key});
+  final ReviewEntity? review;
+  const ReviewItem({super.key, this.review});
 
   @override
   Widget build(BuildContext context) {
@@ -19,44 +23,89 @@ class ReviewItem extends StatelessWidget {
         children: [
           Row(
             children: [
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(defaultButtonRadius)),
-                child: ImageView(width: 32, height: 32, initialImg: ""),
+              Skeleton.replace(
+                replacement: Container(
+                  clipBehavior: Clip.antiAlias,
+                  decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(defaultButtonRadius))),
+                  child: Container(
+                    width: 32,
+                    height: 32,
+                    color: Colors.white,
+                  ),
+                ),
+                child: Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                      color: AppTheme.appBlackColor3,
+                      borderRadius: BorderRadius.circular(defaultButtonRadius)),
+                  child: Center(
+                      child: Text(
+                    review?.userName?.isEmpty != true
+                        ? review!.userName![0].toString()
+                        : "",
+                    style: AppTheme
+                        .styleWithTextWhiteAdelleSansExtendedFonts14w500,
+                  )),
+                ),
               ),
               SizedBox(
                 width: 12,
               ),
-              SizedBox(
-                  width: 60,
-                  child: Text(
-                    "Yassen Mostafa".ellipsize(28),
-                    style: AppTheme
-                        .styleWithTextAppBlackColor3AdelleSansExtendedFonts16w500,
-                  )),
-              Spacer(),
-              SVGIcons.localSVG(ratingStarIconPath,
-                  width: 16, height: 16),
-              SizedBox(
-                width: 4,
+              Skeleton.replace(
+                replacement: Container(
+                  width: 110,
+                  height: 20,
+                  color: Colors.white,
+                ),
+                child: SizedBox(
+                    child: Text(
+                  (review?.userName ?? "").ellipsize(28),
+                  style: AppTheme
+                      .styleWithTextAppBlackColor3AdelleSansExtendedFonts16w500,
+                )),
               ),
-              Text("4.5",style: AppTheme.styleWithTextAppBlueColor3AdelleSansExtendedFonts16w500,)
+              Spacer(),
+              Skeleton.replace(
+                replacement: Container(
+                  width: 50,
+                  height: 20,
+                  color: Colors.white,
+                ),
+                child: Row(
+                  children: [
+                    SVGIcons.localSVG(ratingStarIconPath,
+                        width: 16, height: 16),
+                    SizedBox(
+                      width: 4,
+                    ),
+                    Text(
+                      (review?.rating ?? 0).toString(),
+                      style: AppTheme
+                          .styleWithTextAppBlueColor3AdelleSansExtendedFonts16w500,
+                    )
+                  ],
+                ),
+              )
             ],
           ),
           SizedBox(
             height: 8,
           ),
-          SizedBox(
-              width: MediaQuery.of(context).size.width -110,
-              child: Text(
-                  "I had an amazing dining experience! "
-                  "I had an amazing dining experience! "
-                  "I had an amazing dining experience! "
-                  "I had an amazing dining experience! "
-                  "I had an amazing dining experience! "
-                  "The warm atmosphere and attentive service truly made my visit memorable.",style: AppTheme.styleWithTextAppGreen20AdelleSansExtendedFonts14w400
-                  ))
-
+          Skeleton.replace(
+            replacement: Container(
+              width: 150,
+              height: 20,
+              color: Colors.white,
+            ),
+            child: SizedBox(
+                width: MediaQuery.of(context).size.width - 15,
+                child: Text(review?.comment ?? "",
+                    style: AppTheme
+                        .styleWithTextAppGreen20AdelleSansExtendedFonts14w400)),
+          )
         ],
       ),
     );

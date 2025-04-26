@@ -22,6 +22,7 @@ const LANG_KEY = 'lang';
 const TITLE_KEY = 'title';
 const CUISINE_ID_KEY = 'cuisineId';
 const CATEGORY_ID_KEY = 'categoryId';
+const RESTAURANT_ID_KEY = 'restaurantId';
 
 const FILTER_LIST_KEY="filterList";
 const SELECT_RANGE_VALUE_KEY="selectRangeValues";

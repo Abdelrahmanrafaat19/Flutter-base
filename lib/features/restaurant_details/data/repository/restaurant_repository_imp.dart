@@ -15,9 +15,7 @@ class RestaurantRepositoryImp extends RestaurantRepository {
 
   @override
   FutureResponseModel fetchRestaurantMenu(
-      {String? restaurantId,
-      int? itemsCountLimit,
-      String? localeIsoCode}) {
+      {String? restaurantId, int? itemsCountLimit, String? localeIsoCode}) {
     return _dataSources.fetchRestaurantMenu(
         restaurantId: restaurantId,
         itemsCountLimit: itemsCountLimit,
@@ -26,7 +24,14 @@ class RestaurantRepositoryImp extends RestaurantRepository {
 
   @override
   FutureResponseModel fetchRestaurantReviews(
-      String restaurantId, String localeIsoCode) {
-    return _dataSources.fetchRestaurantReviews(restaurantId, localeIsoCode);
+      {String? restaurantId,
+      String? localeIsoCode,
+      String? page,
+      String? size}) {
+    return _dataSources.fetchRestaurantReviews(
+        restaurantId: restaurantId,
+        localeIsoCode: localeIsoCode,
+        page: page,
+        size: size);
   }
 }

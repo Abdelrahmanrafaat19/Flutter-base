@@ -11,9 +11,7 @@ class UtilsExts {
     static void handleStatusBarColorWithIcon(
         {Color? statusBarColor = AppTheme.mainAppBackgroundColor, Brightness? statusBarIcons = Brightness.dark}) {
         SystemChrome.setSystemUIOverlayStyle(
-            SystemUiOverlayStyle(
-                statusBarColor: statusBarColor ,statusBarIconBrightness: statusBarIcons
-            )
+            SystemUiOverlayStyle(statusBarIconBrightness: statusBarIcons)
         );
     }
 

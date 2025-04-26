@@ -14,19 +14,22 @@ class RestaurantDataSources {
   }
 
   FutureResponseModel fetchRestaurantMenu(
-      {String? restaurantId,
-      int? itemsCountLimit,
-      String? localeIsoCode}) {
+      {String? restaurantId, int? itemsCountLimit, String? localeIsoCode}) {
+    String params = "?localeIsoCode=$localeIsoCode${itemsCountLimit != null ? "&itemsCountLimit=$itemsCountLimit" : ""}";
+
     return _httpOps.getData(
-        endPoint: "$restaurantMenusEndPoint/$restaurantId",
-        params: "?localeIsoCode=$localeIsoCode&itemsCountLimit=$itemsCountLimit",
-        );
+      endPoint: "$restaurantMenusEndPoint/$restaurantId",
+      params: params,
+    );
   }
 
   FutureResponseModel fetchRestaurantReviews(
-      String restaurantId, String localeIsoCode) {
+      {String? restaurantId,
+      String? localeIsoCode,
+      String? page,
+      String? size}) {
     return _httpOps.getData(
         endPoint: "$restaurantReviewsEndPoint/$restaurantId",
-        params: "?localeIsoCode=$localeIsoCode");
+        params: "?localeIsoCode=$localeIsoCode&page=$page&size=$size");
   }
 }
