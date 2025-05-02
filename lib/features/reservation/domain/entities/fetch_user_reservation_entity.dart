@@ -20,7 +20,8 @@ class ReservedRestaurantEntity {
     this.status,
     this.occassion,
     this.guestName,
-    this.reminder,    this.guestPhone,
+    this.reminder,
+    this.guestPhone,
     this.createdAt,
   });
 

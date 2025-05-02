@@ -8,7 +8,13 @@ import '../../../../core/constants/Assets.dart';
 import '../../../../core/widgets/svg_icons.dart';
 
 class ResturantData extends StatelessWidget {
-  const ResturantData({super.key});
+  final String name, cusin, address;
+
+  const ResturantData(
+      {super.key,
+      required this.name,
+      required this.cusin,
+      required this.address});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +30,7 @@ class ResturantData extends StatelessWidget {
             child: Container(
               clipBehavior: Clip.antiAlias,
               width: double.infinity,
-              margin:  EdgeInsets.symmetric(
+              margin: EdgeInsets.symmetric(
                   horizontal: defaultPaddingHorizontal.w, vertical: 8.h),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -34,23 +40,20 @@ class ResturantData extends StatelessWidget {
                 children: [
                   Container(
                     width: 85.w,
-                    decoration:  BoxDecoration(
-                      borderRadius: BorderRadiusDirectional.all(
-                      Radius.circular(8.r)
-                      ),
-                      image:const  DecorationImage(
+                    decoration: BoxDecoration(
+                      borderRadius:
+                          BorderRadiusDirectional.all(Radius.circular(8.r)),
+                      image: const DecorationImage(
                         fit: BoxFit.fill,
                         image: NetworkImage(
                           "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJ0EqHI6h5QgFTXGG_1i2FADG1xulRbVtecA&s",
                         ),
                       ),
                     ),
-                   
                   ),
                   Expanded(
                     child: Container(
                       padding: const EdgeInsetsDirectional.only(start: 16),
-
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -63,8 +66,8 @@ class ResturantData extends StatelessWidget {
                               height: 20,
                               color: Colors.white,
                             ),
-                            child:  Text(
-                              "Tako Mexico",
+                            child: Text(
+                              name,
                               style: AppTheme
                                   .styleWithTextBlackAdelleSansExtendedFonts16w500,
                             ),
@@ -87,7 +90,8 @@ class ResturantData extends StatelessWidget {
                                       horizontal: 6.0),
                                   child: Text(
                                     "20 Mins",
-                                    style: AppTheme.styleWithAppGrey7Fonts14w400,
+                                    style:
+                                        AppTheme.styleWithAppGrey7Fonts14w400,
                                   ),
                                 ),
                                 Container(
@@ -102,12 +106,13 @@ class ResturantData extends StatelessWidget {
                                 ),
                                 SVGIcons.localSVG(categoryIconPath,
                                     width: 16, height: 16),
-                                const Padding(
+                                 Padding(
                                   padding: EdgeInsetsDirectional.symmetric(
                                       horizontal: 6.0),
                                   child: Text(
-                                    "Mexican",
-                                    style: AppTheme.styleWithAppGrey7Fonts14w400,
+                                    cusin,
+                                    style:
+                                        AppTheme.styleWithAppGrey7Fonts14w400,
                                   ),
                                 )
                               ],
@@ -129,18 +134,19 @@ class ResturantData extends StatelessWidget {
                                         width: 16, height: 16)),
                                 Skeleton.ignore(
                                   child: Padding(
-                                    padding: const EdgeInsetsDirectional.symmetric(
-                                        horizontal: 6.0),
+                                    padding:
+                                        const EdgeInsetsDirectional.symmetric(
+                                            horizontal: 6.0),
                                     child: Text(
-                                      "Madinty, South Park B28" ,
-                                      style: AppTheme.styleWithAppGrey7Fonts14w400,
+                                      address,
+                                      style:
+                                          AppTheme.styleWithAppGrey7Fonts14w400,
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                     ),
                                   ),
                                 ),
                                 const Spacer(),
-
                               ],
                             ),
                           ),

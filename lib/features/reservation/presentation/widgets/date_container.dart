@@ -8,13 +8,27 @@ import '../../../../core/widgets/svg_icons.dart';
 import 'calender_bottom_sheet.dart';
 
 class DateContainer extends StatefulWidget {
-  final void Function(DateTime, DateTime)?onDaySelected ;
-  final DateTime focusedDay ;
+  final void Function(DateTime, DateTime)? onDaySelected;
+
+  final DateTime focusedDay;
+
   final DateTime? selectedDay;
   final List<DateTime> days;
+  final void Function() onTap;
   final List<String> dates;
-    int isSelected=0;
-   DateContainer({super.key,required this.onDaySelected, required this.focusedDay,required this.selectedDay, required this.days, required this.dates, required this.isSelected});
+  final void Function(DateTime selectedDate) onDateSelected;
+
+
+  DateContainer(
+      {super.key,
+      required this.onDaySelected,
+      required this.focusedDay,
+      required this.selectedDay,
+      required this.days,
+      required this.dates,
+
+      required this.onTap,
+      required this.onDateSelected});
 
   @override
   State<DateContainer> createState() => _DateContainerState();
@@ -23,8 +37,7 @@ class DateContainer extends StatefulWidget {
 class _DateContainerState extends State<DateContainer> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
-
-
+  int isSelected1=1;
 
   @override
   Widget build(BuildContext context) {
@@ -44,18 +57,17 @@ class _DateContainerState extends State<DateContainer> {
               Text("Date", style: AppTheme.style20BlackBold),
               InkWell(
                 onTap: () {
-
                   showModalBottomSheet(
                     context: context,
                     shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(20)),
                     ),
                     isScrollControlled: true,
-                    builder: (_) =>  CalendarBottomSheet(
+                    builder: (_) => CalendarBottomSheet(
                       focusedDay: widget.focusedDay,
                       selectedDay: widget.selectedDay,
-
-                      onDaySelected:widget.onDaySelected,
+                      onDaySelected: widget.onDaySelected,
                     ),
                   );
                 },
@@ -75,25 +87,26 @@ class _DateContainerState extends State<DateContainer> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: List.generate(5, (index) {
-              bool isSelected = widget.isSelected == index;
+              bool isSelected = isSelected1 == index;
               bool isClickable = index != 0;
 
               return InkWell(
                 onTap: isClickable
                     ? () {
-                  setState(() {
-                    widget.isSelected = index;
-                  });
-                }
+                        setState(() {
+                          isSelected1 = index;
+                        });
+                        widget.onDateSelected(widget.days[index]);
+                      }
                     : null,
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
                   decoration: BoxDecoration(
-                    color: widget.isSelected == index
+                    color: isSelected1 == index
                         ? AppTheme.lightBrown
                         : Colors.transparent,
                     borderRadius: BorderRadius.circular(8.r),
-                    border: widget.isSelected == index
+                    border: isSelected1 == index
                         ? Border.all(
                             color: AppTheme.codeColorB08A4E,
                             width: 1.w,
@@ -105,9 +118,11 @@ class _DateContainerState extends State<DateContainer> {
                       Text(DateFormat('E').format(widget.days[index]),
                           style: AppTheme.style20BlackBold.copyWith(
                             fontWeight: FontWeight.w900,
-                            color:isClickable?( widget.isSelected == index
-                                ? AppTheme.codeColorB08A4E
-                                : AppTheme.colorCode171717):AppTheme.colorCodeEAEAEA,
+                            color: isClickable
+                                ? (isSelected1 == index
+                                    ? AppTheme.codeColorB08A4E
+                                    : AppTheme.colorCode171717)
+                                : AppTheme.colorCodeEAEAEA,
                           )),
                       SizedBox(height: 4.h),
                       Container(
@@ -119,9 +134,11 @@ class _DateContainerState extends State<DateContainer> {
                           widget.days[index].day.toString(),
                           style: AppTheme.style20BlackBold.copyWith(
                             fontWeight: FontWeight.w900,
-                            color:isClickable?( widget.isSelected == index
-                                ? AppTheme.codeColorB08A4E
-                                : AppTheme.colorCode171717):AppTheme.colorCodeEAEAEA,
+                            color: isClickable
+                                ? (isSelected1 == index
+                                    ? AppTheme.codeColorB08A4E
+                                    : AppTheme.colorCode171717)
+                                : AppTheme.colorCodeEAEAEA,
                           ),
                         ),
                       )

@@ -4,8 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/Theme/app_theme.dart';
 
 class GuestContainer extends StatefulWidget {
+  final int guestCounter;
+  final void Function() increment,decrement;
 
-  const GuestContainer({super.key,});
+  const GuestContainer({super.key, required this.guestCounter, required this.increment, required this.decrement,});
 
   @override
   State<GuestContainer> createState() => _GuestContainerState();
@@ -35,10 +37,7 @@ class _GuestContainerState extends State<GuestContainer> {
             child: Row(
               children: [
                 IconButton(
-                    onPressed: () {
-                      numberOfGuests--;
-                      setState(() {});
-                    },
+                    onPressed: widget.decrement,
                     icon: Icon(
                       Icons.remove,
                       color: AppTheme.colorCode171717,
@@ -47,7 +46,7 @@ class _GuestContainerState extends State<GuestContainer> {
                 SizedBox(
                   width: 10.w,
                 ),
-                Text(numberOfGuests.toString(),
+                Text(widget.guestCounter.toString(),
                     style: AppTheme.style20BlackBold
                         .copyWith(fontWeight: FontWeight.w500)),
 
@@ -55,10 +54,7 @@ class _GuestContainerState extends State<GuestContainer> {
                   width: 10.w,
                 ),
                 IconButton(
-                    onPressed: () {
-                     numberOfGuests++;
-                      setState(() {});
-                    },
+                    onPressed:widget.increment,
                     icon: Icon(
                       Icons.add,
                       color: AppTheme.colorCode171717,

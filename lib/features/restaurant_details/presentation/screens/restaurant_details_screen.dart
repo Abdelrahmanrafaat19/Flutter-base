@@ -27,6 +27,7 @@ import '../widgets/banner_card_items.dart';
 
 class RestaurantDetailsScreen extends ConsumerStatefulWidget {
   final String restaurantId;
+
   const RestaurantDetailsScreen({
     super.key,
     required this.restaurantId,
@@ -79,10 +80,11 @@ class _RestaurantDetailsScreenState
   Widget build(BuildContext context) {
     final restaurantState = ref.watch(fetchRestaurantDetailsStateProvider);
 
-    handleState(updateFavoriteRestaurantStateProvider,showLoading: true,onSuccess: (res){
-      ref.read(fetchRestaurantDetailsStateProvider.notifier).updateRestaurantFavoriteState(
-          restaurantState.data
-      );
+    handleState(updateFavoriteRestaurantStateProvider, showLoading: true,
+        onSuccess: (res) {
+      ref
+          .read(fetchRestaurantDetailsStateProvider.notifier)
+          .updateRestaurantFavoriteState(restaurantState.data);
     });
 
     handleState(fetchRestaurantDetailsStateProvider, showLoading: true);
@@ -93,7 +95,8 @@ class _RestaurantDetailsScreenState
           CustomScrollView(
             slivers: [
               SliverAppBar(
-                  automaticallyImplyLeading: false, // Add this line
+                  automaticallyImplyLeading: false,
+                  // Add this line
                   expandedHeight: MediaQuery.of(context).size.height * .45,
                   titleSpacing: 0,
                   pinned: true,
@@ -117,7 +120,8 @@ class _RestaurantDetailsScreenState
                         ),
                         InkWell(
                             onTap: () {
-                              updateFavoriteRestaurantState(restaurantState.data);
+                              updateFavoriteRestaurantState(
+                                  restaurantState.data);
                             },
                             child: SVGIcons.localSVG(
                                 restaurantState.data?.isFavorite == true
@@ -132,8 +136,9 @@ class _RestaurantDetailsScreenState
                     background: Stack(
                       children: [
                         InkWell(
-                          onTap: (){
-                            if(restaurantState.data?.imageUrls?.isNotEmpty == true) {
+                          onTap: () {
+                            if (restaurantState.data?.imageUrls?.isNotEmpty ==
+                                true) {
                               navigateToRestaurantGallery(
                                   restaurantState.data?.imageUrls ?? []);
                             }
@@ -148,12 +153,18 @@ class _RestaurantDetailsScreenState
                             ),
                             width: MediaQuery.of(context).size.width,
                             showLoading: false,
-                            showIndicator: restaurantState.data?.imageUrls?.isNotEmpty == true,
+                            showIndicator:
+                                restaurantState.data?.imageUrls?.isNotEmpty ==
+                                    true,
                             showShadow: true,
                           ),
                         ),
                         Positioned(
-                            bottom:  restaurantState.data?.imageUrls?.isNotEmpty == true ? MediaQuery.of(context).size.height * .12 : MediaQuery.of(context).size.height * .03,
+                            bottom:
+                                restaurantState.data?.imageUrls?.isNotEmpty ==
+                                        true
+                                    ? MediaQuery.of(context).size.height * .12
+                                    : MediaQuery.of(context).size.height * .03,
                             left: 0,
                             right: 0,
                             child: SizedBox(
@@ -470,8 +481,8 @@ class _RestaurantDetailsScreenState
                         width: 16,
                       ),
                       Consumer(builder: (context, ref, child) {
-                        var restaurantMenu =
-                            ref.watch(fetchLimitRestaurantMenuItemsStateProvider);
+                        var restaurantMenu = ref
+                            .watch(fetchLimitRestaurantMenuItemsStateProvider);
                         if (restaurantMenu.state == DataState.SUCCESS) {
                           var categories =
                               restaurantMenu.data?.categoryItems ?? [];
@@ -527,7 +538,10 @@ class _RestaurantDetailsScreenState
                   valueListenable: activeCategoryPageIndex,
                   builder: (context, value, _) {
                     return SliverToBoxAdapter(
-                      child: CategoryTabContent(index: value,restaurantId: widget.restaurantId,),
+                      child: CategoryTabContent(
+                        index: value,
+                        restaurantId: widget.restaurantId,
+                      ),
                     );
                   }),
               SliverToBoxAdapter(
@@ -671,7 +685,10 @@ class _RestaurantDetailsScreenState
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: Expanded(
                 child: AppButton(
-                  onPress: () {},
+                  onPress: () {
+                    context.push(bookTableScreenRoute,
+                        extra: {RESTID: restaurantState.data?.id});
+                  },
                   height: 56,
                   backColor: AppTheme.mainAppColor,
                   child: Row(
@@ -719,11 +736,11 @@ class _RestaurantDetailsScreenState
   void updateFavoriteRestaurantState(RestaurantDetailsEntity? restaurant) {
     ref.read(updateFavoriteRestaurantStateProvider.notifier).call(
         restaurantId: restaurant?.id,
-        addFavorite: !(restaurant?.isFavorite??false)
-    );
+        addFavorite: !(restaurant?.isFavorite ?? false));
   }
 
   void navigateToRestaurantGallery(List<String> list) {
-    context.push(showRestaurantGalleryRoute,extra: {RESTAURANT_GALLERY_KEY:list});
+    context.push(showRestaurantGalleryRoute,
+        extra: {RESTAURANT_GALLERY_KEY: list});
   }
 }

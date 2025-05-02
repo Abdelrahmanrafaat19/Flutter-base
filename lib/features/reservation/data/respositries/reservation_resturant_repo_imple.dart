@@ -64,4 +64,11 @@ class ReservationResturantRepoImple implements ReservationResturantRepo {
     return _reservedRestaurantDataSource.fetchReservationCostMethod(
         restaurantID: restaurantID, guestCount: guestCount);
   }
+
+  @override
+  FutureResponseModel fetchSingle2ReservationMethod(
+      {String? page, String? size, required String restaurantID}) {
+    return _reservedRestaurantDataSource.fetchSingle2ReservationMethod(
+        restaurantID: restaurantID);
+  }
 }

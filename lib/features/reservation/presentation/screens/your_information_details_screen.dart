@@ -1,54 +1,100 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_base/core/constants/app_routes.dart';
+import 'package:flutter_base/core/models/StateModel.dart';
+import 'package:flutter_base/features/auth/presentation/widgets/countries.dart';
+import 'package:flutter_base/features/reservation/data/models/reservation_data_model.dart';
+import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl_phone_field/phone_number.dart';
 import '../../../../core/Constants/Constants.dart';
 import '../../../../core/Theme/app_theme.dart';
 import '../../../../core/widgets/app_button.dart';
+import '../../../auth/domain/providers/user_provider.dart';
 import '../../../auth/presentation/widgets/labeled_text_field.dart';
 import '../../../auth/presentation/widgets/phone_number_field.dart';
+import '../providers/use_case_providers.dart';
 import '../widgets/occasion_drop_down_field.dart';
 
-class YourInformationDetailsScreen extends StatefulWidget {
-  const YourInformationDetailsScreen({super.key});
+String getCountryAlphaCode(String phoneNumber) {
+  try {
+    var number = PhoneNumber.getCountry(phoneNumber);
+    print("This is Phone number ${number.code}");
+    return number.code; // Returns 2-letter country code
+  } catch (e) {
+    print('Error parsing phone number: $e');
+    return e.toString();
+  }
+}
+
+class YourInformationDetailsScreen extends ConsumerStatefulWidget {
+  final int guestCount;
+  final String dateValue;
+  final int restID;
+
+  const YourInformationDetailsScreen(
+      {super.key,
+      required this.guestCount,
+      required this.dateValue,
+      required this.restID});
 
   @override
-  State<YourInformationDetailsScreen> createState() =>
+  ConsumerState<YourInformationDetailsScreen> createState() =>
       _YourInformationDetailsScreenState();
 }
 
 class _YourInformationDetailsScreenState
-    extends State<YourInformationDetailsScreen> {
+    extends ConsumerState<YourInformationDetailsScreen> {
   bool isBookingForSomeone = false;
   final _controller = ValueNotifier<bool>(true);
   late TextEditingController nameController;
   late TextEditingController emailController;
+  late String codeCountry;
 
   late TextEditingController phoneController;
-  String? selectedOccasion = 'Birthday';
+  String? selectedOccasion;
+
   final List<String> occasions = [
     'Birthday',
     'Anniversary',
     'Meeting',
     'Casual',
   ];
+
   @override
-  void initState() {
-    // TODO: implement initState
+  void initState()  {
+    final client = ref.read(userProvider.notifier).checkIfUserExist();
+    codeCountry =  getCountryAlphaCode("+201063103655");
+
+    nameController =
+        TextEditingController(text: "${client?.firstName} ${client?.lastName}");
+    emailController = TextEditingController(text: client?.email);
+    phoneController = TextEditingController(
+        text: formatNumberSync(client?.phoneNumber ?? "",
+            removeCountryCodeFromResult: true));
+    // WidgetsBinding.instance.addPostFrameCallback((callback) {});
+
     super.initState();
-    nameController = TextEditingController(text: "Abdelrahman Shoaib");
-    emailController = TextEditingController(text: "Shoaib@gmail.com");
-    phoneController = TextEditingController(text: "0.010634103");
   }
 
   @override
   Widget build(BuildContext context) {
+    var reservedRestaurantDataResult =
+        ref.watch(createReservationUserRestaurantUseCaseProvider);
+    print(
+        "this is Date Value ${widget.dateValue}  this time value ${widget.guestCount}");
     return Scaffold(
       backgroundColor: AppTheme.mainAppBackgroundColor,
       appBar: AppBar(
         toolbarHeight: 50.h,
         centerTitle: true,
         leading: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              context.pop();
+            },
             icon: Icon(
               Icons.arrow_back_sharp,
               color: AppTheme.colorCode171717,
@@ -176,6 +222,7 @@ class _YourInformationDetailsScreenState
                 filledColor: AppTheme.appGrey2,
                 isPhoneNumberIsValidate: true,
                 controller: phoneController,
+                codeCountry: codeCountry,
               ),
               SizedBox(
                 height: 24.h,
@@ -204,7 +251,7 @@ class _YourInformationDetailsScreenState
               OccasionDropDownField(
                 occasions: occasions,
                 selectedOccasion: selectedOccasion,
-                onChange:  ( newValue) {
+                onChange: (newValue) {
                   setState(() {
                     selectedOccasion = newValue!;
                   });
@@ -220,13 +267,91 @@ class _YourInformationDetailsScreenState
                   height: defaultButtonHeight,
                   backColor: AppTheme.codeColorB08A4E,
                   text: "Continue",
-                  onPress: () {},
+                  onPress: () {
+                    print(selectedOccasion);
+                    if (selectedOccasion == null) {
+                      showValidationToast("please Select your Occasion");
+                    } else {
+                      ReversationDataModel reversationDateModel =
+                          ReversationDataModel(
+                        guestCount: widget.guestCount,
+                        guestName: nameController.text,
+                        guestPhone: phoneController.text,
+                        occasion: selectedOccasion,
+                        reservationDate: widget.dateValue,
+                      );
+                      ref
+                          .read(createReservationUserRestaurantUseCaseProvider
+                              .notifier)
+                          .call(
+                            restaurantID: widget.restID.toString(),
+                            reservationData: reversationDateModel,
+                          );
+                      if (reservedRestaurantDataResult.state ==
+                          DataState.SUCCESS) {
+                        context.push(reviewSummeryScreenRoute, extra: {
+                          REVERSATION_ID:
+                              reservedRestaurantDataResult.data?.id ?? 0,
+                          GUESTCOUNT: widget.guestCount
+                        });
+                      } else if (reservedRestaurantDataResult.state ==
+                          DataState.ERROR) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            content: Container(
+                              alignment: Alignment.center,
+                              width: 100.w,
+                              height: 100.h,
+                              child: Text(
+                                reservedRestaurantDataResult.message ?? "",
+                                style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20.sp),
+                              ),
+                            ),
+                          ),
+                        );
+                      } else if (reservedRestaurantDataResult.state ==
+                          DataState.LOADING) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            content: Container(
+                              alignment: Alignment.center,
+                              width: 100.w,
+                              height: 100.h,
+                              child: const CircularProgressIndicator(
+                                color: AppTheme.codeColorB08A4E,
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                    }
+                  },
                 ),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  void showValidationToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.red[600],
+      textColor: Colors.white,
+      fontSize: 16.0,
     );
   }
 }

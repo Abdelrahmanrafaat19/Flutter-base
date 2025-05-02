@@ -79,4 +79,15 @@ class ReservedRestaurantDataSource {
       params: "?reminderFlag=$flag",
     );
   }
+  FutureResponseModel fetchSingle2ReservationMethod({
+    String? page,
+    String? size,
+    required String restaurantID,
+  }) {
+    return _httpOps.getData(
+      authorized: true,
+      endPoint: "$reservationEndPoint$restaurantID",
+
+    );
+  }
 }

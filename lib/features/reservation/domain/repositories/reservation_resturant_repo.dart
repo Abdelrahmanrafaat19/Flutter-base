@@ -19,7 +19,11 @@ abstract class ReservationResturantRepo {
     String? size,
     required String restaurantID,
   });
-
+  FutureResponseModel fetchSingle2ReservationMethod({
+    String? page,
+    String? size,
+    required String restaurantID,
+  });
   FutureResponseModel reminderTriggerReservationMethod({
     required String restaurantID,
     required bool flag,

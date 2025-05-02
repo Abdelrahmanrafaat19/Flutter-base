@@ -68,8 +68,9 @@ dependencies:
   flutter_advanced_switch: ^3.1.0
   table_calendar: ^3.0.9
   flutter_credit_card: ^4.1.0
-
   smooth_page_indicator: ^1.1.0
+  flutter_libphonenumber: ^2.5.1
+
 
 
 

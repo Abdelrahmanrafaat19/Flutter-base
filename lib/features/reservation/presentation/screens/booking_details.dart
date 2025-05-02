@@ -131,11 +131,11 @@ class _BookingDetailsState extends ConsumerState<BookingDetails> {
                                     itemBuilder: (context, index) {
                                       String date = getDate(
                                           singleReservedRestaurantDataResult
-                                                  .data?[0].createdAt ??
+                                                  .data?[0].reservationDate ??
                                               "");
                                       String time = getTime(
                                           singleReservedRestaurantDataResult
-                                                  .data?[0].createdAt ??
+                                                  .data?[0].reservationDate ??
                                               "");
                                       List<String?> valueListData = [
                                         singleReservedRestaurantDataResult

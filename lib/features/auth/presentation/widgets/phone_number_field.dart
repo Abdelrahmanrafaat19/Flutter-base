@@ -13,15 +13,18 @@ class PhoneNumberField extends StatelessWidget {
   final String? Function(String?)? validator;
   final bool isPhoneNumberIsValidate;
   final Color? filledColor;
+  final String? codeCountry;
 
-  const PhoneNumberField(
-      {super.key,
-      this.controller,
-      this.onChanged,
-      this.validator,
-      required this.isPhoneNumberIsValidate,
-      this.onSave,
-      this.filledColor});
+  const PhoneNumberField({
+    super.key,
+    this.controller,
+    this.onChanged,
+    this.validator,
+    required this.isPhoneNumberIsValidate,
+    this.onSave,
+    this.filledColor,
+    this.codeCountry,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +59,7 @@ class PhoneNumberField extends StatelessWidget {
             enabledBorder: AppBorders.getEnableBorder(),
             disabledBorder: AppBorders.getBorder(),
           ),
-          initialCountryCode: 'US',
+          initialCountryCode:codeCountry?? 'US',
           // Set the default country
           onChanged: onChanged,
           controller: controller,

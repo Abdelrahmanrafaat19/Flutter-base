@@ -1,6 +1,7 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_base/core/constants/constants.dart';
 import 'package:flutter_base/core/constants/eunms.dart';
 import 'package:flutter_base/features/auth/presentation/screens/change_password_screen.dart';
 import 'package:flutter_base/features/auth/presentation/screens/forget_password_screen.dart';
@@ -16,7 +17,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as ago;
-import 'core/Constants/Constants.dart';
+import 'features/location/data/repositories/address_permission_repo_imple.dart';
 import 'features/location/presentaion/screens/search_location_screen.dart';
 import 'features/reservation/presentation/screens/booking_details.dart';
 import 'features/reservation/presentation/screens/booking_table_screen.dart';
@@ -40,6 +41,7 @@ import 'features/permissions/presentation/screens/notification_permission_screen
 import 'features/search/domain/use_cases/fetch_restaurant_data_use_case.dart';
 import 'features/search/presentation/screens/all_data_of_search_category_screen.dart';
 import 'features/search/presentation/screens/search_result_screen.dart';
+import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
 
 late SharedPreferences prefs;
 
@@ -109,7 +111,6 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   await ScreenUtil.ensureScreenSize();
 
-
   // await Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.currentPlatform,
   // );
@@ -124,7 +125,11 @@ void main() async {
   // await FirebaseMessaging.instance.subscribeToTopic("championship");
 
   // Check if you received the link via `getInitialLink` first
-
+  await init();
+  final rawNumber = '+201063103655';
+  final formattedNumber =
+      formatNumberSync(rawNumber, removeCountryCodeFromResult: true);
+  print("this is Phone number ${formattedNumber}");
   ago.setLocaleMessages('en', ago.ArMessages());
   //Main App
   runApp(ProviderScope(
@@ -136,6 +141,7 @@ void main() async {
 
 class MyApp extends ConsumerWidget {
   final appLang;
+
   MyApp({Key? key, this.appLang}) : super(key: key);
 
   @override
@@ -175,7 +181,8 @@ class MyApp extends ConsumerWidget {
       ),
       GoRoute(
         path: mainScreenRoute,
-        builder: (BuildContext context, GoRouterState state) => const MainScreen(),
+        builder: (BuildContext context, GoRouterState state) =>
+            const MainScreen(),
       ),
       GoRoute(
         path: loginScreenRoute,
@@ -186,13 +193,43 @@ class MyApp extends ConsumerWidget {
         builder: (BuildContext context, GoRouterState state) => SignUpScreen(),
       ),
       GoRoute(
+        path: bookTableScreenRoute,
+        builder: (BuildContext context, GoRouterState state) {
+          var extra = state.extra as Map;
+          return BookTableScreen(
+            resID: extra[RESTID],
+          );
+        },
+      ),
+      GoRoute(
+        path: reviewSummeryScreenRoute,
+        builder: (BuildContext context, GoRouterState state) {
+          var extra = state.extra as Map;
+          return ReviewSummeryScreen(
+            reversationID: extra[REVERSATION_ID],
+            guestCount: extra[GUESTCOUNT],
+          );
+        },
+      ),
+      GoRoute(
+        path: yourInformationDetailsRoute,
+        builder: (BuildContext context, GoRouterState state) {
+          var extra = state.extra as Map;
+          return YourInformationDetailsScreen(
+            guestCount: extra[GUESTCOUNT],
+            dateValue: extra[DATAVALUE],
+            restID: extra[RESTID],
+          );
+        },
+      ),
+      GoRoute(
         path: bookingDetailsRoute,
-          builder: (BuildContext context, GoRouterState state) {
-            var extra = state.extra as Map;
-            return BookingDetails(
-               extra[BOOKING_ID],
-            );
-          },
+        builder: (BuildContext context, GoRouterState state) {
+          var extra = state.extra as Map;
+          return BookingDetails(
+            extra[BOOKING_ID],
+          );
+        },
       ),
       GoRoute(
         path: changePasswordScreenRoute,
@@ -248,8 +285,7 @@ class MyApp extends ConsumerWidget {
       ),
       GoRoute(
         path: searchScreenRoute,
-        builder: (BuildContext context, GoRouterState state) =>
-            SearchScreen(),
+        builder: (BuildContext context, GoRouterState state) => SearchScreen(),
       ),
       GoRoute(
         path: seeAllScreenForCategoryRoute,
@@ -274,7 +310,6 @@ class MyApp extends ConsumerWidget {
               selectedRatingIndex: extra[SELECT_RATING_INDEX_KEY],
               selectedCuisinesIndex: extra[SELECT_CUISINES_INDEX_KEY],
               selectDistantRangeValues: extra[SELECT_DISTANT_RANGE_VALUES_KEY],
-
             );
           }),
       GoRoute(
@@ -285,11 +320,11 @@ class MyApp extends ConsumerWidget {
             title: extra,
           );
         },
-
       ),
       GoRoute(
         path: googleMapScreenRoute,
-        builder: (BuildContext context, GoRouterState state) => const GoogleMapScreen(),
+        builder: (BuildContext context, GoRouterState state) =>
+            const GoogleMapScreen(),
       ),
       GoRoute(
         path: restaurantDetailsRoute,
@@ -300,32 +335,32 @@ class MyApp extends ConsumerWidget {
           );
         },
       ),
-     GoRoute(
+      GoRoute(
         path: menuScreenRoute,
-       builder: (BuildContext context, GoRouterState state) {
-         var extra = state.extra as Map;
-         return MenuScreen(
-           restaurantId: extra[RESTAURANT_ID_KEY],
-         );
-       },
+        builder: (BuildContext context, GoRouterState state) {
+          var extra = state.extra as Map;
+          return MenuScreen(
+            restaurantId: extra[RESTAURANT_ID_KEY],
+          );
+        },
       ),
       GoRoute(
         path: restaurantReviewsRoute,
-       builder: (BuildContext context, GoRouterState state) {
-         var extra = state.extra as Map;
-         return RestaurantReviewsScreen(
-           restaurantId: extra[RESTAURANT_ID_KEY],
-         );
-       },
+        builder: (BuildContext context, GoRouterState state) {
+          var extra = state.extra as Map;
+          return RestaurantReviewsScreen(
+            restaurantId: extra[RESTAURANT_ID_KEY],
+          );
+        },
       ),
       GoRoute(
         path: showRestaurantGalleryRoute,
-       builder: (BuildContext context, GoRouterState state) {
-         var extra = state.extra as Map;
-         return ShowRestaurantGallery(
-           imagesList: extra[RESTAURANT_GALLERY_KEY],
-         );
-       },
+        builder: (BuildContext context, GoRouterState state) {
+          var extra = state.extra as Map;
+          return ShowRestaurantGallery(
+            imagesList: extra[RESTAURANT_GALLERY_KEY],
+          );
+        },
       ),
     ],
   );

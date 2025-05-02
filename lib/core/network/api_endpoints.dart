@@ -28,7 +28,7 @@ const placesAutocompleteEndPoint="place/autocomplete/json";
 const fetchUserReserved="reservation";
 const createReservationEndPoint="reservation/restaurant/";
 const remiderTriggerEndPoint="reservation/reminder/";
-
+const reservationEndPoint="reservation/";
 // restaurants
 const restaurantMenusEndPoint = "menu/restaurantId";
 const restaurantDetailsEndPoint = "restaurant";

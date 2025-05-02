@@ -2,9 +2,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppTheme {
-  static const Color mainAppColor = Color(0xFF3DB5D3);
+  static const Color mainAppColor = Color(0xFFB08A4E);
   static const Color mainAppColorLight = Color(0xFFF7DBDE);
   static const Color mainAppColorLight2 = Color(0xFFFDE9EB);
   static const Color mainAppColorBright = Color(0xFFe6f4ff);
@@ -44,12 +45,11 @@ class AppTheme {
   static const Color codeColor737373 = Color(0xff737373);
   static const Color appGrey14 =
       Color(0x14000000); // box-shadow: 0px -6px 16px 0px #00000014;
-  static const Color appGrey14 = Color(0x14000000); // box-shadow: 0px -6px 16px 0px #00000014;
+ // box-shadow: 0px -6px 16px 0px #00000014;
   static const Color appGrey15 = Color(0xff444955);
   static const Color codeColorA3A3A3 = Color(0xffA3A3A3);
   static const Color codeColor404040 = Color(0xff404040);
-  static const Color appHeaderOne = Color(0xFF225268);
-  static const Color appHeaderTwo = Color(0xFF2298B8);
+
   static const Color colorCode171717 = Color(0xff171717);
   static const Color appGrey16 = Color(0xff525252);
   static const Color appGrey17 = Color(0xffA3A3A3);
@@ -57,9 +57,9 @@ class AppTheme {
   static const Color appGrey19 = Color(0xffF5F5F5);
   static const Color appGrey20 = Color(0xff737373);
   static const Color appHeaderOne = Color(0xFFD9BA8C);
-  static const Color appHeaderTwo = Color(0xFFCAA062);
-  static const Color appHeaderThree = Color(0xFF947340);
 
+  static const Color appHeaderThree = Color(0xFF947340);
+  static const Color appHeaderTwo = Color(0xFFCAA062);
   static const Color appGunmetal = Color(0xFF333740);
   static const Color appLightGrey = Color(0xFFe5e5e5);
   static const Color appLightGreyV2 = Color(0xFFF0F0F0);

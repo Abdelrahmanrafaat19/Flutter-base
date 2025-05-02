@@ -81,7 +81,7 @@ class _SearchLocationScreenState extends ConsumerState<SearchLocationScreen> {
     _loadAddresses();
   }
 
-  // Clear all saved addresses
+
   void _clearAddresses() async {
     await AddressStorage.clearAddresses();
     setState(() {
@@ -91,8 +91,6 @@ class _SearchLocationScreenState extends ConsumerState<SearchLocationScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-
     handleState(getLatLngFromLatLngUseCaseProvider,showLoading: true, onSuccess: (res) {
       if (res.data != null) {
         AddressStorage.addAddress(res.data!);

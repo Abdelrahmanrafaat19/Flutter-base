@@ -19,9 +19,12 @@ class DataTableBookSuccessColumn extends StatelessWidget {
         SizedBox(
           height: 16.h,
         ),
-        Text(
-          value,
-          style: AppTheme.style16W500codeColor525252,
+        Expanded(
+          child: Text(
+            value,
+            overflow: TextOverflow.ellipsis,
+            style: AppTheme.style16W500codeColor525252,
+          ),
         ),
       ],
     );

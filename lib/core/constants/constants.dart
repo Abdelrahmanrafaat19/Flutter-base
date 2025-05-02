@@ -22,7 +22,7 @@ const CUISINE_ID_KEY = 'cuisineId';
 const CATEGORY_ID_KEY = 'categoryId';
 const RESTAURANT_ID_KEY = 'restaurantId';
 const RESTAURANT_GALLERY_KEY = 'restaurantGallery';
-
+const RESTID="restautrantID";
 const FILTER_LIST_KEY="filterList";
 const SELECT_RANGE_VALUE_KEY="selectRangeValues";
 const SELECTED_SORT_BY_ITEM_INDEX_KEY="selectedSortByItemIndex";
@@ -31,6 +31,9 @@ const SELECT_CUISINES_INDEX_KEY="selectedCuisinesIndex";
 const SELECT_DISTANT_RANGE_VALUES_KEY="selectDistantRangeValues";
 const SEARCH_TEXT="searchText";
 const String googleApiKey = "AIzaSyAIhooYpv80pRyeAhyNzAyb4YGCmkTUlXA";
+const GUESTCOUNT="guestCount";
+const DATAVALUE="dataValue";
+const REVERSATION_ID="reversationid";
 
 
 /*

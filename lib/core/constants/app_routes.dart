@@ -20,6 +20,7 @@ const restaurantDetailsRoute="/restaurantDetailsScreen";
 const menuScreenRoute="/menuScreen";
 const restaurantReviewsRoute="/restaurantReviewsScreen";
 const showRestaurantGalleryRoute="/showRestaurantGalleryScreen";
+const bookTableScreenRoute="/bookTableScreenRoute";
 
 const otpScreenRoute = '/otp';
 const bookingTableScreenRoute='/bookingTableScreenRoute';

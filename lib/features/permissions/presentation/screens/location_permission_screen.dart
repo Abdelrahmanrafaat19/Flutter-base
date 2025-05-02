@@ -3,22 +3,43 @@ import 'package:flutter_base/core/Theme/app_theme.dart';
 import 'package:flutter_base/core/constants/app_routes.dart';
 import 'package:flutter_base/core/constants/constants.dart';
 import 'package:flutter_base/core/widgets/app_button.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../../location/data/repositories/address_permission_repo_imple.dart';
+import '../../../location/domain/address_storage.dart';
+import '../../../location/presentaion/providers/use_cases_provider.dart';
+import '../../data/model/address_model.dart';
 
-
-
-class LocationPermissionScreen extends StatefulWidget {
+class LocationPermissionScreen extends ConsumerStatefulWidget {
   const LocationPermissionScreen({super.key});
 
   @override
-  State<LocationPermissionScreen> createState() =>
+  ConsumerState<LocationPermissionScreen> createState() =>
       _LocationPermissionScreenState();
 }
 
-class _LocationPermissionScreenState extends State<LocationPermissionScreen> {
+class _LocationPermissionScreenState
+    extends ConsumerState<LocationPermissionScreen> {
+  void _onSelectAddress(Address address) {
+    AddressStorage.saveUserCurrentLocation(address);
+    updateUserLocation(address);
+    context.pop(true);
+  }
+
+  // In your widget where you call this method:
+  void _getLocationAndNavigate(context) async {
+    try {
+      final address = await AddressPermissionRepoImple.getCurrentLocation(context);
+      // Now navigate after getting the location
+     context.push(notificationPermissionScreenRoute);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.toString()}')),
+      );
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +62,7 @@ class _LocationPermissionScreenState extends State<LocationPermissionScreen> {
               width: 180,
               height: 180,
             ),
-            SizedBox(
+         const   SizedBox(
               height: 55,
             ),
             Text(
@@ -65,8 +86,12 @@ class _LocationPermissionScreenState extends State<LocationPermissionScreen> {
               text: "Allow Location Access",
               backColor: AppTheme.mainAppColor,
               onPress: () async {
-                await AddressPermissionRepoImple()
-                    .requestLocationPermission(context);
+                Address? currentAddress =
+                    await AddressPermissionRepoImple().requestLocationPermission(context);
+                print(currentAddress?.placeName);
+                _onSelectAddress(currentAddress!);
+                _getLocationAndNavigate(context);
+                // context.push(notificationPermissionScreenRoute);
               },
             ),
             SizedBox(
@@ -74,10 +99,10 @@ class _LocationPermissionScreenState extends State<LocationPermissionScreen> {
             ),
             TextButton(
               onPressed: () {
-                context.go(searchLocationScreenRoute);
+                context.go(mainScreenRoute);
               },
               child: Text(
-                "Enter Location Manually",
+                "May be later",
                 style: TextStyle(
                     color: AppTheme.mainAppColor,
                     fontSize: 14,
@@ -88,5 +113,11 @@ class _LocationPermissionScreenState extends State<LocationPermissionScreen> {
         ),
       ),
     );
+  }
+
+  void updateUserLocation(Address address) {
+    ref
+        .read(updateUserLocationStateNotifierProvider.notifier)
+        .updateUserLocation(address);
   }
 }

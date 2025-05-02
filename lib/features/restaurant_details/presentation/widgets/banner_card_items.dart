@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/features/restaurant_details/presentation/screens/restaurant_details_screen.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../../../core/Theme/app_theme.dart';
 import '../../../../core/widgets/circle_image.dart';
 import 'Image_slider_preview.dart';

@@ -50,18 +50,6 @@ const linkIcon="assets/images/link_icon.svg";
 const callIcon="assets/images/call_icon.svg";
 const mapImage="assets/images/map_image.png";
 const burgerIcon="assets/images/burger_icon.svg";
-
-
-const mapIcon = "assets/images/map_icon.svg";
-const restaurantIcons = "assets/images/restaurant_icons.svg";
-const arrowRightIcons = "assets/images/arrow_right.svg";
-const discountIcon = "assets/images/discount_icon_search.svg";
-const ratingIcon = "assets/images/best_rate_icon.svg";
-const reserveIcon = "assets/images/reserve_icon.svg";
-const gpsIcon = "assets/images/gps_icon.svg";
-const unFavouriteWithBackGroundIcon =
-    "assets/images/un_favorite_with_background_icon.svg";
-const mapGpsIcon = "assets/images/map_gps_icon.svg";
 const calenderIcon = "assets/images/calendar.svg";
 const reservedIcon = "assets/images/reservedicon.gif";
 const carIcon = "assets/images/car_icon.svg";

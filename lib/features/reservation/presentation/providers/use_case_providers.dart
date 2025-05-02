@@ -1,12 +1,15 @@
+import 'package:flutter_base/features/reservation/domain/use_case/fetch_single2_reservation_use_case.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/models/StateModel.dart';
 import '../../data/models/avilable_time_model.dart';
+import '../../data/models/cost_model.dart';
 import '../../domain/entities/fetch_user_reservation_entity.dart';
 import '../../domain/providers/reservation_repo_provider.dart';
 import '../../domain/use_case/create_reservation_use_case.dart';
 import '../../domain/use_case/fetch_avaialble_meal_time_use_case.dart';
 import '../../domain/use_case/fetch_single_reservation_use_case.dart';
 import '../../domain/use_case/fetch_user_reservation_use_case.dart';
+import '../../domain/use_case/get_reservation_cost_use_case.dart';
 import '../../domain/use_case/reminder_trigger_use_case.dart';
 
 final fetchReservedUserRestaurantUseCaseProvider =
@@ -20,6 +23,9 @@ StateNotifierProvider.autoDispose<CreateReservationUseCase,StateModel<ReservedRe
 final fetchSingleReservationUserRestaurantUseCaseProvider =
 StateNotifierProvider.autoDispose<FetchSingleReservationUseCase,StateModel<List<ReservedRestaurantEntity>>>(
         (ref) => FetchSingleReservationUseCase(ref, ref.read(reservationRepoProvider)));
+final fetchSingle2ReservationUserRestaurantUseCaseProvider =
+StateNotifierProvider.autoDispose<FetchSingle2ReservationUseCase,StateModel<List<ReservedRestaurantEntity>>>(
+        (ref) => FetchSingle2ReservationUseCase(ref, ref.read(reservationRepoProvider)));
 final reminderTriggerUseCaseProvider =
 StateNotifierProvider.autoDispose<ReminderTriggerUseCase,StateModel<ReservedRestaurantEntity>>(
         (ref) => ReminderTriggerUseCase(ref, ref.read(reservationRepoProvider)));
@@ -28,3 +34,6 @@ StateNotifierProvider.autoDispose<ReminderTriggerUseCase,StateModel<ReservedRest
 final availableMealTimeUseCaseProvider =
 StateNotifierProvider.autoDispose<FetchAvaialbleMealTimeUseCase,StateModel<AvaliableTimeModel>>(
         (ref) => FetchAvaialbleMealTimeUseCase(ref, ref.read(reservationRepoProvider)));
+final costResUseCaseProvider =
+StateNotifierProvider.autoDispose<GetReservationCostUseCase,StateModel<CostModel>>(
+        (ref) => GetReservationCostUseCase(ref, ref.read(reservationRepoProvider)));
